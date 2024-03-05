@@ -121,24 +121,10 @@ stateDiagram-v2
 
     onLoad --> onKeyEvent
     state onKeyEvent {
+        state isMove <<choice>>
         [*] --> isMove
-        state isMove {
-            [*] --> isPlayerWorldOut
-            isPlayerWorldOut --> false: true
-            isPlayerWorldOut --> isPlayerSpaceOrGoal: false
-            isPlayerSpaceOrGoal --> changePlayerObject
-            isPlayerWorldOut --> isCrate: false
-            isCrate --> isCrateWorldOut
-            isCrateWorldOut --> false:true
-            isCrateWorldOut --> isCrateSpaceOrGoal:false
-            isCrateSpaceOrGoal --> changePlayerAndCrateObject: true
-            isCrateSpaceOrGoal --> false:false
-            changePlayerAndCrateObject --> true
-            changePlayerObject --> true
-        }
-
-        isMove --> playerMove: true
-        isMove --> [*]: false
+        isMove --> playerMove: isMove=true
+        isMove --> [*]: isMove=false
         playerMove --> isCrateMove
         playerMove --> isClear
         isCrateMove --> crateMove: true
@@ -156,5 +142,24 @@ stateDiagram-v2
     }
     drawNextStage --> onLoad
 
+```
+
+Objectの更新を実施するかどうか
+```mermaid
+stateDiagram-v2
+    state isMove {
+            [*] --> isPlayerWorldOut
+            isPlayerWorldOut --> false: true
+            isPlayerWorldOut --> isPlayerSpaceOrGoal: false
+            isPlayerSpaceOrGoal --> changePlayerObject
+            isPlayerWorldOut --> isCrate: false
+            isCrate --> isCrateWorldOut
+            isCrateWorldOut --> false:true
+            isCrateWorldOut --> isCrateSpaceOrGoal:false
+            isCrateSpaceOrGoal --> changePlayerAndCrateObject: true
+            isCrateSpaceOrGoal --> false:false
+            changePlayerAndCrateObject --> true
+            changePlayerObject --> true
+    }
 ```
 
