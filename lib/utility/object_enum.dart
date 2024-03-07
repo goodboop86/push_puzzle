@@ -12,5 +12,6 @@ enum Object {
 
   final String displayName;
 
-  static Object fromValue(String value) => Object.values.firstWhere((o) => o.displayName == value);
+  static Object fromValue(String value) =>
+      Object.values.firstWhere((o) => o.displayName == value);
 }
