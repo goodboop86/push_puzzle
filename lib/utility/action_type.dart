@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 
-enum ActionType {move, attack, other}
+enum ActionType {move, attack, rest, other}
 
 ActionType getActionType(String input) {
   switch (input) {
@@ -14,6 +14,9 @@ ActionType getActionType(String input) {
       return ActionType.move;
     case 'space':
       return ActionType.attack;
+    case 'r':
+      return ActionType.rest;
+
   }
   return ActionType.other;
 }

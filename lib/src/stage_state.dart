@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import '../utility/object_enum.dart';
 import '../utility/stage_master_data.dart';
-import '../utility/key_action.dart';
+import '../utility/action_key.dart';
 
 class StageState {
   late int width;

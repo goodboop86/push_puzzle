@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-enum KeyAction {up, down, left, right, none, space}
+enum ActionKey {up, down, left, right, none, space, r}
 
 Vector2 getActionDirection(String input) {
   double dx, dy;
@@ -20,9 +20,6 @@ Vector2 getActionDirection(String input) {
     case 'down':
       dy = 1;
       break;
-    // FIXME
-    case 'space':
-      dy = 0.5;
   }
   return Vector2(dx, dy);
 }

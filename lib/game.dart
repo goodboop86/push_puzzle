@@ -12,7 +12,7 @@ import 'dart:async';
 
 import 'src/push_game.dart';
 import 'utility/config.dart';
-import 'utility/key_action.dart';
+import 'utility/action_key.dart';
 
 class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   late Function stateCallbackHandler;
@@ -149,7 +149,7 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is RawKeyDownEvent;
-    KeyAction keyAction = KeyAction.none;
+    ActionKey keyAction = ActionKey.none;
 
     if (!isKeyDown || _player.moveCount != 0 || pushGame.state.isClear) {
       return super.onKeyEvent(event, keysPressed);
@@ -180,44 +180,59 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
         actionText.text = pushGame.action.toString();
       }
     }
+    else if (actionType == ActionType.rest) {
+      bool isRest = pushGame.changeRestState(keyAction.name);
+      if (isRest) {
+        playerRestAction(isKeyDown, keyAction);
+        turnText.text = pushGame.turn.toString();
+        actionText.text = pushGame.action.toString();
+      }
+    }
 
     return super.onKeyEvent(event, keysPressed);
 
   }
 
-  KeyAction getKeyAction(RawKeyEvent event) {
-    KeyAction keyAction = KeyAction.none;
+  ActionKey getKeyAction(RawKeyEvent event) {
+    ActionKey keyAction = ActionKey.none;
     if (event.logicalKey == LogicalKeyboardKey.keyA ||
         event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      keyAction = KeyAction.left;
+      keyAction = ActionKey.left;
     } else if (event.logicalKey == LogicalKeyboardKey.keyD ||
         event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      keyAction = KeyAction.right;
+      keyAction = ActionKey.right;
     } else if (event.logicalKey == LogicalKeyboardKey.keyW ||
         event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      keyAction = KeyAction.up;
+      keyAction = ActionKey.up;
     } else if (event.logicalKey == LogicalKeyboardKey.keyS ||
         event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      keyAction = KeyAction.down;
+      keyAction = ActionKey.down;
+    } else if (event.logicalKey == LogicalKeyboardKey.keyR) {
+      keyAction = ActionKey.r;
+    }
     // spaceの場合
-    } else if (event.logicalKey == LogicalKeyboardKey.findKeyByKeyId(0x00000000020)) {
-      keyAction = KeyAction.space;
+    else if (event.logicalKey == LogicalKeyboardKey.findKeyByKeyId(0x00000000020)) {
+      keyAction = ActionKey.space;
     }
     print(keyAction.name.toString());
     return keyAction;
   }
 
-  void playerMoveAction(bool isKeyDown, KeyAction keyDirection) {
-    if (isKeyDown && keyDirection != KeyAction.none) {
+  void playerMoveAction(bool isKeyDown, ActionKey keyDirection) {
+    if (isKeyDown && keyDirection != ActionKey.none) {
       _player.direction = keyDirection;
       _player.moveCount = oneBlockSize.toInt();
     } else if (_player.direction == keyDirection) {
-      _player.direction = KeyAction.none;
+      _player.direction = ActionKey.none;
     }
   }
 
-  void playerAttackAction(bool isKeyDown, KeyAction keyDirection) {
+  void playerAttackAction(bool isKeyDown, ActionKey keyDirection) {
     print("attack!!!");
+  }
+
+  void playerRestAction(bool isKeyDown, ActionKey keyDirection) {
+    print("rest...");
   }
 
 

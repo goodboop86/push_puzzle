@@ -49,6 +49,13 @@ class PushGame {
     return true;
   }
 
+  bool changeRestState(String input) {
+    step++;
+    turn++;
+    action = "Rest";
+    return true;
+  }
+
   void nextStage() {
     _stage++;
     step = 0;
