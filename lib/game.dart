@@ -137,7 +137,7 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
     if (isMove) {
       playerMove(isKeyDown, keyDirection);
       if (pushGame.state.isCrateMove) {
-        createMove();
+        crateMove();
       }
       if (pushGame.state.isClear) {
         stateCallbackHandler(pushGame.state.isClear);
@@ -174,7 +174,7 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
     }
   }
 
-  void createMove() {
+  void crateMove() {
     final targetCrate = _crateList.firstWhere((crate) => crate.coordinate == pushGame.state.crateMoveBeforeVec);
     targetCrate.move(pushGame.state.crateMoveAfterVec);
     targetCrate.goalCheck(pushGame.state.goalVecList);

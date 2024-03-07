@@ -79,3 +79,102 @@ I appreciate it very much.
 -   <https://github.com/webcyou-org>
 -   <https://github.com/panicdragon>
 -   <https://www.webcyou.com/>
+
+
+## Class
+※このクラス図は厳密ではなく、画面形成に直接的に関わるクラスは省略する。
+例えば中間クラスのScaffoldなどは記載しない。ただし継承関係や内部処理に関わるクラスは記載する。
+
+```mermaid
+classDiagram
+    StatelessWidget <-- App
+    App <-- MainGamePage
+    StatefulWidget <|-- MainGamePage
+    MainGamePage <-- MainGamePageState
+    State <|-- MainGamePageState
+    FlameGame <|-- MainGame
+    MainGamePageState <-- MainGame
+    MainGamePageState <-- Congratulations
+    StatelessWidget <|-- Congratulations
+    MainGame <-- PushGame
+    MainGame <-- Player
+    MainGame <-- Crate
+    PushGame <-- StageState
+    StageState <-- Object
+    %% ここのObjectは独自クラス
+    SpriteAnimationComponent <|-- Player
+    SpriteAnimationComponent <|-- Crate
+
+```
+
+## Activity
+特にMainGame(FlameGame)のゲームフローについて
+全体の更新プロセス
+```mermaid
+stateDiagram-v2
+    [*] --> onLoad
+    state onLoad {
+        renderFloor --> renderBackGround
+        renderBackGround --> initPlayer
+        renderBackGround --> initCrate
+        initCrate --> clate 
+        initPlayer --> player
+    }
+
+    onLoad --> onKeyEvent
+    state onKeyEvent {
+        state isMove <<choice>>
+        [*] --> isMove
+        isMove --> playerMove: isMove=true
+        isMove --> [*]: isMove=false
+        playerMove --> isCrateMove
+        playerMove --> isClear
+        isCrateMove --> crateMove: true
+        crateMove --> isClear
+        isClear --> drawNextStage: true
+        isClear --> [*]: false
+        isCrateMove --> [*]: false
+
+        state drawNextStage {
+            [*] --> something
+            something --> [*] 
+        }
+
+        
+    }
+    drawNextStage --> onLoad
+```
+
+Objectの更新を実施するかどうか
+```mermaid
+stateDiagram-v2
+    state isMove {
+            [*] --> isPlayerWorldOut
+            isPlayerWorldOut --> false: true
+            isPlayerWorldOut --> isPlayerSpaceOrGoal: false
+            isPlayerSpaceOrGoal --> changePlayerObject
+            isPlayerWorldOut --> isCrate: false
+            isCrate --> isCrateWorldOut
+            isCrateWorldOut --> false:true
+            isCrateWorldOut --> isCrateSpaceOrGoal:false
+            isCrateSpaceOrGoal --> changePlayerAndCrateObject: true
+            isCrateSpaceOrGoal --> false:false
+            changePlayerAndCrateObject --> true
+            changePlayerObject --> true
+    }
+```
+
+drawNextStage
+```mermaid
+stateDiagram-v2
+    state drawNextStage{
+        [*] --> nextStage
+        state nextStage {
+            [*]  --> changeStage
+            state changeStage {
+                [*] --> setObjectList
+                setObjectList --> setGoalVecList
+                }
+            }
+        }
+```
