@@ -3,6 +3,7 @@ import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:push_puzzle/utility/action_type.dart';
 
 import 'components/player.dart';
 import 'components/crate.dart';
@@ -149,19 +150,31 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
     }
 
     keyAction = getKeyAction(event);
-    bool isAction = pushGame.changeState(keyAction.name);
-    if (isAction) {
-      playerAction(isKeyDown, keyAction);
-      turn.text = pushGame.turn.toString();
-      if (pushGame.state.isCrateMove) {
-        crateMove();
+    ActionType actionType = getActionType(keyAction.name);
+
+    if (actionType == ActionType.move) {
+      bool isMove = pushGame.changeMoveState(keyAction.name);
+      if (isMove) {
+        playerMoveAction(isKeyDown, keyAction);
+        turn.text = pushGame.turn.toString();
+        if (pushGame.state.isCrateMove) {
+          crateMove();
+        }
+        if (pushGame.state.isClear) {
+          stateCallbackHandler(pushGame.state.isClear);
+          Timer(const Duration(seconds: 3), drawNextStage);
+        }
       }
-      if (pushGame.state.isClear) {
-        stateCallbackHandler(pushGame.state.isClear);
-        Timer(const Duration(seconds: 3), drawNextStage);
+    } else if (actionType == ActionType.attack) {
+      bool isAttack = pushGame.changeAttackState(keyAction.name);
+      if (isAttack) {
+        playerAttackAction(isKeyDown, keyAction);
+        turn.text = pushGame.turn.toString();
       }
     }
+
     return super.onKeyEvent(event, keysPressed);
+
   }
 
   KeyAction getKeyAction(RawKeyEvent event) {
@@ -180,22 +193,26 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
       keyAction = KeyAction.down;
     // spaceの場合
     } else if (event.logicalKey == LogicalKeyboardKey.findKeyByKeyId(0x00000000020)) {
-      keyAction = KeyAction.attack;
+      keyAction = KeyAction.space;
     }
     print(keyAction.name.toString());
     return keyAction;
   }
 
-  void playerAction(bool isKeyDown, KeyAction keyDirection) {
-    if (isKeyDown && keyDirection != KeyAction.none && keyDirection != KeyAction.attack) {
+  void playerMoveAction(bool isKeyDown, KeyAction keyDirection) {
+    if (isKeyDown && keyDirection != KeyAction.none) {
       _player.direction = keyDirection;
       _player.moveCount = oneBlockSize.toInt();
     } else if (_player.direction == keyDirection) {
       _player.direction = KeyAction.none;
-    } else if (isKeyDown && keyDirection == KeyAction.attack){
-      print("attack!!!");
     }
   }
+
+  void playerAttackAction(bool isKeyDown, KeyAction keyDirection) {
+    print("attack!!!");
+  }
+
+
 
   void crateMove() {
     final targetCrate = _crateList.firstWhere(

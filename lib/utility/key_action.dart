@@ -1,6 +1,7 @@
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
-enum KeyAction {up, down, left, right, none, attack}
+enum KeyAction {up, down, left, right, none, space}
 
 Vector2 getActionDirection(String input) {
   double dx, dy;
@@ -19,8 +20,8 @@ Vector2 getActionDirection(String input) {
     case 'down':
       dy = 1;
       break;
-    case 'attack':
-      // 進行方向の概念がないので、ひとまず上方向に少し移動する。
+    // FIXME
+    case 'space':
       dy = 0.5;
   }
   return Vector2(dx, dy);
