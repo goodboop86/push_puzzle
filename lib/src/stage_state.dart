@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import '../utility/object_enum.dart';
 import '../utility/stage_master_data.dart';
-import '../utility/direction.dart';
+import '../utility/key_action.dart';
 
 class StageState {
   late int width;
@@ -173,8 +173,8 @@ class StageState {
 
   bool changeState(String input) {
     _isCrateMove = false;
-    int dx = getMoveDirection(input).x.toInt();
-    int dy = getMoveDirection(input).y.toInt();
+    int dx = getActionDirection(input).x.toInt();
+    int dy = getActionDirection(input).y.toInt();
     int x = playerVecPos.x.toInt(); // modulus operator
     int y = playerVecPos.y.toInt(); // integer division operator
 

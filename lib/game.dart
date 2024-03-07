@@ -11,7 +11,7 @@ import 'dart:async';
 
 import 'src/push_game.dart';
 import 'utility/config.dart';
-import 'utility/direction.dart';
+import 'utility/key_action.dart';
 
 class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   late Function stateCallbackHandler;
@@ -142,16 +142,16 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is RawKeyDownEvent;
-    Direction keyDirection = Direction.none;
+    KeyAction keyAction = KeyAction.none;
 
     if (!isKeyDown || _player.moveCount != 0 || pushGame.state.isClear) {
       return super.onKeyEvent(event, keysPressed);
     }
 
-    keyDirection = getKeyDirection(event);
-    bool isMove = pushGame.changeState(keyDirection.name);
-    if (isMove) {
-      playerMove(isKeyDown, keyDirection);
+    keyAction = getKeyAction(event);
+    bool isAction = pushGame.changeState(keyAction.name);
+    if (isAction) {
+      playerAction(isKeyDown, keyAction);
       turn.text = pushGame.turn.toString();
       if (pushGame.state.isCrateMove) {
         crateMove();
@@ -164,30 +164,36 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
     return super.onKeyEvent(event, keysPressed);
   }
 
-  Direction getKeyDirection(RawKeyEvent event) {
-    Direction keyDirection = Direction.none;
+  KeyAction getKeyAction(RawKeyEvent event) {
+    KeyAction keyAction = KeyAction.none;
     if (event.logicalKey == LogicalKeyboardKey.keyA ||
         event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      keyDirection = Direction.left;
+      keyAction = KeyAction.left;
     } else if (event.logicalKey == LogicalKeyboardKey.keyD ||
         event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      keyDirection = Direction.right;
+      keyAction = KeyAction.right;
     } else if (event.logicalKey == LogicalKeyboardKey.keyW ||
         event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      keyDirection = Direction.up;
+      keyAction = KeyAction.up;
     } else if (event.logicalKey == LogicalKeyboardKey.keyS ||
         event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      keyDirection = Direction.down;
+      keyAction = KeyAction.down;
+    // spaceの場合
+    } else if (event.logicalKey == LogicalKeyboardKey.findKeyByKeyId(0x00000000020)) {
+      keyAction = KeyAction.attack;
     }
-    return keyDirection;
+    print(keyAction.name.toString());
+    return keyAction;
   }
 
-  void playerMove(bool isKeyDown, Direction keyDirection) {
-    if (isKeyDown && keyDirection != Direction.none) {
+  void playerAction(bool isKeyDown, KeyAction keyDirection) {
+    if (isKeyDown && keyDirection != KeyAction.none && keyDirection != KeyAction.attack) {
       _player.direction = keyDirection;
       _player.moveCount = oneBlockSize.toInt();
     } else if (_player.direction == keyDirection) {
-      _player.direction = Direction.none;
+      _player.direction = KeyAction.none;
+    } else if (isKeyDown && keyDirection == KeyAction.attack){
+      print("attack!!!");
     }
   }
 

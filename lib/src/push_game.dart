@@ -31,13 +31,22 @@ class PushGame {
   bool changeState(String input) {
     step++;
 
-    // 移動できない場合はターンは更新しない。
-    bool isMove = state.changeState(input);
-    if (isMove) {
+    bool isAttack = false;
+    bool isMove = false;
+
+    // 攻撃、移動の場合はactionを更新したい。
+    if(input=='attack') {
+      isAttack = true;
+    } else {
+      isMove = state.changeState(input);
+    }
+
+    if (isMove || isAttack) {
+      // 移動や攻撃できない場合はターンは更新しない。
       turn++;
     }
 
-    return isMove;
+    return isMove || isAttack;
   }
 
   void nextStage() {

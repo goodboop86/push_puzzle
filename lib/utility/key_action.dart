@@ -1,8 +1,8 @@
 import 'package:flame/components.dart';
 
-enum Direction { up, down, left, right, none }
+enum KeyAction {up, down, left, right, none, attack}
 
-Vector2 getMoveDirection(String input) {
+Vector2 getActionDirection(String input) {
   double dx, dy;
   dx = dy = 0;
 
@@ -19,6 +19,9 @@ Vector2 getMoveDirection(String input) {
     case 'down':
       dy = 1;
       break;
+    case 'attack':
+      // 進行方向の概念がないので、ひとまず上方向に少し移動する。
+      dy = 0.5;
   }
   return Vector2(dx, dy);
 }
