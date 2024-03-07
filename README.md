@@ -100,6 +100,8 @@ classDiagram
     MainGame <-- Player
     MainGame <-- Crate
     PushGame <-- StageState
+    StageState <-- Object
+    %% ここのObjectは独自クラス
     SpriteAnimationComponent <|-- Player
     SpriteAnimationComponent <|-- Crate
 
@@ -141,7 +143,6 @@ stateDiagram-v2
         
     }
     drawNextStage --> onLoad
-
 ```
 
 Objectの更新を実施するかどうか
@@ -163,3 +164,17 @@ stateDiagram-v2
     }
 ```
 
+drawNextStage
+```mermaid
+stateDiagram-v2
+    state drawNextStage{
+        [*] --> nextStage
+        state nextStage {
+            [*]  --> changeStage
+            state changeStage {
+                [*] --> setObjectList
+                setObjectList --> setGoalVecList
+                }
+            }
+        }
+```
