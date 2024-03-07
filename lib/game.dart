@@ -25,6 +25,9 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   late Sprite _floorSprite;
 
   @override
+  bool debugMode = true;
+
+  @override
   Color backgroundColor() => const Color.fromRGBO(89, 106, 108, 1.0);
 
   @override
@@ -40,9 +43,15 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
     };
 
     await draw();
+    await debugDraw();
   }
 
+
   void setCallback(Function fn) => stateCallbackHandler = fn;
+
+  Future<void> debugDraw() async {
+    add(TextComponent(text: pushGame.step.toString(), position: Vector2(10, 10)));
+  }
 
   Future<void> draw() async {
     for (var y = 0; y < pushGame.state.splitStageStateList.length; y++) {

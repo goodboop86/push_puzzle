@@ -29,6 +29,8 @@ class PushGame {
 
   bool changeState(String input) {
     step++;
+    print(step);
+
     return state.changeState(input);
   }
 
