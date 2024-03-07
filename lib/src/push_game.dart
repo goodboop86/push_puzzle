@@ -3,9 +3,10 @@ import 'stage_state.dart';
 class PushGame {
   late int _stage;
   late int step;
+  late int turn;
   late StageState state;
 
-  PushGame({int stage = 1, this.step = 0}) {
+  PushGame({int stage = 1, this.step = 0, this.turn = 0}) {
     _stage = stage;
     state = StageState(stage: stage);
   }
@@ -29,9 +30,14 @@ class PushGame {
 
   bool changeState(String input) {
     step++;
-    print(step);
 
-    return state.changeState(input);
+    // 移動できない場合はターンは更新しない。
+    bool isMove = state.changeState(input);
+    if (isMove) {
+      turn++;
+    }
+
+    return isMove;
   }
 
   void nextStage() {
