@@ -24,7 +24,8 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   final List<SpriteComponent> _floorSpriteList = [];
   late Map<String, Sprite> _spriteMap;
   late Sprite _floorSprite;
-  late final TextComponent turn;
+  late final TextComponent turnText;
+  late final TextComponent actionText;
 
   @override
   bool debugMode = true;
@@ -51,10 +52,15 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
   void setCallback(Function fn) => stateCallbackHandler = fn;
 
   Future<void> debugDraw() async {
-    add(turn = TextComponent(
+    add(turnText = TextComponent(
       position: Vector2(10, 10),
       priority: 1,
       text: "0",
+    ));
+    add(actionText = TextComponent(
+      position: Vector2(60, 10),
+      priority: 1,
+      text: "start",
     ));
   }
 
@@ -156,7 +162,8 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
       bool isMove = pushGame.changeMoveState(keyAction.name);
       if (isMove) {
         playerMoveAction(isKeyDown, keyAction);
-        turn.text = pushGame.turn.toString();
+        turnText.text = pushGame.turn.toString();
+        actionText.text = pushGame.action.toString();
         if (pushGame.state.isCrateMove) {
           crateMove();
         }
@@ -169,7 +176,8 @@ class MainGame extends FlameGame with KeyboardEvents, HasGameRef {
       bool isAttack = pushGame.changeAttackState(keyAction.name);
       if (isAttack) {
         playerAttackAction(isKeyDown, keyAction);
-        turn.text = pushGame.turn.toString();
+        turnText.text = pushGame.turn.toString();
+        actionText.text = pushGame.action.toString();
       }
     }
 

@@ -4,6 +4,7 @@ class PushGame {
   late int _stage;
   late int step;
   late int turn;
+  late String action = "none";
   late StageState state;
 
   PushGame({int stage = 1, this.step = 0, this.turn = 0}) {
@@ -31,6 +32,8 @@ class PushGame {
   bool changeMoveState(String input) {
     step++;
     bool isMove = state.changeState(input);
+    action = "Move";
+
 
     if (isMove) {
       // 移動できない場合はターンは更新しない。
@@ -42,6 +45,7 @@ class PushGame {
   bool changeAttackState(String input) {
     step++;
     turn++;
+    action = "Attack";
     return true;
   }
 
