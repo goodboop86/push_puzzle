@@ -4,9 +4,12 @@ class DungeonConfig {
   late int dungeonHeight;
   late int dungeonWidth;
   late int minMapSize;
-  // 0.25 ~ 0.75
-  get splitRatio => Random().nextDouble() / 2 + 0.25;
-  get splitAxis => Random().nextBool() ? "horizontal" : "vertical";
+  final double splitRatioBias = 0.2;
+  // 0.3 ~ 0.7
+  get splitRatio => Random().nextDouble() / 2 + splitRatioBias;
+  // 1 ~ 4
+  //get splitDepth => Random().nextInt(2) + 1;
+  final int splitDepth = 5;
 
   DungeonConfig(
       {required this.dungeonHeight,
