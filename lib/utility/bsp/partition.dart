@@ -34,7 +34,7 @@ class PartitionRepository {
       if(getLeafNumber == 0) {type="U";}
       if(getLeafNumber == 1) {type="D";}
     }
-    print("SplitAxis: $getSplitAxis, SplitRatio: $getSplitRatio, leafPosition: $type");
+    print("SplitAxis: $getSplitAxis, SplitRatio: $getSplitRatio, Depth: $getDepth, LeafPosition: $type");
     u.trace2d(child);
     print("---");
   }
@@ -42,16 +42,18 @@ class PartitionRepository {
 
 class Partition {
   late DungeonConfig config;
-  late List<List<int>> rect;
+  late List<List<int>> _rect;
   late List<Partition> children;
   late int depth;
   PartitionRepository info = PartitionRepository();
+
+  get getRect => _rect;
 
 
   // 長方形を分割する方向を決める。
   // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
   String getSplitAxisWithUpdateInfo(){
-    info.setSplitAxis = (rect.length/rect.first.length) + (Random().nextDouble() * info.splitAxisBias) > 1 ? "horizontal" : "vertical";
+    info.setSplitAxis = (getRect.length/getRect.first.length) + (Random().nextDouble() * info.splitAxisBias) > 1 ? "horizontal" : "vertical";
     return info.getSplitAxis;
   }
 
@@ -63,34 +65,34 @@ class Partition {
 
   // 2次元配列をパラメータに従って分割する。
   List<List<List<int>>> split() {
-    int height = rect.length;
-    int width = rect.first.length;
+    int height = getRect.length;
+    int width = getRect.first.length;
     String axis = getSplitAxisWithUpdateInfo();
     double ratio = getSplitRatioWithUpdateInfo();
 
-    List<List<List<int>>>? both = [];
+    List<List<List<int>>>? pair = [];
 
     if (axis == "horizontal") {
       int idx = (height * ratio).toInt();
 
       // memo: sublistの第２引数の配列番号は含まれない
-      both = [
-        rect.sublist(0, idx),
-        rect.sublist(idx, height)
+      pair = [
+        _rect.sublist(0, idx),
+        _rect.sublist(idx, height)
       ];
     } else if (axis == "vertical") {
       int idx = (width * ratio).toInt();
-      both = [
-        rect.map((row) => row.sublist(0, idx)).toList(),
-        rect.map((row) => row.sublist(idx, width)).toList()
+      pair = [
+        _rect.map((row) => row.sublist(0, idx)).toList(),
+        _rect.map((row) => row.sublist(idx, width)).toList()
       ];
     }
 
     // splitが作成されていなければexception(無い想定)
-    if (both.isEmpty) {
+    if (pair.isEmpty) {
       throw Exception();
     } else {
-      return both;
+      return pair;
     }
   }
 
@@ -102,7 +104,7 @@ class Partition {
     // - なので判定はisEmptyで良いが要素数1の場合にloopが続くので1以上が良さそう
     // memo: min(splitRatio)=biasなので、index境界は bias * 縦or横幅の四捨五入
     // biasが0.3、幅3ならindex境界は0.9->1となりsublist(0,1), sublist(1,3)が成立する
-    bool isCreatable = rect.length > 1;
+    bool isCreatable = getRect.length > 1;
 
     return isShouldCreate && isCreatable;
   }
@@ -110,23 +112,48 @@ class Partition {
   void createChildren() {
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (isCreateChildren()) {
-      List<List<List<int>>> leaf = split();
+      List<List<List<int>>> pair = split();
 
       info.setDepth = depth;
 
-      // children = leaf.map((half) => Partition(config: config, rect: half, depth: depth)).toList();
-      leaf.asMap().forEach((int i, var child) {
+      // FIXME: logの出すタイミングとPartitionのタイミングが別で二重処理っぽい。
+      // FIXME: この辺のクラス構造を整理したい。
+      pair.asMap().forEach((int i, var child) {
         info.setLeafNumber = i;
         print("#####$i#####");
         info.traceLeafWithInfo(child);
-        Partition(config: config, rect: child, depth: depth);
       });
+      children = pair.map((half) => Partition(config: config, rect: half, depth: depth)).toList();
     } else{
       children = [];
     }
   }
 
-  Partition({required this.config, required this.rect, required this.depth}) {
+  List<List<int>> mergedRect(){
+    bool isEdge = children.isEmpty;
+    if(isEdge) {
+      return getRect;
+    } else {
+      //要素2
+      List<List<List<int>>> pair =[];
+      children.forEach((child) {pair.add(child.getRect);});
+
+      if (info.getSplitAxis == "horizontal") {
+        return pair[0] + pair[1];
+      } else if (info.getSplitAxis == "vertical") {
+        List<List<int>> merged = [];
+        for (int i = 0; i < pair[0].length; i++) {
+          merged.addAll([pair[0][i] + pair[1][i]]);
+        }
+        return merged;
+      } else {
+        // 無い想定
+        return [];
+      }
+    }
+  }
+
+  Partition({required this.config, required List<List<int>> rect, required this.depth}) : _rect = rect {
     depth += 1;
     createChildren();
   }
