@@ -47,13 +47,13 @@ class RoomCreator {
 
       // 部屋を描画する範囲
       roomArea = Area(
-          from: Coordinate(y: margin + hb, x: margin + wb),
-          to: Coordinate(y: margin + hb + rh -1, x: margin + wb + rw -1));
+          from: Point(y: margin + hb, x: margin + wb),
+          to: Point(y: margin + hb + rh -1, x: margin + wb + rw -1));
 
       // グリッドを描画する範囲
       gridArea = Area(
-          from: Coordinate(y: margin, x: margin),
-          to: Coordinate(y: leaf.length - margin -1, x: leaf.first.length - margin -1));
+          from: Point(y: margin, x: margin),
+          to: Point(y: leaf.length - margin -1, x: leaf.first.length - margin -1));
 
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
