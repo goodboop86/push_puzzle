@@ -3,6 +3,7 @@ class Util {
     lis2d.forEach((row) {
       print(row);
     });
+    print('---');
   }
   void trace3d(List<List<List<int>>> lis3d) {
     lis3d.forEach((lis2d) {

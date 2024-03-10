@@ -11,12 +11,11 @@ import 'package:push_puzzle/utility/bsp/util.dart';
 void main() {
   Util u = Util();
   DungeonConfig config =
-      DungeonConfig(dungeonHeight: 30, dungeonWidth: 20, minMapSize: 3);
+      DungeonConfig(dungeonHeight: 20, dungeonWidth: 10, minMapSize: 3);
 
   List<List<int>> rect = List.generate(config.dungeonHeight,
-      (i) => List.generate(config.dungeonWidth, (j) => 10 * i + j));
+      (i) => List.generate(config.dungeonWidth, (j) => config.dungeonWidth * i + j));
   Partition root = Partition(config: config, rect: rect, depth: 0);
 
-  int foo = 1;
 
 }
