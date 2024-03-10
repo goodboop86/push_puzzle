@@ -12,14 +12,17 @@ class PartitionRepository {
   late int _depth;
   late int _childNumber;
   late List<List<int>> _rect;
+  late String _name;
 
-  set setDepth(int depth) {_depth = depth;}
-  set setChildNumber(int childNumber) {_childNumber = childNumber;}
-  set setRect(List<List<int>> rect) => {_rect = rect};
+  set depth(int depth) {_depth = depth;}
+  set childNumber(int childNumber) {_childNumber = childNumber;}
+  set rect(List<List<int>> rect) => {_rect = rect};
+  set name(String name) => {_name = name};
 
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
   get getRect => _rect;
+  get getName => _name;
 
   void trace3d(_) => u.trace3d(_);
 

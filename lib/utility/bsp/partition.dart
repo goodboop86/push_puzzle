@@ -7,6 +7,7 @@ class Partition {
   late List<Partition> children;
   late int depth;
   late PartitionRepository repo = PartitionRepository();
+  late bool isRoot;
 
 
   // 2次元配列をパラメータに従って分割する。
@@ -61,16 +62,16 @@ class Partition {
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (isCreateChildren()) {
       List<List<List<int>>> pair = split();
-      repo.setDepth = depth;
+      repo.depth = depth;
 
       // FIXME: logの出すタイミングとPartitionのタイミングが別で二重処理っぽい。
       // FIXME: この辺のクラス構造を整理したい。
       pair.asMap().forEach((int i, var child) {
-        repo.setChildNumber = i;
+        repo.childNumber = i;
         print("#####$i#####");
         repo.traceChildWithInfo(child);
       });
-      children = pair.map((half) => Partition(config: config, rect: half, depth: depth)).toList();
+      children = pair.map((half) => Partition(config: config, rect: half, depth: depth, isRoot: false)).toList();
     } else{
       children = [];
     }
@@ -100,10 +101,9 @@ class Partition {
     }
   }
 
-  Partition({required this.config, required this.depth, required List<List<int>> rect}) {
-    repo.setRect = rect;
+  Partition({required this.config, required this.depth, required this.isRoot, required List<List<int>> rect}) {
+    repo.rect = rect;
     depth += 1;
     createChildren();
   }
-
 }
