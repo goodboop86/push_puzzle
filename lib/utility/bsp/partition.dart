@@ -11,15 +11,16 @@ class Partition {
 
   // 2次元配列をパラメータに従って分割する。
   List<List<List<int>>> split() {
-    int height = repo.getRect.length;
-    int width = repo.getRect.first.length;
+
+    List<List<int>> rect = repo.getRect;
+    int height = rect.length;
+    int width = rect.first.length;
     repo.adjustSplitAxis();
     String axis = repo.getSplitAxis;
     repo.adjustSplitRatio();
     double ratio = repo.getSplitRatio;
 
     List<List<List<int>>>? pair = [];
-    List<List<int>> rect = repo.getRect;
     if (axis == "horizontal") {
       int idx = (height * ratio).toInt();
       // memo: sublistの第２引数の配列番号は含まれない
@@ -60,15 +61,14 @@ class Partition {
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (isCreateChildren()) {
       List<List<List<int>>> pair = split();
-
       repo.setDepth = depth;
 
       // FIXME: logの出すタイミングとPartitionのタイミングが別で二重処理っぽい。
       // FIXME: この辺のクラス構造を整理したい。
       pair.asMap().forEach((int i, var child) {
-        repo.setLeafNumber = i;
+        repo.setChildNumber = i;
         print("#####$i#####");
-        repo.traceLeafWithInfo(child);
+        repo.traceChildWithInfo(child);
       });
       children = pair.map((half) => Partition(config: config, rect: half, depth: depth)).toList();
     } else{
