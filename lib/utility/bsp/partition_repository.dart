@@ -27,11 +27,11 @@ class PartitionRepository {
   void traceLeafWithInfo(List<List<int>> child) {
     String type = "";
     if (_splitAxis=="vertical") {
-      if(getLeafNumber == 0) {type="L";}
-      if(getLeafNumber == 1) {type="R";}
+      if(_leafNumber == 0) {type="L";}
+      if(_leafNumber == 1) {type="R";}
     } else if(_splitAxis=="horizontal") {
-      if(getLeafNumber == 0) {type="U";}
-      if(getLeafNumber == 1) {type="D";}
+      if(_leafNumber == 0) {type="U";}
+      if(_leafNumber == 1) {type="D";}
     }
     print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Depth: $_depth, LeafPosition: $type");
     u.trace2d(child);
