@@ -13,11 +13,13 @@ class PartitionRepository {
   late int _leafNumber;
   late List<List<int>> _rect;
   late String _name;
+  late bool _isRoot;
 
   set depth(int depth) {_depth = depth;}
   set leafNumber(int childNumber) {_leafNumber = childNumber;}
   set rect(List<List<int>> rect) => {_rect = rect};
   set name(String name) => {_name = name};
+  set isRoot(bool isRoot) => {_isRoot = isRoot};
 
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
@@ -27,6 +29,14 @@ class PartitionRepository {
   void trace3d(_) => u.trace3d(_);
 
   void traceLeafWithInfo(List<List<int>> leaf) {
+    print("##########");
+
+    print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Name: $_name");
+    u.trace2d(leaf);
+    print("---");
+  }
+
+  void updateName(){
     String type = "";
     if (_splitAxis=="vertical") {
       if(_leafNumber == 0) {type="L";}
@@ -35,9 +45,7 @@ class PartitionRepository {
       if(_leafNumber == 0) {type="U";}
       if(_leafNumber == 1) {type="D";}
     }
-    print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Depth: $_depth, childPosition: $type");
-    u.trace2d(leaf);
-    print("---");
+     _name += type;
   }
 
   // 長方形を分割する方向を決める。

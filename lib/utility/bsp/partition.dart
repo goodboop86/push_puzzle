@@ -59,6 +59,7 @@ class Partition {
   }
 
   void createChildren() {
+    children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (isCreateChildren()) {
       List<List<List<int>>> pair = split();
@@ -68,13 +69,12 @@ class Partition {
       // FIXME: この辺のクラス構造を整理したい。
       pair.asMap().forEach((int i, var leaf) {
         repo.leafNumber = i;
-        print("#####$i#####");
+        repo.updateName();
         repo.traceLeafWithInfo(leaf);
-
+        children.add(Partition(config: config, rect: leaf, depth: depth, isRoot: false));
       });
-      children = pair.map((half) => Partition(config: config, rect: half, depth: depth, isRoot: false)).toList();
     } else{
-      children = [];
+      // 無い想定
     }
   }
 
@@ -102,8 +102,10 @@ class Partition {
     }
   }
 
-  Partition({required this.config, required this.depth, required this.isRoot, required List<List<int>> rect}) {
+  Partition({required this.config, required this.depth, required isRoot, required List<List<int>> rect}) {
     repo.rect = rect;
+    repo.isRoot = isRoot;
+    repo.name = "r";
     depth += 1;
     createChildren();
   }
