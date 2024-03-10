@@ -74,8 +74,8 @@ class Partition {
         repo.traceLeafWithInfo(leaf);
         children.add(Partition(rect: leaf, depth: depth, isRoot: false, name: repo.getName + repo.getLeafPosition()));
       });
-    } else{
-      // 無い想定
+    } else {
+      repo.depth = depth;
     }
   }
 
@@ -105,10 +105,15 @@ class Partition {
     }
   }
 
-  void echoMyName(){
-    print(repo.getName);
+  void traceInfo(){
+    print("#########################\n"
+        "PRTITION INFO\n"
+        "Root: ${repo.getIsRoot}, depth: ${repo.getDepth}/${repo.getSplitDepth}, Debug: ${repo.getIsDebug}\n"
+        "name: ${repo.getName}, Split axis: ${repo.getSplitAxis} (bias: ±${repo.getSplitAxisBias}), Sprit ratio: ${repo.getSplitRatio} (bias: ±${repo.getSplitRatioBias})\n"
+    );
+    Util().trace2d(repo.getRect);
     if(children.isNotEmpty) {
-      children.forEach((child) {child.echoMyName();});
+      children.forEach((child) {child.traceInfo();});
     }
   }
 
@@ -116,7 +121,7 @@ class Partition {
     // 末端のnodeを指定して生成する必要がある。
     if(children.isEmpty) {
       var rect = repo.getRect;
-      repo.rect = roomCreator.create(rect);
+      repo.rect = roomCreator.createAndUpdateAreas(rect);
     } else {
       // 末端でなければ子階層を呼び出す。
       children.forEach((child) {

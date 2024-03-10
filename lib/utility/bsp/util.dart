@@ -6,6 +6,7 @@ class Util {
     print('---');
   }
   void trace3d(List<List<List<int>>> lis3d) {
+    print(StackTrace.current.toString());
     lis3d.forEach((lis2d) {
       lis2d.forEach((raw) {
         print(raw);

@@ -9,8 +9,8 @@ class PartitionRepository {
   final double _splitRatioBias = 0.25;
   final int _splitDepth = 4;
   final bool _isDebug = false;
-  late String _splitAxis;
-  late double _splitRatio;
+  late String _splitAxis = "";
+  late double _splitRatio = 0.0;
   late int _depth;
   late int _leafNumber;
   late List<List<int>> _rect;
@@ -23,9 +23,13 @@ class PartitionRepository {
   set name(String name) => {_name = name};
   set isRoot(bool isRoot) => {_isRoot = isRoot};
 
+  get getSplitAxisBias => _splitAxisBias;
+  get getSplitRatioBias => _splitRatioBias;
+  get getSplitDepth => _splitDepth;
+  get getIsDebug => _isDebug;
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
-  get getSplitDepth => _splitDepth;
+  get getDepth => _depth;
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;

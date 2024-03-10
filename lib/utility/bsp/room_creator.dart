@@ -13,8 +13,8 @@ class RoomCreator {
 
   late int gridHeight;
   late int gridWidth;
-  late Area roomArea;
-  late Area gridArea;
+  late Area _roomArea;
+  late Area _gridArea;
 
   bool isCreatable(List<List<int>> leaf) {
     int leafHeight = leaf.length;
@@ -31,8 +31,10 @@ class RoomCreator {
     return  isEnoughRoomSize;
   }
 
+  get getRoomArea => _roomArea;
+  get getGridArea => _gridArea;
 
-  List<List<int>> create(List<List<int>> leaf){
+  List<List<int>> createAndUpdateAreas(List<List<int>> leaf){
 
     if(isCreatable(leaf)) {
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
@@ -45,21 +47,23 @@ class RoomCreator {
       int hb = Random().nextInt(gridHeight - rh); // heightBias
       int wb = Random().nextInt(gridWidth - rw); // widthBias
 
+      // UpdateAres
       // 部屋を描画する範囲
-      roomArea = Area(
+      _roomArea = Area(
           from: Point(y: margin + hb, x: margin + wb),
           to: Point(y: margin + hb + rh -1, x: margin + wb + rw -1));
 
       // グリッドを描画する範囲
-      gridArea = Area(
+      _gridArea = Area(
           from: Point(y: margin, x: margin),
           to: Point(y: leaf.length - margin -1, x: leaf.first.length - margin -1));
 
+
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
-          if (gridArea.isIn(y, x)){
+          if (_gridArea.isIn(y, x)){
             leaf[y][x] = 1;
-            if (roomArea.isIn(y, x)) {
+            if (_roomArea.isIn(y, x)) {
               leaf[y][x] = 4;
             }
           }
