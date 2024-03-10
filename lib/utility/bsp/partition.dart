@@ -66,10 +66,11 @@ class Partition {
 
       // FIXME: logの出すタイミングとPartitionのタイミングが別で二重処理っぽい。
       // FIXME: この辺のクラス構造を整理したい。
-      pair.asMap().forEach((int i, var child) {
-        repo.childNumber = i;
+      pair.asMap().forEach((int i, var leaf) {
+        repo.leafNumber = i;
         print("#####$i#####");
-        repo.traceChildWithInfo(child);
+        repo.traceLeafWithInfo(leaf);
+
       });
       children = pair.map((half) => Partition(config: config, rect: half, depth: depth, isRoot: false)).toList();
     } else{
