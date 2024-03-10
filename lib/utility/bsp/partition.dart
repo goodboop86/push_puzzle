@@ -1,5 +1,6 @@
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/room_creator.dart';
+import 'package:push_puzzle/utility/bsp/util.dart';
 
 import 'partition_repository.dart';
 
@@ -80,12 +81,13 @@ class Partition {
 
   List<List<int>> getMergedRect(){
     bool isEdge = children.isEmpty;
+    Util u = Util();
     if(isEdge) {
       return repo.getRect;
     } else {
       //要素2
       List<List<List<int>>> pair =[];
-      children.forEach((child) {pair.add(child.repo.getRect);});
+      children.forEach((child) {pair.add(child.getMergedRect());});
 
       if (repo.getSplitAxis == "horizontal") {
         return pair[0] + pair[1];
@@ -97,6 +99,7 @@ class Partition {
         return merged;
       } else {
         // 無い想定
+        Exception();
         return [];
       }
     }
@@ -109,10 +112,15 @@ class Partition {
     }
   }
 
-  void createRoom() {
-    repo.rect = roomCreator.create(repo.getRect);
-    if(children.isNotEmpty) {
-      children.forEach((child) {child.createRoom();});
+  void createRoomIfIsEdge() {
+    // 末端のnodeを指定して生成する必要がある。
+    if(children.isEmpty) {
+      var rect = repo.getRect;
+      repo.rect = roomCreator.create(rect);
+    } else {
+      // 末端でなければ子階層を呼び出す。
+      children.forEach((child) {
+        child.createRoomIfIsEdge();});
     }
   }
 

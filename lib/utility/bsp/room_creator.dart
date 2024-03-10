@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
+import 'package:push_puzzle/utility/bsp/util.dart';
 
 class RoomCreator {
   late DungeonConfig config;
@@ -43,18 +44,25 @@ class RoomCreator {
 
       // 部屋を描画する範囲
       bool isInRoomRange(int y, int x) =>
-          y >= margin + hb && y <= margin + hb + rh &&
-              x >= margin + wb && x <= margin + wb + rw;
+          y >= margin + hb && y <= margin + hb + rh -1 &&
+              x >= margin + wb && x <= margin + wb + rw -1 ;
+
+      bool isInGridRange(int y, int x) =>
+          y >= margin  && y <= leaf.length - margin -1 &&
+              x >= margin  && x <= leaf.first.length - margin -1;
 
 
-      //List<List<int>> room = [];
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
-          if (isInRoomRange(y, x)) {
-            leaf[y][x] = 0;
+          if (isInGridRange(y, x)){
+            leaf[y][x] = 1;
+            if (isInRoomRange(y, x)) {
+              leaf[y][x] = 4;
+            }
           }
         }
       }
+
 
       return leaf;
     } else {

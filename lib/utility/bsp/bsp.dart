@@ -9,12 +9,12 @@ import 'package:push_puzzle/utility/bsp/room_creator.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
 
 
-void main() {
+Future<void> main() async {
   Util u = Util();
   DungeonConfig config = DungeonConfig();
 
   List<List<int>> rect = List.generate(config.dungeonHeight,
-      (i) => List.generate(config.dungeonWidth, (j) => config.dungeonWidth * i + j));
+      (i) => List.generate(config.dungeonWidth, (j) => 8));
   Partition root = Partition(rect: rect, depth: 0, isRoot: true, name: "r");
 
   //List<List<int>> merged = root.getMergedRect();
@@ -26,7 +26,7 @@ void main() {
   // var res = creator.create(rect);
   // u.trace2d(res);
 
-  root.createRoom();
+  root.createRoomIfIsEdge();
   var res = root.getMergedRect();
   u.trace2d(res);
 }
