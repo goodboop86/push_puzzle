@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
 
@@ -12,6 +13,8 @@ class RoomCreator {
 
   late int gridHeight;
   late int gridWidth;
+  late Area roomArea;
+  late Area gridArea;
 
   bool isCreatable(List<List<int>> leaf) {
     int leafHeight = leaf.length;
@@ -43,26 +46,30 @@ class RoomCreator {
       int wb = Random().nextInt(gridWidth - rw); // widthBias
 
       // 部屋を描画する範囲
-      bool isInRoomRange(int y, int x) =>
-          y >= margin + hb && y <= margin + hb + rh -1 &&
-              x >= margin + wb && x <= margin + wb + rw -1 ;
+      roomArea = Area(
+          from: Coordinate(y: margin + hb, x: margin + wb),
+          to: Coordinate(y: margin + hb + rh -1, x: margin + wb + rw -1));
 
-      bool isInGridRange(int y, int x) =>
-          y >= margin  && y <= leaf.length - margin -1 &&
-              x >= margin  && x <= leaf.first.length - margin -1;
-
+      // グリッドを描画する範囲
+      gridArea = Area(
+          from: Coordinate(y: margin, x: margin),
+          to: Coordinate(y: leaf.length - margin -1, x: leaf.first.length - margin -1));
 
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
-          if (isInGridRange(y, x)){
+          if (gridArea.isIn(y, x)){
             leaf[y][x] = 1;
-            if (isInRoomRange(y, x)) {
+            if (roomArea.isIn(y, x)) {
               leaf[y][x] = 4;
             }
           }
         }
       }
 
+
+      print("roomHeight: $rh, roomWidth: $rw");
+      Util u = Util();
+      u.trace2d(leaf);
 
       return leaf;
     } else {
