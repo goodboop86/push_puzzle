@@ -7,12 +7,13 @@ class PartitionRepository {
   final Util u = Util();
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
+  final bool _isDebug = true;
   late String _splitAxis;
   late double _splitRatio;
   late int _depth;
   late int _leafNumber;
   late List<List<int>> _rect;
-  late String _name;
+  String _name = "";
   late bool _isRoot;
 
   set depth(int depth) {_depth = depth;}
@@ -25,18 +26,21 @@ class PartitionRepository {
   get getSplitRatio => _splitRatio;
   get getRect => _rect;
   get getName => _name;
+  get getIsRoot => _isRoot;
 
   void trace3d(_) => u.trace3d(_);
 
   void traceLeafWithInfo(List<List<int>> leaf) {
-    print("##########");
-
-    print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Name: $_name");
-    u.trace2d(leaf);
-    print("---");
+    String name = _name +  getLeafPosition();
+    if (_isDebug) {
+      print("##########");
+      print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Name: $name");
+      u.trace2d(leaf);
+      print("---");
+    }
   }
 
-  void updateName(){
+  String getLeafPosition(){
     String type = "";
     if (_splitAxis=="vertical") {
       if(_leafNumber == 0) {type="L";}
@@ -45,7 +49,7 @@ class PartitionRepository {
       if(_leafNumber == 0) {type="U";}
       if(_leafNumber == 1) {type="D";}
     }
-     _name += type;
+     return type;
   }
 
   // 長方形を分割する方向を決める。

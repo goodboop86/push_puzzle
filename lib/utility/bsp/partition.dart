@@ -7,7 +7,6 @@ class Partition {
   late List<Partition> children;
   late int depth;
   late PartitionRepository repo = PartitionRepository();
-  late bool isRoot;
 
 
   // 2次元配列をパラメータに従って分割する。
@@ -69,16 +68,15 @@ class Partition {
       // FIXME: この辺のクラス構造を整理したい。
       pair.asMap().forEach((int i, var leaf) {
         repo.leafNumber = i;
-        repo.updateName();
         repo.traceLeafWithInfo(leaf);
-        children.add(Partition(config: config, rect: leaf, depth: depth, isRoot: false));
+        children.add(Partition(config: config, rect: leaf, depth: depth, isRoot: false, name: repo.getName + repo.getLeafPosition()));
       });
     } else{
       // 無い想定
     }
   }
 
-  List<List<int>> mergedRect(){
+  List<List<int>> getMergedRect(){
     bool isEdge = children.isEmpty;
     if(isEdge) {
       return repo.getRect;
@@ -102,10 +100,17 @@ class Partition {
     }
   }
 
-  Partition({required this.config, required this.depth, required isRoot, required List<List<int>> rect}) {
+  void echoMyName(){
+    print(repo.getName);
+    if(children.isNotEmpty) {
+      children.forEach((child) {child.echoMyName();});
+    }
+  }
+
+  Partition({required this.config, required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
     repo.rect = rect;
     repo.isRoot = isRoot;
-    repo.name = "r";
+    repo.name = name;
     depth += 1;
     createChildren();
   }
