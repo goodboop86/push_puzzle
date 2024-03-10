@@ -15,7 +15,7 @@ void main() {
 
   List<List<int>> rect = List.generate(config.dungeonHeight,
       (i) => List.generate(config.dungeonWidth, (j) => config.dungeonWidth * i + j));
-  Partition root = Partition(config: config, rect: rect, depth: 0, isRoot: true, name: "r");
+  Partition root = Partition(rect: rect, depth: 0, isRoot: true, name: "r");
 
   //List<List<int>> merged = root.getMergedRect();
   //print("===merged===");

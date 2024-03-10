@@ -1,9 +1,6 @@
-import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-
 import 'partition_repository.dart';
 
 class Partition {
-  late DungeonConfig config;
   late List<Partition> children;
   late int depth;
   late PartitionRepository repo = PartitionRepository();
@@ -45,7 +42,7 @@ class Partition {
   }
 
   bool isCreateChildren() {
-    bool isShouldCreate = depth < config.splitDepth ? true : false;
+    bool isShouldCreate = depth < repo.getSplitDepth ? true : false;
 
     // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる
     // - sublistはsublist(0,0)などでも空配列を返せるのでexceptionはしない
@@ -69,7 +66,7 @@ class Partition {
       pair.asMap().forEach((int i, var leaf) {
         repo.leafNumber = i;
         repo.traceLeafWithInfo(leaf);
-        children.add(Partition(config: config, rect: leaf, depth: depth, isRoot: false, name: repo.getName + repo.getLeafPosition()));
+        children.add(Partition(rect: leaf, depth: depth, isRoot: false, name: repo.getName + repo.getLeafPosition()));
       });
     } else{
       // 無い想定
@@ -107,7 +104,7 @@ class Partition {
     }
   }
 
-  Partition({required this.config, required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
+  Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
     repo.rect = rect;
     repo.isRoot = isRoot;
     repo.name = name;

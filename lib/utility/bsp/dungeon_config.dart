@@ -1,10 +1,9 @@
 import 'dart:math';
 
 class DungeonConfig {
-  late int dungeonHeight;
-  late int dungeonWidth;
-  late int minMapSize;
-  final int splitDepth = 3;
+  late int dungeonHeight = 15;
+  late int dungeonWidth = 10;
+  late int minMapSize = 4;
 
   DungeonConfig(
       {required this.dungeonHeight,

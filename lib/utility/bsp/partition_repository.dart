@@ -7,7 +7,8 @@ class PartitionRepository {
   final Util u = Util();
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
-  final bool _isDebug = true;
+  final int _splitDepth = 4;
+  final bool _isDebug = false;
   late String _splitAxis;
   late double _splitRatio;
   late int _depth;
@@ -24,6 +25,7 @@ class PartitionRepository {
 
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
+  get getSplitDepth => _splitDepth;
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;
