@@ -1,12 +1,14 @@
 import 'dart:math';
 
 class DungeonConfig {
-  late int dungeonHeight = 15;
-  late int dungeonWidth = 10;
-  late int minMapSize = 4;
+  // ダンジョンの設定値
+  final int dungeonHeight = 50;
+  final int dungeonWidth = 60;
 
-  DungeonConfig(
-      {required this.dungeonHeight,
-        required this.dungeonWidth,
-        required this.minMapSize});
+  // RoomCreatorの設定値
+  final int minRoomSize = 4;
+  final int minMarginBetweenLeaf = 2;
+  final double gridRatio = 0.6;
+
+
 }

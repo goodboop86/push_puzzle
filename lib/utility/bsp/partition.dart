@@ -1,9 +1,14 @@
+import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
+import 'package:push_puzzle/utility/bsp/room_creator.dart';
+
 import 'partition_repository.dart';
 
 class Partition {
   late List<Partition> children;
   late int depth;
   late PartitionRepository repo = PartitionRepository();
+  late DungeonConfig config = DungeonConfig();
+  late RoomCreator roomCreator = RoomCreator(config: config);
 
 
   // 2次元配列をパラメータに従って分割する。
@@ -101,6 +106,13 @@ class Partition {
     print(repo.getName);
     if(children.isNotEmpty) {
       children.forEach((child) {child.echoMyName();});
+    }
+  }
+
+  void createRoom() {
+    repo.rect = roomCreator.create(repo.getRect);
+    if(children.isNotEmpty) {
+      children.forEach((child) {child.createRoom();});
     }
   }
 
