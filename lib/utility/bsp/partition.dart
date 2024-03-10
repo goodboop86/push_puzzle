@@ -1,9 +1,6 @@
-
-
-
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 
-import 'PartitionRepository.dart';
+import 'partition_repository.dart';
 
 class Partition {
   late DungeonConfig config;
@@ -22,11 +19,9 @@ class Partition {
     double ratio = repo.getSplitRatio;
 
     List<List<List<int>>>? pair = [];
-
     List<List<int>> rect = repo.getRect;
     if (axis == "horizontal") {
       int idx = (height * ratio).toInt();
-
       // memo: sublistの第２引数の配列番号は含まれない
       pair = [
         rect.sublist(0, idx),
