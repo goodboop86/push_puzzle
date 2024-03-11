@@ -1,5 +1,7 @@
+import 'dart:math';
+
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-import 'package:push_puzzle/utility/bsp/parttition_visitor.dart';
+import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
 
@@ -12,9 +14,15 @@ class Partition {
   late PartitionRepository repo = PartitionRepository();
   late DungeonConfig config = DungeonConfig();
   late RoomCreator roomCreator = RoomCreator(config: config);
+  late int id;
 
-  void Accept(PartitionVisitor visitor){
-    visitor.visit(this);
+  void accept(PartitionVisitor visitor){
+    visitor.storeData(this);
+    if (depth < 3){
+      children = visitor.createChildren(depth);
+      children.forEach((child) {visitor.visit(child);});
+      //children.map((child) => visitor.visit(child));
+    }
   }
 
   // 2次元配列をパラメータに従って分割する。
@@ -145,6 +153,11 @@ class Partition {
     if(children.isNotEmpty) {
       children.forEach((child) {child.traceInfo();});
     }
+  }
+
+
+  Partition.initialize({required this.depth}){
+    id = Random().nextInt(100);
   }
 
   Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
