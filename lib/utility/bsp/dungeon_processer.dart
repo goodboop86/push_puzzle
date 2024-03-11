@@ -1,4 +1,3 @@
-import 'package:push_puzzle/utility/bsp/corridor_crator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/room_creator.dart';
@@ -36,7 +35,5 @@ class DungeonProcessor {
     //roomCreator = RoomCreator(config: dungeonConfig);
     initialRect = List.generate(dungeonConfig.dungeonHeight,
             (i) => List.generate(dungeonConfig.dungeonWidth, (j) => 8));
-
-;}
-
+  }
 }

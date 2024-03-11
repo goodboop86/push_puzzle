@@ -9,7 +9,7 @@ class PartitionRepository {
   final Util u = Util();
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
-  final int _splitDepth = 4;
+  final int _splitDepth = 3;
   final bool _isDebug = false;
   late String _splitAxis = "";
   late double _splitRatio = 0.0;
