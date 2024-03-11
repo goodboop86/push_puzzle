@@ -27,10 +27,13 @@ class DungeonProcessor {
 
     u.trace2d(root.getMergedRect());
 
+    //var roomAreas = root.getRoomAreas([]);
+
+
   }
 
   DungeonProcessor() {
-    roomCreator = RoomCreator(config: dungeonConfig);
+    //roomCreator = RoomCreator(config: dungeonConfig);
     initialRect = List.generate(dungeonConfig.dungeonHeight,
             (i) => List.generate(dungeonConfig.dungeonWidth, (j) => 8));
 

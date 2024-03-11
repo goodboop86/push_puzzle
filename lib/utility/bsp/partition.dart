@@ -1,7 +1,9 @@
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
+import 'package:push_puzzle/utility/bsp/parttition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
 
+import 'area.dart';
 import 'partition_repository.dart';
 
 class Partition {
@@ -11,6 +13,9 @@ class Partition {
   late DungeonConfig config = DungeonConfig();
   late RoomCreator roomCreator = RoomCreator(config: config);
 
+  void Accept(PartitionVisitor visitor){
+    visitor.visit(this);
+  }
 
   // 2次元配列をパラメータに従って分割する。
   List<List<List<int>>> split() {
@@ -67,8 +72,6 @@ class Partition {
       List<List<List<int>>> pair = split();
       repo.depth = depth;
 
-      // FIXME: logの出すタイミングとPartitionのタイミングが別で二重処理っぽい。
-      // FIXME: この辺のクラス構造を整理したい。
       pair.asMap().forEach((int i, var leaf) {
         repo.leafNumber = i;
         repo.traceLeafWithInfo(leaf);
@@ -105,6 +108,33 @@ class Partition {
     }
   }
 
+  List<Area> getRoomAreas(List<Area> roomAreas) {
+    // 末端のnodeを指定して生成する必要がある。
+    if(children.isEmpty) {
+      roomAreas.add(repo.getRoomArea);
+      return roomAreas;
+    } else {
+      // 末端でなければ子階層を呼び出す。
+      children.forEach((child) {
+        roomAreas = child.getRoomAreas(roomAreas);});
+    }
+    return roomAreas;
+  }
+
+  void createRoomIfIsEdge() {
+    // 末端のnodeを指定して生成する必要がある。
+    if(children.isEmpty) {
+      var rect = repo.getRect;
+      repo.rect = roomCreator.createAndUpdateAreas(rect);
+      // 後のMSTで通路を決める際に利用
+      // repo.roomArea = roomCreator.getRoomArea;
+    } else {
+      // 末端でなければ子階層を呼び出す。
+      children.forEach((child) {
+        child.createRoomIfIsEdge();});
+    }
+  }
+
   void traceInfo(){
     print("#########################\n"
         "PRTITION INFO\n"
@@ -114,18 +144,6 @@ class Partition {
     Util().trace2d(repo.getRect);
     if(children.isNotEmpty) {
       children.forEach((child) {child.traceInfo();});
-    }
-  }
-
-  void createRoomIfIsEdge() {
-    // 末端のnodeを指定して生成する必要がある。
-    if(children.isEmpty) {
-      var rect = repo.getRect;
-      repo.rect = roomCreator.createAndUpdateAreas(rect);
-    } else {
-      // 末端でなければ子階層を呼び出す。
-      children.forEach((child) {
-        child.createRoomIfIsEdge();});
     }
   }
 

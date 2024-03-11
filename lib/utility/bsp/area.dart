@@ -15,11 +15,15 @@ class Area {
       y >= from.y && y <= to.y &&
           x >= from.x && x <= to.x ;
 
-  Point center(int x, int y) {
+  Point center() {
     return Point(y: (from.y + to.y)~/2 , x: (from.x + to.x)~/2);
   }
 
-  Point getRandomPint() {
+  List<int> shape(){
+    return [to.y - from.y, to.x - from.x];
+  }
+
+  Point getRandomPoint() {
     return Point(
         y: Random().nextInt(from.y - to.y) + from.y,
         x: Random().nextInt(from.x - to.x) + from.x);

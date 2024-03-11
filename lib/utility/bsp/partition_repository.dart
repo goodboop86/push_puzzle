@@ -1,7 +1,9 @@
 // 再帰構造を持つツリークラス
 import 'dart:math';
 
+import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
+
 
 class PartitionRepository {
   final Util u = Util();
@@ -16,12 +18,14 @@ class PartitionRepository {
   late List<List<int>> _rect;
   String _name = "";
   late bool _isRoot;
+  late Area _roomArea;
 
   set depth(int depth) {_depth = depth;}
   set leafNumber(int childNumber) {_leafNumber = childNumber;}
   set rect(List<List<int>> rect) => {_rect = rect};
   set name(String name) => {_name = name};
   set isRoot(bool isRoot) => {_isRoot = isRoot};
+  set roomArea(Area roomArea) => {_roomArea = _roomArea};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
@@ -33,6 +37,7 @@ class PartitionRepository {
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;
+  get getRoomArea => _roomArea;
 
   void trace3d(_) => u.trace3d(_);
 
