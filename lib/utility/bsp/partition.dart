@@ -1,3 +1,4 @@
+import 'dart:math';
 
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
@@ -13,26 +14,91 @@ class Partition {
   late PartitionRepository repo = PartitionRepository();
   late DungeonConfig config = DungeonConfig();
   late RoomCreator roomCreator = RoomCreator(config: config);
+  late int id;
 
   void accept(PartitionVisitor visitor){
-    //visitor.storeData(this);
+    visitor.storeData(this);
     if (depth < 3){
-      visitor.createChildren(this);
+      children = visitor.createChildren(depth);
+      children.forEach((child) {visitor.visit(child);});
       //children.map((child) => visitor.visit(child));
     }
   }
 
+  // 2次元配列をパラメータに従って分割する。
+  List<List<List<int>>> split() {
+
+    List<List<int>> rect = repo.getRect;
+    int height = rect.length;
+    int width = rect.first.length;
+    repo.adjustSplitAxis();
+    String axis = repo.getSplitAxis;
+    repo.adjustSplitRatio();
+    double ratio = repo.getSplitRatio;
+
+    List<List<List<int>>>? pair = [];
+    if (axis == "horizontal") {
+      int idx = (height * ratio).toInt();
+      // memo: sublistの第２引数の配列番号は含まれない
+      pair = [
+        rect.sublist(0, idx),
+        rect.sublist(idx, height)
+      ];
+    } else if (axis == "vertical") {
+      int idx = (width * ratio).toInt();
+      pair = [
+        rect.map((row) => row.sublist(0, idx)).toList(),
+        rect.map((row) => row.sublist(idx, width)).toList()
+      ];
+    }
+
+    // splitが作成されていなければexception(無い想定)
+    if (pair.isEmpty) {
+      throw Exception();
+    } else {
+      return pair;
+    }
+  }
+
+  bool isCreateChildren() {
+    bool isShouldCreate = depth < repo.getSplitDepth ? true : false;
+
+    // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる
+    // - sublistはsublist(0,0)などでも空配列を返せるのでexceptionはしない
+    // - なので判定はisEmptyで良いが要素数1の場合にloopが続くので1以上が良さそう
+    // memo: min(splitRatio)=biasなので、index境界は bias * 縦or横幅の四捨五入
+    // biasが0.3、幅3ならindex境界は0.9->1となりsublist(0,1), sublist(1,3)が成立する
+    bool isCreatable = repo.getRect.length > 1;
+
+    return isShouldCreate && isCreatable;
+  }
+
+  void createChildren() {
+    children = [];
+    // 分割回数が十分でないならchildrenの作成を繰り返す
+    if (isCreateChildren()) {
+      List<List<List<int>>> pair = split();
+      repo.depth = depth;
+
+      pair.asMap().forEach((int i, var leaf) {
+        repo.leafNumber = i;
+        repo.traceLeafWithInfo(leaf);
+        children.add(Partition(rect: leaf, depth: depth, isRoot: false, name: repo.getName + repo.getLeafPosition()));
+      });
+    } else {
+      repo.depth = depth;
+    }
+  }
 
   List<List<int>> getMergedRect(){
     bool isEdge = children.isEmpty;
+    Util u = Util();
     if(isEdge) {
       return repo.getRect;
     } else {
       //要素2
       List<List<List<int>>> pair =[];
-
-      for (var child in children) {pair.add(child.getMergedRect());}
-      //children.forEach((child) {pair.add(child.getMergedRect());});
+      children.forEach((child) {pair.add(child.getMergedRect());});
 
       if (repo.getSplitAxis == "horizontal") {
         return pair[0] + pair[1];
@@ -57,8 +123,8 @@ class Partition {
       return roomAreas;
     } else {
       // 末端でなければ子階層を呼び出す。
-      for (var child in children) {child.getRoomAreas(roomAreas);}
-      //children.forEach((child) { roomAreas = child.getRoomAreas(roomAreas);});
+      children.forEach((child) {
+        roomAreas = child.getRoomAreas(roomAreas);});
     }
     return roomAreas;
   }
@@ -72,47 +138,33 @@ class Partition {
       // repo.roomArea = roomCreator.getRoomArea;
     } else {
       // 末端でなければ子階層を呼び出す。
-      for (var child in children) {child.createRoomIfIsEdge();}
-      //children.forEach((child) {child.createRoomIfIsEdge();});
+      children.forEach((child) {
+        child.createRoomIfIsEdge();});
     }
   }
 
-
-  // FIXME: tracerはvisitorの方がよさそう.
-  // FIXME: あとroomCreateするときに葉のNodeのrectが必要になるから、それもvisitorの方が良いと思われる。
-  // 再帰処理はparitionに任せたほうが良さそう。
   void traceInfo(){
     print("#########################\n"
-        "PARTITION INFO\n"
+        "PRTITION INFO\n"
         "Root: ${repo.getIsRoot}, depth: ${repo.getDepth}/${repo.getSplitDepth}, Debug: ${repo.getIsDebug}\n"
-        "name: ${repo.getName}, Split axis: ${repo.getSplitAxis} (bias: ±${repo.getSplitAxisBias}), Split ratio: ${repo.getSplitRatio} (bias: ±${repo.getSplitRatioBias})\n"
+        "name: ${repo.getName}, Split axis: ${repo.getSplitAxis} (bias: ±${repo.getSplitAxisBias}), Sprit ratio: ${repo.getSplitRatio} (bias: ±${repo.getSplitRatioBias})\n"
     );
     Util().trace2d(repo.getRect);
     if(children.isNotEmpty) {
-      for (var child in children) {child.traceInfo();}
-      //children.forEach((child) {child.traceInfo();});
+      children.forEach((child) {child.traceInfo();});
     }
   }
 
-  // visitor用
-  Partition.initialize(PartitionVisitor v,{required this.depth, required isRoot, required rect, required String name}){
 
-    children =[]; //FIXME: 暫定処理
-
-    repo.rect = rect;
-    repo.isRoot = isRoot;
-    repo.name = name;
-    depth += 1;
+  Partition.initialize({required this.depth}){
+    id = Random().nextInt(100);
   }
-
-  // visitor用
-  Partition.initialize_(int i);
 
   Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
     repo.rect = rect;
     repo.isRoot = isRoot;
     repo.name = name;
     depth += 1;
-    // createChildren();
+    createChildren();
   }
 }
