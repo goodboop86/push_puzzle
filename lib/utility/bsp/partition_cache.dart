@@ -19,13 +19,15 @@ class PartitionCache {
   String _name = "";
   late bool _isRoot;
   late Area _roomArea;
+  late Area _gridArea;
 
   set depth(int depth) {_depth = depth;}
   set leafNumber(int childNumber) {_leafNumber = childNumber;}
   set rect(List<List<int>> rect) => {_rect = rect};
   set name(String name) => {_name = name};
   set isRoot(bool isRoot) => {_isRoot = isRoot};
-  set roomArea(Area roomArea) => {_roomArea = _roomArea};
+  set roomArea(Area roomArea) => {_roomArea = roomArea};
+  set gridArea(Area gridArea) => {_gridArea = gridArea};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
@@ -38,6 +40,7 @@ class PartitionCache {
   get getName => _name;
   get getIsRoot => _isRoot;
   get getRoomArea => _roomArea;
+  get getGridArea => _gridArea;
 
   void trace3d(_) => u.trace3d(_);
 

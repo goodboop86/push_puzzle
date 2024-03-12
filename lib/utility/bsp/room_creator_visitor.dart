@@ -12,8 +12,8 @@ class RoomCreatorVisitor extends Visitor {
 
   late int gridHeight;
   late int gridWidth;
-  late Area _roomArea;
-  late Area _gridArea;
+  // temporal partition
+  late Partition tp;
 
   void visit(Partition partition){
     partition.acceptRoomCreatorVisitor(this);
@@ -21,15 +21,19 @@ class RoomCreatorVisitor extends Visitor {
   }
 
   void createRoomIfIsEdge(Partition p) {
-    // 末端のnodeを指定して生成する必要がある。
-    if(p.children.isEmpty) {
-      var rect = p.cache.getRect;
-      p.cache.rect = createAndUpdateAreas(rect);
+    // コードの可読性を上げるため、処理が終わるまで格納する。
+    // 実装として良いかは微妙
+    tp = p;
+    
+    // 末端のnodeを指定して生成する必要がある.
+    if(tp.children.isEmpty) {
+      tp.cache.rect =  drawAreas();
+
       // 後のMSTで通路を決める際に利用
       // repo.roomArea = roomCreator.getRoomArea;
     } else {
       // 末端でなければ子階層を呼び出す。
-      p.children.forEach((child) {
+      tp.children.forEach((child) {
         createRoomIfIsEdge(child);});
     }
   }
@@ -49,11 +53,9 @@ class RoomCreatorVisitor extends Visitor {
     return  isEnoughRoomSize;
   }
 
-  get getRoomArea => _roomArea;
-  get getGridArea => _gridArea;
 
-  List<List<int>> createAndUpdateAreas(List<List<int>> leaf){
-
+  List<List<int>> drawAreas(){
+    List<List<int>> leaf = tp.cache.getRect;
     if(isCreatable(leaf)) {
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
       int rh = Random().nextInt(gridHeight - config.minRoomSize) +
@@ -65,29 +67,28 @@ class RoomCreatorVisitor extends Visitor {
       int hb = Random().nextInt(gridHeight - rh); // heightBias
       int wb = Random().nextInt(gridWidth - rw); // widthBias
 
-      // UpdateAres
-      // 部屋を描画する範囲
-      _roomArea = Area(
-          from: Point(y: config.minMarginBetweenLeaf + hb, x: config.minMarginBetweenLeaf + wb),
-          to: Point(y: config.minMarginBetweenLeaf + hb + rh -1, x: config.minMarginBetweenLeaf + wb + rw -1));
 
       // グリッドを描画する範囲
-      _gridArea = Area(
+      tp.cache.gridArea = Area(
           from: Point(y: config.minMarginBetweenLeaf, x: config.minMarginBetweenLeaf),
           to: Point(y: leaf.length - config.minMarginBetweenLeaf -1, x: leaf.first.length - config.minMarginBetweenLeaf -1));
 
+      // UpdateAres
+      // 部屋を描画する範囲
+      tp.cache.roomArea = Area(
+          from: Point(y: config.minMarginBetweenLeaf + hb, x: config.minMarginBetweenLeaf + wb),
+          to: Point(y: config.minMarginBetweenLeaf + hb + rh -1, x: config.minMarginBetweenLeaf + wb + rw -1));
 
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
-          if (_gridArea.isIn(y, x)){
+          if (tp.cache.getGridArea.isIn(y, x)){
             leaf[y][x] = 1;
-            if (_roomArea.isIn(y, x)) {
+            if (tp.cache.getRoomArea.isIn(y, x)) {
               leaf[y][x] = 4;
             }
           }
         }
       }
-
 
       print("roomHeight: $rh, roomWidth: $rw");
       Util u = Util();
@@ -100,9 +101,5 @@ class RoomCreatorVisitor extends Visitor {
     }
   }
 
-  RoomCreatorVisitor() {
-    //config.minRoomSize =  config.config.minRoomSize;
-    //vconfig.minMarginBetweenLeaf = config.minconfig.minMarginBetweenLeafBetweenLeaf;
-    //config.gridRatio = config.config.gridRatio;
-}
+  RoomCreatorVisitor();
 }
