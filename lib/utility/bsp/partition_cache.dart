@@ -7,6 +7,8 @@ import 'package:push_puzzle/utility/bsp/util.dart';
 
 class PartitionCache {
   final Util u = Util();
+
+  // Partition生成に関わる設定
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
   final int _splitDepth = 4;
@@ -35,6 +37,8 @@ class PartitionCache {
   get getIsDebug => _isDebug;
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
+
+  // FIXME: depthはPartitionが持つ情報でもよさそう。
   get getDepth => _depth;
   get getRect => _rect;
   get getName => _name;
