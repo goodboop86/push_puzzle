@@ -9,7 +9,7 @@ class PartitionVisitor extends Visitor {
   @override
   void visit(Partition partition) {
     access += 1;
-    partition.accept(this);
+    partition.acceptPartitionVisitor(this);
   }
   List<Partition> createChildren(int depth){
     return [Partition.initialize(depth: depth+1), Partition.initialize(depth: depth+1)];

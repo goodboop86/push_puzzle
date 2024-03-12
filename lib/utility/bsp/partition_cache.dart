@@ -5,7 +5,7 @@ import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/util.dart';
 
 
-class PartitionRepository {
+class PartitionCache {
   final Util u = Util();
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
