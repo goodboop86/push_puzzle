@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator_visitor.dart';
-import 'package:push_puzzle/utility/bsp/util.dart';
+import 'package:push_puzzle/utility/bsp/Tracer.dart';
 
 import 'area.dart';
 import 'partition_cache.dart';
@@ -20,7 +20,7 @@ class Partition {
 
   List<List<int>> getMergedRect(){
     bool isEdge = children.isEmpty;
-    Util u = Util();
+    CacheTracer u = CacheTracer();
     if(isEdge) {
       return cache.getRect;
     } else {
@@ -57,18 +57,6 @@ class Partition {
     return roomAreas;
   }
 
-
-  void traceInfo(){
-    print("#########################\n"
-        "PRTITION INFO\n"
-        "Root: ${cache.getIsRoot}, depth: ${cache.getDepth}/${cache.getSplitDepth}, Debug: ${cache.getIsDebug}\n"
-        "name: ${cache.getName}, Split axis: ${cache.getSplitAxis} (bias: ±${cache.getSplitAxisBias}), Sprit ratio: ${cache.getSplitRatio} (bias: ±${cache.getSplitRatioBias})\n"
-    );
-    Util().trace2d(cache.getRect);
-    if(children.isNotEmpty) {
-      children.forEach((child) {child.traceInfo();});
-    }
-  }
 
   void acceptPartitionVisitor(PartitionVisitor visitor){
     visitor.createChildren(this);

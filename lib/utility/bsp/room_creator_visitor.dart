@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
-import 'package:push_puzzle/utility/bsp/util.dart';
+import 'package:push_puzzle/utility/bsp/Tracer.dart';
 import 'package:push_puzzle/utility/bsp/visitor.dart';
 
 class RoomCreatorVisitor extends Visitor {
@@ -91,7 +91,7 @@ class RoomCreatorVisitor extends Visitor {
       }
 
       print("roomHeight: $rh, roomWidth: $rw");
-      Util u = Util();
+      CacheTracer u = CacheTracer();
       u.trace2d(leaf);
 
       return leaf;

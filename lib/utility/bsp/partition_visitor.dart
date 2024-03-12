@@ -1,8 +1,10 @@
+import 'package:push_puzzle/utility/bsp/Tracer.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor.dart';
 
 class PartitionVisitor extends Visitor {
+  final CacheTracer tracer = CacheTracer();
   late DungeonConfig config = DungeonConfig();
   late Partition tp;
 
@@ -19,13 +21,13 @@ class PartitionVisitor extends Visitor {
 
     tp.children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
-    if (isCreateChildren()) {
-      List<List<List<int>>> pair = split();
+    if (_isCreateChildren()) {
+      List<List<List<int>>> pair = _split();
       tp.cache.depth = tp.depth;
 
       pair.asMap().forEach((int i, var leaf) {
         tp.cache.leafNumber = i;
-        tp.cache.traceLeafWithInfo(leaf);
+        _trace();
         tp.children.add(Partition(
             rect: leaf, depth: tp.depth, isRoot: false,
             name: tp.cache.getName + tp.cache.getLeafPosition()));
@@ -39,7 +41,7 @@ class PartitionVisitor extends Visitor {
 
 
   // 2次元配列をパラメータに従って分割する。
-  List<List<List<int>>> split() {
+  List<List<List<int>>> _split() {
 
     List<List<int>> rect = tp.cache.getRect;
     int height = rect.length;
@@ -73,7 +75,7 @@ class PartitionVisitor extends Visitor {
     }
   }
 
-  bool isCreateChildren() {
+  bool _isCreateChildren() {
     bool isShouldCreate = tp.depth < tp.cache.getSplitDepth ? true : false;
 
     // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる
@@ -84,6 +86,10 @@ class PartitionVisitor extends Visitor {
     bool isCreatable = tp.cache.getRect.length > 1;
 
     return isShouldCreate && isCreatable;
+  }
+
+  void _trace() {
+    tracer.traceInfo(tp.cache);
   }
 
   PartitionVisitor();

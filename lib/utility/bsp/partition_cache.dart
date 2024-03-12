@@ -2,11 +2,10 @@
 import 'dart:math';
 
 import 'package:push_puzzle/utility/bsp/area.dart';
-import 'package:push_puzzle/utility/bsp/util.dart';
+import 'package:push_puzzle/utility/bsp/Tracer.dart';
 
 
 class PartitionCache {
-  final Util u = Util();
 
   // Partition生成に関わる設定
   final double _splitAxisBias = 0.1;
@@ -46,17 +45,6 @@ class PartitionCache {
   get getRoomArea => _roomArea;
   get getGridArea => _gridArea;
 
-  void trace3d(_) => u.trace3d(_);
-
-  void traceLeafWithInfo(List<List<int>> leaf) {
-    String name = _name +  getLeafPosition();
-    if (_isDebug) {
-      print("##########");
-      print("SplitAxis: $_splitAxis, SplitRatio: $_splitRatio, Name: $name");
-      u.trace2d(leaf);
-      print("---");
-    }
-  }
 
   String getLeafPosition(){
     String type = "";
