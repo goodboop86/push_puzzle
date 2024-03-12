@@ -17,14 +17,15 @@ class DungeonProcessor {
 
     root = Partition.construct(
         depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, name: d.rootName);
+
     PartitionVisitor visitor = PartitionVisitor();
     visitor.visit(root);
 
-    u.trace2d(root.getMergedRect());
+    //u.trace2d(root.getMergedRect());
 
     roomCreator.visit(root);
 
-    u.trace2d(root.getMergedRect());
+    //u.trace2d(root.getMergedRect());
 
     //var roomAreas = root.getRoomAreas([]);
 

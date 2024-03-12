@@ -59,12 +59,9 @@ class Partition {
 
 
   void acceptPartitionVisitor(PartitionVisitor visitor){
-    visitor.createChildren(this);
     if (depth < 3){
       depth += 1;
       visitor.createChildren(this);
-      // children.forEach((child) {visitor.visit(child);});
-      //children.map((child) => visitor.visit(child));
     }
   }
 
@@ -72,10 +69,6 @@ class Partition {
     visitor.createRoomIfIsEdge(this);
   }
 
-  Partition.initialize({required this.depth, required isRoot, required List<List<int>> rect, required String name}){
-    depth += 1;
-    // createChildren();
-  }
 
   Partition.construct({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
     cache.rect = rect;
