@@ -1,3 +1,4 @@
+import 'package:push_puzzle/utility/bsp/consolidator.dart';
 import 'package:push_puzzle/utility/bsp/corridor_crator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
@@ -7,8 +8,9 @@ import 'package:push_puzzle/utility/bsp/Tracer.dart';
 
 class DungeonProcessor {
   DungeonConfig d = DungeonConfig();
-  CacheTracer u = CacheTracer();
+  CacheTracer t = CacheTracer();
   RoomCreatorVisitor roomCreator = RoomCreatorVisitor();
+  ConsolidatorVisitor consolider = ConsolidatorVisitor();
   late Partition root;
   late List<List<int>> initialRect;
   //CorridorCreator corridorCreator = CorridorCreator();
@@ -21,13 +23,14 @@ class DungeonProcessor {
     PartitionVisitor visitor = PartitionVisitor();
     visitor.visit(root);
 
-    //u.trace2d(root.getMergedRect());
+    consolider.consolid(root);
+    //t.trace2d(root.cache.getConsolidRect);
 
     roomCreator.visit(root);
 
-    //u.trace2d(root.getMergedRect());
+    consolider.consolid(root);
+    //t.trace2d(root.cache.getConsolidRect);
 
-    //var roomAreas = root.getRoomAreas([]);
 
 
   }

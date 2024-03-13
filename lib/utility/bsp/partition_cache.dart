@@ -21,6 +21,7 @@ class PartitionCache {
   late bool _isRoot;
   late Area _roomArea;
   late Area _gridArea;
+  late List<List<int>> _consolidRect;
 
   set depth(int depth) {_depth = depth;}
   set leafNumber(int childNumber) {_leafNumber = childNumber;}
@@ -29,6 +30,7 @@ class PartitionCache {
   set isRoot(bool isRoot) => {_isRoot = isRoot};
   set roomArea(Area roomArea) => {_roomArea = roomArea};
   set gridArea(Area gridArea) => {_gridArea = gridArea};
+  set consolidRect(var consolidRect) => {_consolidRect = consolidRect};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
@@ -37,13 +39,14 @@ class PartitionCache {
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
 
-  // FIXME: depthはPartitionが持つ情報でもよさそう。
+  // roomCreatorに関する設定
   get getDepth => _depth;
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;
   get getRoomArea => _roomArea;
   get getGridArea => _gridArea;
+  get getConsolidRect => _consolidRect;
 
 
   String getLeafPosition(){

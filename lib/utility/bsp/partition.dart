@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:push_puzzle/utility/bsp/consolidator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator_visitor.dart';
@@ -18,31 +19,31 @@ class Partition {
 
 
 
-  List<List<int>> getMergedRect(){
-    bool isEdge = children.isEmpty;
-    CacheTracer u = CacheTracer();
-    if(isEdge) {
-      return cache.getRect;
-    } else {
-      //要素2
-      List<List<List<int>>> pair =[];
-      children.forEach((child) {pair.add(child.getMergedRect());});
-
-      if (cache.getSplitAxis == "horizontal") {
-        return pair[0] + pair[1];
-      } else if (cache.getSplitAxis == "vertical") {
-        List<List<int>> merged = [];
-        for (int i = 0; i < pair[0].length; i++) {
-          merged.addAll([pair[0][i] + pair[1][i]]);
-        }
-        return merged;
-      } else {
-        // 無い想定
-        Exception();
-        return [];
-      }
-    }
-  }
+  // List<List<int>> getMergedRect(){
+  //   bool isEdge = children.isEmpty;
+  //   CacheTracer u = CacheTracer();
+  //   if(isEdge) {
+  //     return cache.getRect;
+  //   } else {
+  //     //要素2
+  //     List<List<List<int>>> pair =[];
+  //     children.forEach((child) {pair.add(child.getMergedRect());});
+  //
+  //     if (cache.getSplitAxis == "horizontal") {
+  //       return pair[0] + pair[1];
+  //     } else if (cache.getSplitAxis == "vertical") {
+  //       List<List<int>> merged = [];
+  //       for (int i = 0; i < pair[0].length; i++) {
+  //         merged.addAll([pair[0][i] + pair[1][i]]);
+  //       }
+  //       return merged;
+  //     } else {
+  //       // 無い想定
+  //       Exception();
+  //       return [];
+  //     }
+  //   }
+  // }
 
   List<Area> getRoomAreas(List<Area> roomAreas) {
     // 末端のnodeを指定して生成する必要がある。
@@ -67,6 +68,11 @@ class Partition {
 
   void acceptRoomCreatorVisitor(RoomCreatorVisitor visitor){
     visitor.createRoomIfIsEdge(this);
+  }
+
+  void acceptConsolidatorVisitor(ConsolidatorVisitor visitor){
+    // 各TreeのconsolidRectはそれぞれのcacheに格納されるので戻す必要はない。
+    var _ = visitor.consolid(this);
   }
 
 
