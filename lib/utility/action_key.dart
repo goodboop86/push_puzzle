@@ -1,8 +1,9 @@
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
-enum Direction { up, down, left, right, none }
+enum ActionKey {up, down, left, right, none, space, r}
 
-Vector2 getMoveDirection(String input) {
+Vector2 getActionDirection(String input) {
   double dx, dy;
   dx = dy = 0;
 

@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 
 import '../utility/object_enum.dart';
 import '../utility/stage_master_data.dart';
-import '../utility/direction.dart';
+import '../utility/action_key.dart';
 
 class StageState {
   late int width;
@@ -58,8 +58,7 @@ class StageState {
       objectList[targetPosition] == Object.crate ||
       objectList[targetPosition] == Object.crateOnGoal;
 
-  bool isWorldOut(tx, ty) =>
-      tx < 0 || ty < 0 || tx >= width || ty >= height;
+  bool isWorldOut(tx, ty) => tx < 0 || ty < 0 || tx >= width || ty >= height;
 
   bool isSpaceOrGoal(int targetPosition) =>
       objectList[targetPosition] == Object.space ||
@@ -67,9 +66,11 @@ class StageState {
 
   bool get isClear => objectList.indexWhere((obj) => obj == Object.crate) == -1;
 
-  Vector2 get playerVecPos => Vector2((playerIndex % width).toDouble(), (playerIndex ~/ width).toDouble());
+  Vector2 get playerVecPos => Vector2(
+      (playerIndex % width).toDouble(), (playerIndex ~/ width).toDouble());
 
-  Vector2 getVecPos(int index) => Vector2((index % width).toDouble(), (index ~/ width).toDouble());
+  Vector2 getVecPos(int index) =>
+      Vector2((index % width).toDouble(), (index ~/ width).toDouble());
 
   List<int> get crateIndexList {
     List<int> indices = [];
@@ -172,8 +173,8 @@ class StageState {
 
   bool changeState(String input) {
     _isCrateMove = false;
-    int dx = getMoveDirection(input).x.toInt();
-    int dy = getMoveDirection(input).y.toInt();
+    int dx = getActionDirection(input).x.toInt();
+    int dy = getActionDirection(input).y.toInt();
     int x = playerVecPos.x.toInt(); // modulus operator
     int y = playerVecPos.y.toInt(); // integer division operator
 

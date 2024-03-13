@@ -2,7 +2,7 @@ import 'package:flame/components.dart';
 import 'package:flame/sprite.dart';
 
 import '../utility/config.dart';
-import '../utility/direction.dart';
+import '../utility/action_key.dart';
 
 class Player extends SpriteAnimationComponent with HasGameRef {
   final double _animationSpeed = 0.15;
@@ -15,7 +15,7 @@ class Player extends SpriteAnimationComponent with HasGameRef {
   late final SpriteAnimation _runRightAnimation;
   late final SpriteAnimation _standingAnimation;
 
-  Direction direction = Direction.none;
+  ActionKey direction = ActionKey.none;
 
   Player()
       : super(
@@ -44,23 +44,23 @@ class Player extends SpriteAnimationComponent with HasGameRef {
     if (_moveCount == 0) return;
 
     switch (direction) {
-      case Direction.up:
+      case ActionKey.up:
         animation = _runUpAnimation;
         moveFunc(Vector2(0, -_moveCoordinate));
         break;
-      case Direction.down:
+      case ActionKey.down:
         animation = _runDownAnimation;
         moveFunc(Vector2(0, _moveCoordinate));
         break;
-      case Direction.left:
+      case ActionKey.left:
         animation = _runLeftAnimation;
         moveFunc(Vector2(-_moveCoordinate, 0));
         break;
-      case Direction.right:
+      case ActionKey.right:
         animation = _runRightAnimation;
         moveFunc(Vector2(_moveCoordinate, 0));
         break;
-      case Direction.none:
+      case ActionKey.none:
         animation = _standingAnimation;
         break;
     }
