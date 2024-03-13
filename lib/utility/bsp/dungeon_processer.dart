@@ -1,5 +1,4 @@
 import 'package:push_puzzle/utility/bsp/consolidator.dart';
-import 'package:push_puzzle/utility/bsp/corridor_crator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
@@ -23,12 +22,12 @@ class DungeonProcessor {
     PartitionVisitor visitor = PartitionVisitor();
     visitor.visit(root);
 
-    consolider.consolid(root);
+    //consolider.consolid(root);
     //t.trace2d(root.cache.getConsolidRect);
 
-    roomCreator.visit(root);
+    //roomCreator.visit(root);
 
-    consolider.consolid(root);
+    //consolider.consolid(root);
     //t.trace2d(root.cache.getConsolidRect);
 
 
