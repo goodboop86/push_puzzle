@@ -1,12 +1,11 @@
 import 'package:logging/logging.dart';
-import 'package:push_puzzle/utility/bsp/Tracer.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor.dart';
+import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 class PartitionVisitor extends Visitor {
   final log = Logger('PartitionVisitor');
-  final CacheTracer tracer = CacheTracer();
   late DungeonConfig config = DungeonConfig();
   late Partition tp;
 
@@ -20,14 +19,11 @@ class PartitionVisitor extends Visitor {
     // コードの可読性を上げるため、処理が終わるまで格納する。
     // 実装として良いかは微妙
     tp = p;
-
     tp.children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (_isCreateChildren()) {
       List<List<List<int>>> pair = _split();
-      //tp.depth += 1;
       tp.cache.depth = tp.depth;
-      //logger.d("depth: ${tp.depth}");
 
       pair.asMap().forEach((int i, var leaf) {
         tp.cache.leafNumber = i;
@@ -100,19 +96,9 @@ class PartitionVisitor extends Visitor {
             "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
             "(bias: ±${tp.cache.getSplitRatioBias})"
     );
-    tracer.trace2d(tp.cache.getRect);
+    List<List<int>> rect = tp.cache.getRect;
+    rect.debugPrint();
   }
 
   PartitionVisitor();
-}
-
-void main() {
-  DungeonConfig d = DungeonConfig();
-  List<List<int>> initialRect = List.generate(d.dungeonHeight,
-          (i) => List.generate(d.dungeonWidth, (j) => 8));
-  Partition partition = Partition.construct(
-      depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, name: d.rootName);
-  PartitionVisitor visitor = PartitionVisitor();
-  visitor.visit(partition);
-
 }

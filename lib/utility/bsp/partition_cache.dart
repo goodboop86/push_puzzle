@@ -2,7 +2,7 @@
 import 'dart:math';
 
 import 'package:push_puzzle/utility/bsp/area.dart';
-import 'package:push_puzzle/utility/bsp/Tracer.dart';
+import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 
 class PartitionCache {
@@ -82,6 +82,5 @@ class PartitionCache {
   void adjustSplitRatio() {
     _splitRatio =  Random().nextDouble() / 2 + _splitRatioBias;
   }
-
 
 }

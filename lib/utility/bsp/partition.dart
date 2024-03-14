@@ -10,7 +10,7 @@ import 'partition_cache.dart';
 
 class Partition {
   final log = Logger('Partition');
-  late List<Partition> children;
+  List<Partition> children = [];
   late int depth;
   late PartitionCache cache = PartitionCache();
   late DungeonConfig config = DungeonConfig();
@@ -80,6 +80,7 @@ class Partition {
   }
 
   Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
+
     cache.rect = rect;
     cache.isRoot = isRoot;
     cache.name = name;
