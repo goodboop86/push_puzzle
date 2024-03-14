@@ -22,7 +22,7 @@ class DungeonProcessor {
     PartitionVisitor visitor = PartitionVisitor();
     visitor.visit(root);
 
-    //consolider.consolid(root);
+    consolider.visit(root);
     //t.trace2d(root.cache.getConsolidRect);
 
     roomCreator.visit(root);

@@ -2,10 +2,10 @@ import 'package:push_puzzle/utility/bsp/consolidator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator_visitor.dart';
-import 'package:push_puzzle/utility/bsp/Tracer.dart';
 import 'package:logging/logging.dart';
 import 'area.dart';
 import 'partition_cache.dart';
+import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 
 class Partition {
@@ -59,7 +59,7 @@ class Partition {
 
 
   void acceptPartitionVisitor(PartitionVisitor visitor){
-      log.info("Create a partition with depth ${cache.getSplitDepth}");
+      log.info("Create a partition with depth: ${cache.getSplitDepth}");
       visitor.createChildren(this);
   }
 
@@ -68,6 +68,9 @@ class Partition {
   }
 
   void acceptConsolidatorVisitor(ConsolidatorVisitor visitor){
+    log.info("consolid a rect. depth: ${cache.getSplitDepth}");
+    List<List<int>> rect = cache.getRect;
+    rect.debugPrint();
     // 各TreeのconsolidRectはそれぞれのcacheに格納されるので戻す必要はない。
     var _ = visitor.consolid(this);
   }

@@ -1,7 +1,11 @@
+import 'package:logging/logging.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor.dart';
+import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
+
 
 class ConsolidatorVisitor extends Visitor {
+  final log = Logger('ConsolidatorVisitor');
   late Partition tp;
 
 
