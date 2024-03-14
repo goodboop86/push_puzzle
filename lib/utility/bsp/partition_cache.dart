@@ -7,30 +7,41 @@ import 'package:push_puzzle/utility/bsp/Tracer.dart';
 
 class PartitionCache {
 
-  // Partition生成に関わる設定
-  final double _splitAxisBias = 0.1;
+  // 初期設定値
   final double _splitRatioBias = 0.25;
   final int _splitDepth = 3;
   final bool _isDebug = false;
+  late bool _isRoot;
+
+  // 共通設定
+  late List<List<int>> _rect;
+  late Area _absArea;
+  String _name = "";
+  int depth = -1;
+
+  // createChildrenに関する設定
   late String _splitAxis = "";
   late double _splitRatio = -1;
-  int depth = -1;
   late int _leafNumber;
-  late List<List<int>> _rect;
-  String _name = "";
-  late bool _isRoot;
-  late Area _roomArea;
+  final double _splitAxisBias = 0.1;
+
+
+  // roomCreatorに関する設定
   late Area _gridArea;
+  late Area _roomArea;
+
+  // 結合に関する設定
   late List<List<int>> _consolidRect;
 
-  //set depth(int depth) {_depth = depth;}
-  set leafNumber(int childNumber) {_leafNumber = childNumber;}
-  set rect(List<List<int>> rect) => {_rect = rect};
-  set name(String name) => {_name = name};
-  set isRoot(bool isRoot) => {_isRoot = isRoot};
-  set roomArea(Area roomArea) => {_roomArea = roomArea};
-  set gridArea(Area gridArea) => {_gridArea = gridArea};
-  set consolidRect(var consolidRect) => {_consolidRect = consolidRect};
+
+  set leafNumber(int _) {_leafNumber = _;}
+  set rect(List<List<int>> _) => {_rect = _};
+  set name(String _) => {_name = _};
+  set isRoot(bool _) => {_isRoot = _};
+  set roomArea(Area _) => {_roomArea = _};
+  set gridArea(Area _) => {_gridArea = _};
+  set consolidRect(var _) => {_consolidRect = _};
+  set absArea(Area _) => {_absArea = _};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;

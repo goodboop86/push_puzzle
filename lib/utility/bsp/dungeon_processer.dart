@@ -25,7 +25,7 @@ class DungeonProcessor {
     //consolider.consolid(root);
     //t.trace2d(root.cache.getConsolidRect);
 
-    //roomCreator.visit(root);
+    roomCreator.visit(root);
 
     //consolider.consolid(root);
     //t.trace2d(root.cache.getConsolidRect);
