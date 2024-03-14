@@ -3,10 +3,10 @@ import 'dart:math';
 class DungeonConfig {
   // ダンジョンの設定値
   final int dungeonHeight = 10;
-  final int dungeonWidth = 15;
+  final int dungeonWidth = 10;
 
   // Partitionの設定値
-  final int initialDepth = 0; //don't change
+  final int initialDepth = -0; //don't change
   final bool initialIsRoot = true; //don't change
   final String rootName = "r";
 

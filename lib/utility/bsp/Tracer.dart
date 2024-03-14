@@ -18,11 +18,6 @@ class CacheTracer {
     });
   }
   void traceInfo(PartitionCache cache){
-    print("#########################\n"
-        "PRTITION INFO\n"
-        "Root: ${cache.getIsRoot}, depth: ${cache.getDepth}/${cache.getSplitDepth}, Debug: ${cache.getIsDebug}\n"
-        "name: ${cache.getName}, Split axis: ${cache.getSplitAxis} (bias: ±${cache.getSplitAxisBias}), Sprit ratio: ${cache.getSplitRatio} (bias: ±${cache.getSplitRatioBias})\n"
-    );
     trace2d(cache.getRect);
   }
   }

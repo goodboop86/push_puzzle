@@ -1,9 +1,11 @@
+import 'package:logging/logging.dart';
 import 'package:push_puzzle/utility/bsp/Tracer.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor.dart';
 
 class PartitionVisitor extends Visitor {
+  final log = Logger('PartitionVisitor');
   final CacheTracer tracer = CacheTracer();
   late DungeonConfig config = DungeonConfig();
   late Partition tp;
@@ -23,11 +25,12 @@ class PartitionVisitor extends Visitor {
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (_isCreateChildren()) {
       List<List<List<int>>> pair = _split();
+      //tp.depth += 1;
       tp.cache.depth = tp.depth;
+      //logger.d("depth: ${tp.depth}");
 
       pair.asMap().forEach((int i, var leaf) {
         tp.cache.leafNumber = i;
-        _trace();
         tp.children.add(Partition(
             rect: leaf, depth: tp.depth, isRoot: false,
             name: tp.cache.getName + tp.cache.getLeafPosition()));
@@ -36,6 +39,7 @@ class PartitionVisitor extends Visitor {
       tp.cache.depth = tp.depth;
     }
 
+    _trace();
     tp.children.forEach((child) {createChildren(child);});
   }
 
@@ -89,7 +93,14 @@ class PartitionVisitor extends Visitor {
   }
 
   void _trace() {
-    tracer.traceInfo(tp.cache);
+    log.info(
+        "Root: ${tp.cache.getIsRoot}, depth: ${tp.cache.depth}/${tp.cache.getSplitDepth}, "
+            "Debug: ${tp.cache.getIsDebug} "
+            "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
+            "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
+            "(bias: ±${tp.cache.getSplitRatioBias})"
+    );
+    tracer.trace2d(tp.cache.getRect);
   }
 
   PartitionVisitor();
@@ -103,5 +114,5 @@ void main() {
       depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, name: d.rootName);
   PartitionVisitor visitor = PartitionVisitor();
   visitor.visit(partition);
-  print("end");
+
 }

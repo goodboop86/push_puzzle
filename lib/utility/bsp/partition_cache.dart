@@ -10,11 +10,11 @@ class PartitionCache {
   // Partition生成に関わる設定
   final double _splitAxisBias = 0.1;
   final double _splitRatioBias = 0.25;
-  final int _splitDepth = 4;
+  final int _splitDepth = 3;
   final bool _isDebug = false;
   late String _splitAxis = "";
-  late double _splitRatio = 0.0;
-  late int _depth;
+  late double _splitRatio = -1;
+  int depth = -1;
   late int _leafNumber;
   late List<List<int>> _rect;
   String _name = "";
@@ -23,7 +23,7 @@ class PartitionCache {
   late Area _gridArea;
   late List<List<int>> _consolidRect;
 
-  set depth(int depth) {_depth = depth;}
+  //set depth(int depth) {_depth = depth;}
   set leafNumber(int childNumber) {_leafNumber = childNumber;}
   set rect(List<List<int>> rect) => {_rect = rect};
   set name(String name) => {_name = name};
@@ -40,7 +40,7 @@ class PartitionCache {
   get getSplitRatio => _splitRatio;
 
   // roomCreatorに関する設定
-  get getDepth => _depth;
+ // get getDepth => _depth;
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;

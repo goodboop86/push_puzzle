@@ -1,23 +1,21 @@
-import 'dart:math';
-
 import 'package:push_puzzle/utility/bsp/consolidator.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition_visitor.dart';
 import 'package:push_puzzle/utility/bsp/room_creator_visitor.dart';
 import 'package:push_puzzle/utility/bsp/Tracer.dart';
-
+import 'package:logging/logging.dart';
 import 'area.dart';
 import 'partition_cache.dart';
 
+
 class Partition {
+  final log = Logger('Partition');
   late List<Partition> children;
   late int depth;
   late PartitionCache cache = PartitionCache();
   late DungeonConfig config = DungeonConfig();
   // late RoomCreatorVisitor roomCreator = RoomCreatorVisitor(config: config);
   late int id;
-
-
 
   // List<List<int>> getMergedRect(){
   //   bool isEdge = children.isEmpty;
@@ -59,11 +57,10 @@ class Partition {
   }
 
 
+
   void acceptPartitionVisitor(PartitionVisitor visitor){
-    if (depth < 3){
-      depth += 1;
+      log.info("Create a partition with depth ${cache.getSplitDepth}");
       visitor.createChildren(this);
-    }
   }
 
   void acceptRoomCreatorVisitor(RoomCreatorVisitor visitor){
