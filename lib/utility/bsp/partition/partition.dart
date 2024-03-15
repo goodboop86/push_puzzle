@@ -36,6 +36,7 @@ class Partition {
   }
 
   void acceptRoomCreatorVisitor(RoomCreatorVisitor visitor){
+    log.info("##### create room in rect. depth: ${cache.getSplitDepth} #####");
     visitor.execute(this);
   }
 
@@ -45,19 +46,10 @@ class Partition {
     var _ = visitor.execute(this);
   }
 
-  Partition.construct({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
-    cache.rect = rect;
-    cache.isRoot = isRoot;
-    cache.name = name;
-  }
-
   Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
-
     cache.rect = rect;
     cache.isRoot = isRoot;
     cache.name = name;
-    depth += 1;
-    // 元のコードを動かしたい場合は外す。
-    //createChildren();
   }
+
 }

@@ -5,6 +5,7 @@ import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
+import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
   late DungeonConfig config = DungeonConfig();
@@ -91,13 +92,26 @@ class RoomCreatorVisitor extends Visitor {
         }
       }
 
-      logging.info("roomHeight: $rh, roomWidth: $rw");
+      //logging.info("roomHeight: $rh, roomWidth: $rw");
+      _trace();
 
       return leaf;
     } else {
       Exception();
       return leaf;
     }
+  }
+
+  void _trace() {
+    logging.info(
+        "Root: ${tp.cache.getIsRoot}, depth: ${tp.cache.depth}/${tp.cache.getSplitDepth}, "
+            "Debug: ${tp.cache.getIsDebug} "
+            "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
+            "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
+            "(bias: ±${tp.cache.getSplitRatioBias})"
+    );
+    List<List<int>> rect = tp.cache.getRect;
+    rect.debugPrint();
   }
 
   RoomCreatorVisitor();

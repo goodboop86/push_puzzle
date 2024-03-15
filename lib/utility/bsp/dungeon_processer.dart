@@ -14,7 +14,7 @@ class DungeonProcessor {
 
   void process() {
 
-    root = Partition.construct(
+    root = Partition(
         depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, name: d.rootName);
 
     visitor.visit(root);
@@ -22,6 +22,9 @@ class DungeonProcessor {
     arranger.visit(root);
 
     roomCreator.visit(root);
+
+    // arranger.visit(root);
+
 
   }
 

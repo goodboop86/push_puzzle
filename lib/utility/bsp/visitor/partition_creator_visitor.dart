@@ -26,7 +26,7 @@ class PartitionCreatorVisitor extends Visitor {
       pair.asMap().forEach((int i, var leaf) {
         tp.cache.leafNumber = i;
         tp.children.add(Partition(
-            rect: leaf, depth: tp.depth, isRoot: false,
+            rect: leaf, depth: tp.depth + 1, isRoot: false,
             name: tp.cache.getName + tp.cache.getLeafPosition()));
       });
     } else {

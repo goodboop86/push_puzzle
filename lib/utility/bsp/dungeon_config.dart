@@ -1,7 +1,7 @@
 class DungeonConfig {
   // ダンジョンの設定値
-  final int dungeonHeight = 10;
-  final int dungeonWidth = 10;
+  final int dungeonHeight = 30;
+  final int dungeonWidth = 40;
 
   // Partitionの設定値
   final int initialDepth = -0; //don't change
