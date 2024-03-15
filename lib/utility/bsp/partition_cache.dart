@@ -9,7 +9,7 @@ class PartitionCache {
 
   // 初期設定値
   final double _splitRatioBias = 0.25;
-  final int _splitDepth = 3;
+  final int _splitDepth = 2;
   final bool _isDebug = false;
   late bool _isRoot;
 

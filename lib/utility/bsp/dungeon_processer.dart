@@ -12,7 +12,6 @@ class DungeonProcessor {
   ConsolidatorVisitor consolider = ConsolidatorVisitor();
   late Partition root;
   late List<List<int>> initialRect;
-  //CorridorCreator corridorCreator = CorridorCreator();
 
   void process() {
 
@@ -23,12 +22,9 @@ class DungeonProcessor {
     visitor.visit(root);
 
     consolider.visit(root);
-    //t.trace2d(root.cache.getConsolidRect);
 
     roomCreator.visit(root);
 
-    //consolider.consolid(root);
-    //t.trace2d(root.cache.getConsolidRect);
 
 
 
