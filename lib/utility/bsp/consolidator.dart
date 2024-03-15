@@ -17,7 +17,6 @@ class ConsolidatorVisitor extends Visitor {
 
   List<List<int>> consolid(Partition p){
     tp = p;
-    bool isRoot = tp.cache.getIsRoot;
     bool isEdge = tp.children.isEmpty;
     if(isEdge) {
       tp.cache.consolidRect = tp.cache.getRect;
