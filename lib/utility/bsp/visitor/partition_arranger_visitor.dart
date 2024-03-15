@@ -1,18 +1,17 @@
-import 'package:logging/logging.dart';
-import 'package:push_puzzle/utility/bsp/partition.dart';
-import 'package:push_puzzle/utility/bsp/visitor.dart';
+import 'package:push_puzzle/utility/bsp/partition/partition.dart';
+import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
 import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 
-class ConsolidatorVisitor extends Visitor {
-  final log = Logger('ConsolidatorVisitor');
+class PartitionArrangerVisitor extends Visitor {
 
   @override
   void visit(Partition partition) {
     partition.acceptConsolidatorVisitor(this);
   }
 
-  List<List<int>> consolid(Partition p) {
+  @override
+  List<List<int>> execute(Partition p) {
     // ここではtp=pとしない。tpは再帰呼び出しの最後のedgeの情報を持つため
     // 最後に返却された結合配列がrootに対する戻り値であるのに対しif文を通り抜けてしまう。
 
@@ -23,7 +22,7 @@ class ConsolidatorVisitor extends Visitor {
     } else {
       //要素2
       List<List<List<int>>> pair = [];
-      p.children.forEach((child) {pair.add(consolid(child));});
+      for (var child in p.children) {pair.add(execute(child));}
 
       List<List<int>> merged = [];
       if (p.cache.getSplitAxis == "horizontal") {
@@ -45,7 +44,7 @@ class ConsolidatorVisitor extends Visitor {
   }
 
   void _trace(Partition p) {
-    log.info(
+    logging.info(
         "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
             "Debug: ${p.cache.getIsDebug} "
             "name: ${p.cache.getName}, Split axis: ${p.cache.getSplitAxis} "

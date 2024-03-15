@@ -1,11 +1,9 @@
-import 'package:logging/logging.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-import 'package:push_puzzle/utility/bsp/partition.dart';
-import 'package:push_puzzle/utility/bsp/visitor.dart';
+import 'package:push_puzzle/utility/bsp/partition/partition.dart';
+import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
 import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
-class PartitionVisitor extends Visitor {
-  final log = Logger('PartitionVisitor');
+class PartitionCreatorVisitor extends Visitor {
   late DungeonConfig config = DungeonConfig();
   late Partition tp;
 
@@ -14,8 +12,8 @@ class PartitionVisitor extends Visitor {
     partition.acceptPartitionVisitor(this);
   }
 
-
-  void createChildren(Partition p) {
+  @override
+  void execute(Partition p) {
     // コードの可読性を上げるため、処理が終わるまで格納する。
     // 実装として良いかは微妙
     tp = p;
@@ -36,7 +34,7 @@ class PartitionVisitor extends Visitor {
     }
 
     _trace();
-    tp.children.forEach((child) {createChildren(child);});
+    for (var child in tp.children) {execute(child);}
   }
 
 
@@ -89,7 +87,7 @@ class PartitionVisitor extends Visitor {
   }
 
   void _trace() {
-    log.info(
+    logging.info(
         "Root: ${tp.cache.getIsRoot}, depth: ${tp.cache.depth}/${tp.cache.getSplitDepth}, "
             "Debug: ${tp.cache.getIsDebug} "
             "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
@@ -100,5 +98,5 @@ class PartitionVisitor extends Visitor {
     rect.debugPrint();
   }
 
-  PartitionVisitor();
+  PartitionCreatorVisitor();
 }

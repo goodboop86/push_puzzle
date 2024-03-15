@@ -3,9 +3,8 @@ import 'dart:math';
 
 import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-import 'package:push_puzzle/utility/bsp/partition.dart';
-import 'package:push_puzzle/utility/bsp/Tracer.dart';
-import 'package:push_puzzle/utility/bsp/visitor.dart';
+import 'package:push_puzzle/utility/bsp/partition/partition.dart';
+import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
 
 class RoomCreatorVisitor extends Visitor {
   late DungeonConfig config = DungeonConfig();
@@ -21,7 +20,8 @@ class RoomCreatorVisitor extends Visitor {
 
   }
 
-  void createRoomIfIsEdge(Partition p) {
+  @override
+  void execute(Partition p) {
     // コードの可読性を上げるため、処理が終わるまで格納する。
     // 実装として良いかは微妙
     tp = p;
@@ -34,8 +34,8 @@ class RoomCreatorVisitor extends Visitor {
       // repo.roomArea = roomCreator.getRoomArea;
     } else {
       // 末端でなければ子階層を呼び出す。
-      tp.children.forEach((child) {
-        createRoomIfIsEdge(child);});
+      for (var child in tp.children) {
+        execute(child);}
     }
   }
 
@@ -91,9 +91,7 @@ class RoomCreatorVisitor extends Visitor {
         }
       }
 
-      print("roomHeight: $rh, roomWidth: $rw");
-      CacheTracer u = CacheTracer();
-      u.trace2d(leaf);
+      logging.info("roomHeight: $rh, roomWidth: $rw");
 
       return leaf;
     } else {

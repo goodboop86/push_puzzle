@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class DungeonConfig {
   // ダンジョンの設定値
   final int dungeonHeight = 10;
