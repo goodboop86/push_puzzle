@@ -12,7 +12,6 @@ class RoomCreatorVisitor extends Visitor {
 
   late int gridHeight;
   late int gridWidth;
-  late bool isDebug;
   // temporal partition
   late Partition tp;
 

@@ -4,7 +4,6 @@ import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 
 class PartitionArrangerVisitor extends Visitor {
-  late bool isDebug;
 
   @override
   void visit(Partition partition, {bool isDebug = false}) {
