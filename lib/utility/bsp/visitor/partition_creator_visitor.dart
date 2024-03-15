@@ -6,9 +6,11 @@ import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 class PartitionCreatorVisitor extends Visitor {
   late DungeonConfig config = DungeonConfig();
   late Partition tp;
+  late bool isDebug;
 
   @override
-  void visit(Partition partition) {
+  void visit(Partition partition, {bool isDebug = false}) {
+    this.isDebug = isDebug;
     partition.acceptPartitionVisitor(this);
   }
 
@@ -33,7 +35,7 @@ class PartitionCreatorVisitor extends Visitor {
       tp.cache.depth = tp.depth;
     }
 
-    _trace();
+    isDebug? _trace() : null;
     for (var child in tp.children) {execute(child);}
   }
 

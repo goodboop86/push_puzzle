@@ -12,11 +12,13 @@ class RoomCreatorVisitor extends Visitor {
 
   late int gridHeight;
   late int gridWidth;
+  late bool isDebug;
   // temporal partition
   late Partition tp;
 
   @override
-  void visit(Partition partition){
+  void visit(Partition partition, {bool isDebug = false}){
+    this.isDebug = isDebug;
     partition.acceptRoomCreatorVisitor(this);
 
   }
@@ -92,8 +94,7 @@ class RoomCreatorVisitor extends Visitor {
         }
       }
 
-      //logging.info("roomHeight: $rh, roomWidth: $rw");
-      _trace();
+      isDebug? _trace(): null;
 
       return leaf;
     } else {

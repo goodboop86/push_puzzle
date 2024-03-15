@@ -4,9 +4,11 @@ import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
 
 
 class PartitionArrangerVisitor extends Visitor {
+  late bool isDebug;
 
   @override
-  void visit(Partition partition) {
+  void visit(Partition partition, {bool isDebug = false}) {
+    this.isDebug = isDebug;
     partition.acceptConsolidatorVisitor(this);
   }
 
@@ -37,7 +39,7 @@ class PartitionArrangerVisitor extends Visitor {
         return [];
       }
 
-      _trace(p);
+      isDebug? _trace(p): null;
       p.cache.consolidRect = merged;
       return p.cache.getConsolidRect;
     }
