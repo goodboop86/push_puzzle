@@ -16,11 +16,7 @@ class PartitionArrangerVisitor extends Visitor {
     // ここではtp=pとしない。tpは再帰呼び出しの最後のedgeの情報を持つため
     // 最後に返却された結合配列がrootに対する戻り値であるのに対しif文を通り抜けてしまう。
 
-    if (p.children.isEmpty) {
-      p.cache.arrangedRect = p.cache.getRect;
-      return p.cache.getArrangedRect;
-
-    } else {
+    if (shouldExecute(p)) {
       //要素2
       List<List<List<int>>> pair = [];
       for (var child in p.children) {pair.add(execute(child));}
@@ -41,7 +37,14 @@ class PartitionArrangerVisitor extends Visitor {
       p.cache.arrangedRect = merged;
       isDebug? _trace(p): null;
       return p.cache.getArrangedRect;
+    } else {
+      p.cache.arrangedRect = p.cache.getRect;
+      return p.cache.getArrangedRect;
     }
+  }
+
+  bool shouldExecute(Partition p) {
+    return p.children.isNotEmpty;
   }
 
   void _trace(Partition p) {
