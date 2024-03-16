@@ -9,7 +9,7 @@ abstract class Visitor {
  final Logger logging = Logger('Visitor');
  late bool isDebug;
  void visit(Partition partition);
- void _trace();
+ void trace(Partition p);
  execute(Partition p);
  shouldExecute(Partition p);
 }

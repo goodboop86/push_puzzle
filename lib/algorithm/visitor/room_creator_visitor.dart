@@ -102,11 +102,12 @@ class RoomCreatorVisitor extends Visitor {
       p.cache.absGridArea = p.cache.getGridArea.add(Point(y: p.cache.getAbsArea.from.y, x: p.cache.getAbsArea.from.x));
       p.cache.absRoomArea = p.cache.getRoomArea.add(Point(y: p.cache.getAbsArea.from.y, x: p.cache.getAbsArea.from.x));
 
-      isDebug? _trace(p): null;
+      isDebug? trace(p): null;
       return leaf;
   }
 
-  void _trace(Partition p) {
+  @override
+  void trace(Partition p) {
     logging.info(
         "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
             "Debug: ${p.cache.getIsDebug} "

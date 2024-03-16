@@ -1,5 +1,4 @@
 import 'package:push_puzzle/algorithm/area.dart';
-import 'package:push_puzzle/algorithm/dungeon_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
@@ -34,7 +33,7 @@ class PartitionCreatorVisitor extends Visitor {
       p.cache.depth = p.depth;
     }
 
-    isDebug? _trace(p) : null;
+    isDebug? trace(p) : null;
     for (var child in p.children) {execute(child);}
   }
 
@@ -99,7 +98,8 @@ class PartitionCreatorVisitor extends Visitor {
     return isShouldCreate && isCreatable;
   }
 
-  void _trace(Partition p) {
+  @override
+  void trace(Partition p) {
     logging.info(
         "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
             "Debug: ${p.cache.getIsDebug} "

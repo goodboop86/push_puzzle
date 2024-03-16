@@ -35,7 +35,7 @@ class PartitionArrangerVisitor extends Visitor {
       }
 
       p.cache.arrangedRect = merged;
-      isDebug? _trace(p): null;
+      isDebug? trace(p): null;
       return p.cache.getArrangedRect;
     } else {
       p.cache.arrangedRect = p.cache.getRect;
@@ -48,7 +48,8 @@ class PartitionArrangerVisitor extends Visitor {
     return p.children.isNotEmpty;
   }
 
-  void _trace(Partition p) {
+  @override
+  void trace(Partition p) {
     logging.info(
         "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
             "Debug: ${p.cache.getIsDebug} "
