@@ -8,14 +8,11 @@ extension List2DExtension on List<List<int>> {
     });
     l.info("---");
   }
-
 }
 
 void main() {
-
   Logger.root.level = Level.ALL; // すべてのログを取得します。
-  Logger.root.onRecord.listen((record) {
-  });
+  Logger.root.onRecord.listen((record) {});
 
   var list = [
     [1, 2, 3],
@@ -24,6 +21,4 @@ void main() {
   ];
 
   list.debugPrint();
-
-
 }

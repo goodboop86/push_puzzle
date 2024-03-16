@@ -12,14 +12,13 @@ class Area {
   Area({required this.from, required this.to});
 
   bool isIn(int y, int x) =>
-      y >= from.y && y <= to.y &&
-          x >= from.x && x <= to.x ;
+      y >= from.y && y <= to.y && x >= from.x && x <= to.x;
 
   Point center() {
-    return Point(y: (from.y + to.y)~/2 , x: (from.x + to.x)~/2);
+    return Point(y: (from.y + to.y) ~/ 2, x: (from.x + to.x) ~/ 2);
   }
 
-  List<int> shape(){
+  List<int> shape() {
     return [to.y - from.y, to.x - from.x];
   }
 
@@ -27,6 +26,12 @@ class Area {
     return Point(
         y: Random().nextInt(from.y - to.y) + from.y,
         x: Random().nextInt(from.x - to.x) + from.x);
+  }
+
+  Area add(Point p) {
+    return Area(
+        from: Point(y: from.y + p.y, x: from.x + p.x),
+        to: Point(y: to.y + p.y, x: to.x + p.x));
   }
 
   @override

@@ -5,7 +5,6 @@ import 'dart:core';
 import 'package:logging/logging.dart';
 import 'package:push_puzzle/algorithm/dungeon_processer.dart';
 
-
 void main() {
   Logger.root.level = Level.ALL; // すべてのログを取得します。
   Logger.root.onRecord.listen((record) {

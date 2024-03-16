@@ -1,116 +1,126 @@
-
 import 'dart:math';
 
 import 'package:push_puzzle/algorithm/area.dart';
-import 'package:push_puzzle/algorithm/dungeon_config.dart';
-import 'package:push_puzzle/algorithm/partition/partition.dart';
+import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
-  late DungeonConfig config = DungeonConfig();
-
-  late int gridHeight;
-  late int gridWidth;
-  // temporal partition
-  late Partition tp;
-
   @override
-  void visit(Partition partition, {bool isDebug = false}){
+  void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
     partition.acceptRoomCreatorVisitor(this);
-
   }
 
   @override
   void execute(Partition p) {
-    // コードの可読性を上げるため、処理が終わるまで格納する。
-    // 実装として良いかは微妙
-    tp = p;
-    
     // 末端のnodeを指定して生成する必要がある.
-    if(tp.children.isEmpty) {
-      tp.cache.rect =  drawAreas();
+    if (p.children.isEmpty) {
+      if (shouldExecute(p)) {
+        p.rect = drawAreas(p);
+      } else {
+        logging.info("部屋を作成できるスペースがありません。");
+      }
 
       // 後のMSTで通路を決める際に利用
       // repo.roomArea = roomCreator.getRoomArea;
     } else {
       // 末端でなければ子階層を呼び出す。
-      for (var child in tp.children) {
-        execute(child);}
+      for (var child in p.children) {
+        execute(child);
+      }
     }
   }
 
-  bool isCreatable(List<List<int>> leaf) {
-    int leafHeight = leaf.length;
-    int leafWidth = leaf.first.length;
-
+  @override
+  bool shouldExecute(Partition p) {
     // グリッドサイズ: 部屋を作成できる空間
-    gridHeight = leafHeight - config.minMarginBetweenLeaf * 2;
-    gridWidth = leafWidth - config.minMarginBetweenLeaf * 2;
+    //({int height, int width}) gridShape;
+
+    ({int height, int width}) gridShape = (
+      height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
+      width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    );
+
+    // gridHeight =  p.rect.length - config.minMarginBetweenLeaf * 2;
+    // gridWidth = p.rect.first.length - config.minMarginBetweenLeaf * 2;
 
     // 作成する部屋のサイズが小さすぎないか
-    bool isEnoughRoomSize =
-    (gridWidth > config.minRoomSize) && (gridHeight > config.minRoomSize) ? true : false;
+    bool isEnoughRoomSize = (gridShape.width > config.minRoomSize) &&
+            (gridShape.height > config.minRoomSize)
+        ? true
+        : false;
 
-    return  isEnoughRoomSize;
+    return isEnoughRoomSize;
   }
 
+  List<List<int>> drawAreas(Partition p) {
+    ({int height, int width}) gridShape = (
+      height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
+      width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    );
 
-  List<List<int>> drawAreas(){
-    List<List<int>> leaf = tp.cache.getRect;
-    if(isCreatable(leaf)) {
-      // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
-      int rh = Random().nextInt(gridHeight - config.minRoomSize) +
-          config.minRoomSize; // roomHeight
-      int rw = Random().nextInt(gridWidth - config.minRoomSize) +
-          config.minRoomSize; // roomWidth
+    List<List<int>> leaf = p.rect;
+    // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
+    int rh = Random().nextInt(gridShape.height - config.minRoomSize) +
+        config.minRoomSize; // roomHeight
+    int rw = Random().nextInt(gridShape.width - config.minRoomSize) +
+        config.minRoomSize; // roomWidth
 
-      // 部屋とグリッドとの距離をランダムに決める
-      int hb = Random().nextInt(gridHeight - rh); // heightBias
-      int wb = Random().nextInt(gridWidth - rw); // widthBias
+    // 部屋とグリッドとの距離をランダムに決める
+    int hb = Random().nextInt(gridShape.height - rh); // heightBias
+    int wb = Random().nextInt(gridShape.width - rw); // widthBias
 
+    // グリッドを描画する範囲
+    p.gridArea = Area(
+        from: Point(
+            y: config.minMarginBetweenLeaf, x: config.minMarginBetweenLeaf),
+        to: Point(
+            y: leaf.length - config.minMarginBetweenLeaf - 1,
+            x: leaf.first.length - config.minMarginBetweenLeaf - 1));
 
-      // グリッドを描画する範囲
-      tp.cache.gridArea = Area(
-          from: Point(y: config.minMarginBetweenLeaf, x: config.minMarginBetweenLeaf),
-          to: Point(y: leaf.length - config.minMarginBetweenLeaf -1, x: leaf.first.length - config.minMarginBetweenLeaf -1));
+    // UpdateAres
+    // 部屋を描画する範囲
+    p.roomArea = Area(
+        from: Point(
+            y: config.minMarginBetweenLeaf + hb,
+            x: config.minMarginBetweenLeaf + wb),
+        to: Point(
+            y: config.minMarginBetweenLeaf + hb + rh - 1,
+            x: config.minMarginBetweenLeaf + wb + rw - 1));
 
-      // UpdateAres
-      // 部屋を描画する範囲
-      tp.cache.roomArea = Area(
-          from: Point(y: config.minMarginBetweenLeaf + hb, x: config.minMarginBetweenLeaf + wb),
-          to: Point(y: config.minMarginBetweenLeaf + hb + rh -1, x: config.minMarginBetweenLeaf + wb + rw -1));
-
-      for (int y = 0; y < leaf.length; y++) {
-        for (int x = 0; x < leaf.first.length; x++) {
-          if (tp.cache.getGridArea.isIn(y, x)){
-            leaf[y][x] = 1;
-            if (tp.cache.getRoomArea.isIn(y, x)) {
-              leaf[y][x] = 4;
-            }
+    for (int y = 0; y < leaf.length; y++) {
+      for (int x = 0; x < leaf.first.length; x++) {
+        if (p.getGridArea.isIn(y, x)) {
+          leaf[y][x] = 1;
+          if (p.getRoomArea.isIn(y, x)) {
+            leaf[y][x] = 4;
           }
         }
       }
-
-      isDebug? _trace(): null;
-
-      return leaf;
-    } else {
-      logging.info("部屋を作成できるスペースがありません。");
-      return leaf;
     }
+
+    // grid, roomのabsAreaがMSTのために必要
+    // そのために、このpartitionの絶対座標(from)を加算する
+    p.absGridArea =
+        p.getGridArea.add(Point(y: p.absArea.from.y, x: p.absArea.from.x));
+    p.absRoomArea =
+        p.getRoomArea.add(Point(y: p.absArea.from.y, x: p.absArea.from.x));
+
+    isDebug ? trace(p) : null;
+    return leaf;
   }
 
-  void _trace() {
-    logging.info(
-        "Root: ${tp.cache.getIsRoot}, depth: ${tp.cache.depth}/${tp.cache.getSplitDepth}, "
-            "Debug: ${tp.cache.getIsDebug} "
-            "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
-            "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
-            "(bias: ±${tp.cache.getSplitRatioBias})"
-    );
-    List<List<int>> rect = tp.cache.getRect;
+  @override
+  void trace(Partition p) {
+    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+        "Debug: ${p.getIsDebug} "
+        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+        "(bias: ±${p.getSplitRatioBias}) "
+        "absGridArea: ${p.getAbsGridArea.toString()}, "
+        "absRoomArea: ${p.getAbsRoomArea.toString()}");
+    List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
 
