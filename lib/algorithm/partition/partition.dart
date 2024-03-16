@@ -1,7 +1,7 @@
-import 'package:push_puzzle/utility/bsp/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-import 'package:push_puzzle/utility/bsp/visitor/partition_creator_visitor.dart';
-import 'package:push_puzzle/utility/bsp/visitor/room_creator_visitor.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/algorithm/dungeon_config.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
+import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
 import 'package:logging/logging.dart';
 import '../area.dart';
 import 'partition_cache.dart';

@@ -1,6 +1,6 @@
-import 'package:push_puzzle/utility/bsp/partition/partition.dart';
-import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
-import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
+import 'package:push_puzzle/algorithm/partition/partition.dart';
+import 'package:push_puzzle/algorithm/visitor/visitor.dart';
+import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 
 class PartitionArrangerVisitor extends Visitor {

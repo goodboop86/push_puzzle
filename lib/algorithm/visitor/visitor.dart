@@ -1,6 +1,6 @@
 
 import 'package:logging/logging.dart';
-import 'package:push_puzzle/utility/bsp/partition/partition.dart';
+import 'package:push_puzzle/algorithm/partition/partition.dart';
 
 abstract class Visitor {
  final Logger logging = Logger('Visitor');

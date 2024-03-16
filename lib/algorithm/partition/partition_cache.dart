@@ -1,8 +1,8 @@
 // 再帰構造を持つツリークラス
 import 'dart:math';
 
-import 'package:push_puzzle/utility/bsp/area.dart';
-import 'package:push_puzzle/utility/bsp/extention/list2d_extention.dart';
+import 'package:push_puzzle/algorithm/area.dart';
+import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 
 class PartitionCache {

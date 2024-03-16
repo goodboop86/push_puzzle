@@ -3,7 +3,7 @@
 import 'dart:core';
 
 import 'package:logging/logging.dart';
-import 'package:push_puzzle/utility/bsp/dungeon_processer.dart';
+import 'package:push_puzzle/algorithm/dungeon_processer.dart';
 
 
 void main() {

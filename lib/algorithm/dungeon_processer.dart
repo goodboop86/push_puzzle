@@ -1,9 +1,9 @@
-import 'package:push_puzzle/utility/bsp/area.dart';
-import 'package:push_puzzle/utility/bsp/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
-import 'package:push_puzzle/utility/bsp/partition/partition.dart';
-import 'package:push_puzzle/utility/bsp/visitor/partition_creator_visitor.dart';
-import 'package:push_puzzle/utility/bsp/visitor/room_creator_visitor.dart';
+import 'package:push_puzzle/algorithm/area.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/algorithm/dungeon_config.dart';
+import 'package:push_puzzle/algorithm/partition/partition.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
+import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
 
 class DungeonProcessor {
   DungeonConfig d = DungeonConfig();
