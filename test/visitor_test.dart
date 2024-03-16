@@ -1,20 +1,44 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 
-import 'package:push_puzzle/src/stage_state.dart';
 
 import 'resources/test_object.dart';
+import 'visitor_test.mocks.dart';
 
+
+// NOTE: Mock化したいクラス<Foo>を指定して下記のアノテーションを追加する
+// Mock化したいクラス<Foo>を指定して`dart run build_runner build`
+// すると、`visitor_test.mocks.dart`が生成される。
+// 作成後はNullSafetyのため<MockFoo>などに変更する必要がある。
+@GenerateNiceMocks([MockSpec<MockPartitionCreatorAdjustor>()])
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
+  final config = VisitorConfig();
+  late Partition partition;
 
-  TestObject testObj = TestObject();
-  Partition partition = testObj.partition;
-  VisitorConfig config = testObj.config;
+  // 初期partitionの作成
+  var initialRect = List.generate(config.dungeonHeight,
+          (i) => List.generate(config.dungeonWidth, (j) => 8));
+
+  // 初期のエリアを作成
+  var initialArea = Area(
+      from: Point(y: 0, x: 0),
+      to: Point(y: config.dungeonHeight - 1, x: config.dungeonWidth - 1));
+
+  // Root Partitionを作成
+  partition = Partition(
+      depth: 0,
+      isRoot: true,
+      rect: initialRect,
+      absArea: initialArea,
+      name: "r",
+      config: config);
 
 
   group('Test stage state of game initialization.', () {
@@ -24,6 +48,15 @@ void main() {
 
     group('Visitor test', () {
       test('PartitionCreatorVisitor test', () {
+        MockPartitionCreatorAdjustor adjustor = MockPartitionCreatorAdjustor();
+        when(adjustor.adjustSplitAxis(partition)).thenReturn("vertical");
+        when(adjustor.adjustSplitRatio(partition)).thenReturn(0.5);
+
+
+        PartitionCreatorVisitor visitor =
+        PartitionCreatorVisitor(config: config, adjustor: adjustor);
+
+
         expect(1, 1);
       });
       test('RoomCreatorVisitor test', () {
@@ -38,3 +71,4 @@ void main() {
     });
   });
 }
+

@@ -28,7 +28,7 @@ class DungeonProcessor {
         name: initialRootName,
         config: config);
 
-    visitor = PartitionCreatorVisitor(config: config);
+    visitor = PartitionCreatorVisitor(config: config, adjustor: PartitionCreatorAdjustor());
     visitor.visit(root, isDebug: true);
 
     //arranger.visit(root, isDebug: false);
