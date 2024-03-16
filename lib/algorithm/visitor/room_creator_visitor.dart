@@ -25,7 +25,11 @@ class RoomCreatorVisitor extends Visitor {
 
     // 末端のnodeを指定して生成する必要がある.
     if(p.children.isEmpty) {
-      p.cache.rect =  drawAreas(p);
+      if(shouldExecute(p)) {
+        p.cache.rect = drawAreas(p);
+      } else {
+        logging.info("部屋を作成できるスペースがありません。");
+      }
 
       // 後のMSTで通路を決める際に利用
       // repo.roomArea = roomCreator.getRoomArea;
@@ -36,7 +40,7 @@ class RoomCreatorVisitor extends Visitor {
     }
   }
 
-  bool _isCreatable(Partition p) {
+  bool shouldExecute(Partition p) {
     List<List<int>> leaf = p.cache.getRect;
     int leafHeight = leaf.length;
     int leafWidth = leaf.first.length;
@@ -55,7 +59,6 @@ class RoomCreatorVisitor extends Visitor {
 
   List<List<int>> drawAreas(Partition p){
     List<List<int>> leaf = p.cache.getRect;
-    if(_isCreatable(p)) {
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
       int rh = Random().nextInt(gridHeight - config.minRoomSize) +
           config.minRoomSize; // roomHeight
@@ -95,12 +98,7 @@ class RoomCreatorVisitor extends Visitor {
       p.cache.absRoomArea = p.cache.getRoomArea.add(Point(y: p.cache.getAbsArea.from.y, x: p.cache.getAbsArea.from.x));
 
       isDebug? _trace(p): null;
-
       return leaf;
-    } else {
-      logging.info("部屋を作成できるスペースがありません。");
-      return leaf;
-    }
   }
 
   void _trace(Partition p) {
