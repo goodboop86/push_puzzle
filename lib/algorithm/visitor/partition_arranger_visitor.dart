@@ -22,9 +22,9 @@ class PartitionArrangerVisitor extends Visitor {
       for (var child in p.children) {pair.add(execute(child));}
 
       List<List<int>> merged = [];
-      if (p.cache.getSplitAxis == "horizontal") {
+      if (p.getSplitAxis == "horizontal") {
         merged =  pair[0] + pair[1];
-      } else if (p.cache.getSplitAxis == "vertical") {
+      } else if (p.getSplitAxis == "vertical") {
         for (int i = 0; i < pair[0].length; i++) {
           merged.addAll([pair[0][i] + pair[1][i]]);
         }
@@ -34,12 +34,12 @@ class PartitionArrangerVisitor extends Visitor {
         return [];
       }
 
-      p.cache.arrangedRect = merged;
+      p.arrangedRect = merged;
       isDebug? trace(p): null;
-      return p.cache.getArrangedRect;
+      return p.getArrangedRect;
     } else {
-      p.cache.arrangedRect = p.cache.getRect;
-      return p.cache.getArrangedRect;
+      p.arrangedRect = p.rect;
+      return p.getArrangedRect;
     }
   }
 
@@ -51,13 +51,13 @@ class PartitionArrangerVisitor extends Visitor {
   @override
   void trace(Partition p) {
     logging.info(
-        "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
-            "Debug: ${p.cache.getIsDebug} "
-            "name: ${p.cache.getName}, Split axis: ${p.cache.getSplitAxis} "
-            "(bias: ±${p.cache.getSplitAxisBias}), Sprit ratio: ${p.cache.getSplitRatio} "
-            "(bias: ±${p.cache.getSplitRatioBias})"
+        "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias})"
     );
-    List<List<int>> rect = p.cache.getArrangedRect;
+    List<List<int>> rect = p.getArrangedRect;
     rect.debugPrint();
   }
 

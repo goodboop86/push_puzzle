@@ -21,7 +21,7 @@ class RoomCreatorVisitor extends Visitor {
     // 末端のnodeを指定して生成する必要がある.
     if(p.children.isEmpty) {
       if(shouldExecute(p)) {
-        p.cache.rect = drawAreas(p);
+        p.rect = drawAreas(p);
       } else {
         logging.info("部屋を作成できるスペースがありません。");
       }
@@ -41,12 +41,12 @@ class RoomCreatorVisitor extends Visitor {
     //({int height, int width}) gridShape;
 
     ({int height, int width}) gridShape = (
-    height: (p.cache.getRect.length - config.minMarginBetweenLeaf * 2).toInt(),
-    width: (p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
+    width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
     );
 
-    // gridHeight =  p.cache.getRect.length - config.minMarginBetweenLeaf * 2;
-    // gridWidth = p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2;
+    // gridHeight =  p.rect.length - config.minMarginBetweenLeaf * 2;
+    // gridWidth = p.rect.first.length - config.minMarginBetweenLeaf * 2;
 
     // 作成する部屋のサイズが小さすぎないか
     bool isEnoughRoomSize =
@@ -59,11 +59,11 @@ class RoomCreatorVisitor extends Visitor {
   List<List<int>> drawAreas(Partition p){
 
     ({int height, int width}) gridShape = (
-    height: (p.cache.getRect.length - config.minMarginBetweenLeaf * 2).toInt(),
-    width: (p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
+    width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
     );
 
-    List<List<int>> leaf = p.cache.getRect;
+    List<List<int>> leaf = p.rect;
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
       int rh = Random().nextInt(gridShape.height - config.minRoomSize) +
           config.minRoomSize; // roomHeight
@@ -76,21 +76,21 @@ class RoomCreatorVisitor extends Visitor {
 
 
       // グリッドを描画する範囲
-      p.cache.gridArea = Area(
+      p.gridArea = Area(
           from: Point(y: config.minMarginBetweenLeaf, x: config.minMarginBetweenLeaf),
           to: Point(y: leaf.length - config.minMarginBetweenLeaf -1, x: leaf.first.length - config.minMarginBetweenLeaf -1));
 
       // UpdateAres
       // 部屋を描画する範囲
-      p.cache.roomArea = Area(
+      p.roomArea = Area(
           from: Point(y: config.minMarginBetweenLeaf + hb, x: config.minMarginBetweenLeaf + wb),
           to: Point(y: config.minMarginBetweenLeaf + hb + rh -1, x: config.minMarginBetweenLeaf + wb + rw -1));
 
       for (int y = 0; y < leaf.length; y++) {
         for (int x = 0; x < leaf.first.length; x++) {
-          if (p.cache.getGridArea.isIn(y, x)){
+          if (p.getGridArea.isIn(y, x)){
             leaf[y][x] = 1;
-            if (p.cache.getRoomArea.isIn(y, x)) {
+            if (p.getRoomArea.isIn(y, x)) {
               leaf[y][x] = 4;
             }
           }
@@ -99,8 +99,8 @@ class RoomCreatorVisitor extends Visitor {
 
       // grid, roomのabsAreaがMSTのために必要
       // そのために、このpartitionの絶対座標(from)を加算する
-      p.cache.absGridArea = p.cache.getGridArea.add(Point(y: p.cache.getAbsArea.from.y, x: p.cache.getAbsArea.from.x));
-      p.cache.absRoomArea = p.cache.getRoomArea.add(Point(y: p.cache.getAbsArea.from.y, x: p.cache.getAbsArea.from.x));
+      p.absGridArea = p.getGridArea.add(Point(y: p.getAbsArea.from.y, x: p.getAbsArea.from.x));
+      p.absRoomArea = p.getRoomArea.add(Point(y: p.getAbsArea.from.y, x: p.getAbsArea.from.x));
 
       isDebug? trace(p): null;
       return leaf;
@@ -109,15 +109,15 @@ class RoomCreatorVisitor extends Visitor {
   @override
   void trace(Partition p) {
     logging.info(
-        "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
-            "Debug: ${p.cache.getIsDebug} "
-            "name: ${p.cache.getName}, Split axis: ${p.cache.getSplitAxis} "
-            "(bias: ±${p.cache.getSplitAxisBias}), Sprit ratio: ${p.cache.getSplitRatio} "
-            "(bias: ±${p.cache.getSplitRatioBias}) "
-            "absGridArea: ${p.cache.getAbsGridArea.toString()}, "
-            "absRoomArea: ${p.cache.getAbsRoomArea.toString()}"
+        "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias}) "
+            "absGridArea: ${p.getAbsGridArea.toString()}, "
+            "absRoomArea: ${p.getAbsRoomArea.toString()}"
     );
-    List<List<int>> rect = p.cache.getRect;
+    List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
 

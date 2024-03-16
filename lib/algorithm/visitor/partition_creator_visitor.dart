@@ -21,16 +21,16 @@ class PartitionCreatorVisitor extends Visitor {
       List<List<List<int>>> pair = data.pair;
       List<Area> absArea = data.absArea;
 
-      p.cache.depth = p.depth;
+      p.depth = p.depth;
 
       pair.asMap().forEach((int i, var leaf) {
-        p.cache.leafNumber = i;
+        p.leafNumber = i;
         p.children.add(Partition(
             rect: leaf, depth: p.depth + 1, isRoot: false, absArea: absArea[i],
-            name: p.cache.getName + p.cache.getLeafPosition()));
+            name: p.getName + p.getLeafPosition()));
       });
     } else {
-      p.cache.depth = p.depth;
+      p.depth = p.depth;
     }
 
     isDebug? trace(p) : null;
@@ -41,13 +41,13 @@ class PartitionCreatorVisitor extends Visitor {
   // 2次元配列をパラメータに従って分割する。
   ({List<List<List<int>>> pair, List<Area> absArea}) _split(Partition p) {
 
-    List<List<int>> rect = p.cache.getRect;
+    List<List<int>> rect = p.rect;
     int height = rect.length;
     int width = rect.first.length;
-    p.cache.adjustSplitAxis();
-    String axis = p.cache.getSplitAxis;
-    p.cache.adjustSplitRatio();
-    double ratio = p.cache.getSplitRatio;
+    p.adjustSplitAxis();
+    String axis = p.getSplitAxis;
+    p.adjustSplitRatio();
+    double ratio = p.getSplitRatio;
 
     List<Area> absAreas = [];
     List<List<List<int>>> pair = [];
@@ -93,7 +93,7 @@ class PartitionCreatorVisitor extends Visitor {
     // - なので判定はisEmptyで良いが要素数1の場合にloopが続くので1以上が良さそう
     // memo: min(splitRatio)=biasなので、index境界は bias * 縦or横幅の四捨五入
     // biasが0.3、幅3ならindex境界は0.9->1となりsublist(0,1), sublist(1,3)が成立する
-    bool isCreatable = p.cache.getRect.length > 1;
+    bool isCreatable = p.rect.length > 1;
 
     return isShouldCreate && isCreatable;
   }
@@ -101,14 +101,14 @@ class PartitionCreatorVisitor extends Visitor {
   @override
   void trace(Partition p) {
     logging.info(
-        "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
-            "Debug: ${p.cache.getIsDebug} "
-            "name: ${p.cache.getName}, Split axis: ${p.cache.getSplitAxis} "
-            "(bias: ±${p.cache.getSplitAxisBias}), Sprit ratio: ${p.cache.getSplitRatio} "
-            "(bias: ±${p.cache.getSplitRatioBias}) "
-            "absArea: ${p.cache.getAbsArea.toString()}"
+        "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias}) "
+            "absArea: ${p.getAbsArea.toString()}"
     );
-    List<List<int>> rect = p.cache.getRect;
+    List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
 
