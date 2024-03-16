@@ -6,7 +6,6 @@ import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class PartitionCreatorVisitor extends Visitor {
   late DungeonConfig config = DungeonConfig();
-  late Partition tp;
 
   @override
   void visit(Partition partition, {bool isDebug = false}) {
@@ -16,43 +15,41 @@ class PartitionCreatorVisitor extends Visitor {
 
   @override
   void execute(Partition p) {
-    // コードの可読性を上げるため、処理が終わるまで格納する。
-    // 実装として良いかは微妙
-    tp = p;
-    tp.children = [];
+
+    p.children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
-    if (_isCreateChildren()) {
-      var data = _split();
+    if (_isCreateChildren(p)) {
+      var data = _split(p);
       List<List<List<int>>> pair = data.pair;
       List<Area> absArea = data.absArea;
 
-      tp.cache.depth = tp.depth;
+      p.cache.depth = p.depth;
 
       pair.asMap().forEach((int i, var leaf) {
-        tp.cache.leafNumber = i;
-        tp.children.add(Partition(
-            rect: leaf, depth: tp.depth + 1, isRoot: false, absArea: absArea[i],
-            name: tp.cache.getName + tp.cache.getLeafPosition()));
+        p.cache.leafNumber = i;
+        p.children.add(Partition(
+            rect: leaf, depth: p.depth + 1, isRoot: false, absArea: absArea[i],
+            name: p.cache.getName + p.cache.getLeafPosition()));
       });
     } else {
-      tp.cache.depth = tp.depth;
+      p.cache.depth = p.depth;
     }
 
-    isDebug? _trace() : null;
-    for (var child in tp.children) {execute(child);}
+    isDebug? _trace(p) : null;
+    for (var child in p.children) {execute(child);}
   }
 
 
   // 2次元配列をパラメータに従って分割する。
-  ({List<List<List<int>>> pair, List<Area> absArea}) _split() {
+  ({List<List<List<int>>> pair, List<Area> absArea}) _split(Partition p) {
 
-    List<List<int>> rect = tp.cache.getRect;
+    List<List<int>> rect = p.cache.getRect;
     int height = rect.length;
     int width = rect.first.length;
-    tp.cache.adjustSplitAxis();
-    String axis = tp.cache.getSplitAxis;
-    tp.cache.adjustSplitRatio();
-    double ratio = tp.cache.getSplitRatio;
+    p.cache.adjustSplitAxis();
+    String axis = p.cache.getSplitAxis;
+    p.cache.adjustSplitRatio();
+    double ratio = p.cache.getSplitRatio;
 
     List<Area> absAreas = [];
     List<List<List<int>>> pair = [];
@@ -91,29 +88,29 @@ class PartitionCreatorVisitor extends Visitor {
     }
   }
 
-  bool _isCreateChildren() {
-    bool isShouldCreate = tp.depth < tp.config.dungeonDepth ? true : false;
+  bool _isCreateChildren(Partition p) {
+    bool isShouldCreate = p.depth < p.config.dungeonDepth ? true : false;
 
     // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる
     // - sublistはsublist(0,0)などでも空配列を返せるのでexceptionはしない
     // - なので判定はisEmptyで良いが要素数1の場合にloopが続くので1以上が良さそう
     // memo: min(splitRatio)=biasなので、index境界は bias * 縦or横幅の四捨五入
     // biasが0.3、幅3ならindex境界は0.9->1となりsublist(0,1), sublist(1,3)が成立する
-    bool isCreatable = tp.cache.getRect.length > 1;
+    bool isCreatable = p.cache.getRect.length > 1;
 
     return isShouldCreate && isCreatable;
   }
 
-  void _trace() {
+  void _trace(Partition p) {
     logging.info(
-        "Root: ${tp.cache.getIsRoot}, depth: ${tp.cache.depth}/${tp.cache.getSplitDepth}, "
-            "Debug: ${tp.cache.getIsDebug} "
-            "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
-            "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
-            "(bias: ±${tp.cache.getSplitRatioBias}) "
-            "absArea: ${tp.cache.getAbsArea.toString()}"
+        "Root: ${p.cache.getIsRoot}, depth: ${p.cache.depth}/${p.cache.getSplitDepth}, "
+            "Debug: ${p.cache.getIsDebug} "
+            "name: ${p.cache.getName}, Split axis: ${p.cache.getSplitAxis} "
+            "(bias: ±${p.cache.getSplitAxisBias}), Sprit ratio: ${p.cache.getSplitRatio} "
+            "(bias: ±${p.cache.getSplitRatioBias}) "
+            "absArea: ${p.cache.getAbsArea.toString()}"
     );
-    List<List<int>> rect = tp.cache.getRect;
+    List<List<int>> rect = p.cache.getRect;
     rect.debugPrint();
   }
 
