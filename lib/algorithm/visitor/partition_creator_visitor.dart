@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
@@ -27,7 +29,7 @@ class PartitionCreatorVisitor extends Visitor {
         p.leafNumber = i;
         p.children.add(Partition(
             rect: leaf, depth: p.depth + 1, isRoot: false, absArea: absArea[i],
-            name: p.name + p.getLeafPosition()));
+            name: p.name + getLeafPosition(p)));
       });
     } else {
       p.depth = p.depth;
@@ -37,6 +39,29 @@ class PartitionCreatorVisitor extends Visitor {
     for (var child in p.children) {execute(child);}
   }
 
+  // [for partitionCreatorVisitor]
+  String getLeafPosition(Partition p){
+    String type = "";
+    if (p.getSplitAxis == "vertical") {
+      if(p.getLeafNumber == 0) {type="L";}
+      if(p.getLeafNumber == 1) {type="R";}
+    } else if(p.getSplitAxis == "horizontal") {
+      if(p.getLeafNumber == 0) {type="U";}
+      if(p.getLeafNumber == 1) {type="D";}
+    }
+    return type;
+  }
+
+  // 長方形を分割する方向を決める。
+  // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
+  void adjustSplitAxis(Partition p) {
+    p.splitAxis =  (p.rect.length/p.rect.first.length) + (Random().nextDouble() * p.getSplitAxisBias) > 1 ? "horizontal" : "vertical";
+  }
+
+  // 長方形を分割する比率を決める。
+  void adjustSplitRatio(Partition p) {
+    p.splitRatio =  Random().nextDouble() / 2 + p.getSplitRatioBias;
+  }
 
   // 2次元配列をパラメータに従って分割する。
   ({List<List<List<int>>> pair, List<Area> absArea}) _split(Partition p) {
@@ -44,9 +69,9 @@ class PartitionCreatorVisitor extends Visitor {
     List<List<int>> rect = p.rect;
     int height = rect.length;
     int width = rect.first.length;
-    p.adjustSplitAxis();
+    adjustSplitAxis(p);
     String axis = p.getSplitAxis;
-    p.adjustSplitRatio();
+    adjustSplitRatio(p);
     double ratio = p.getSplitRatio;
 
     List<Area> absAreas = [];

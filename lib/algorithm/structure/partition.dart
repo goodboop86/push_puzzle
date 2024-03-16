@@ -41,8 +41,9 @@ class Partition {
   // 結合に関する設定
   late List<List<int>> _arrangedRect;
 
-
   set leafNumber(int _) {_leafNumber = _;}
+  set splitAxis(String _) {_splitAxis = _;}
+  set splitRatio(double _) {_splitRatio = _;}
   set roomArea(Area _) => {_roomArea = _};
   set gridArea(Area _) => {_gridArea = _};
   set arrangedRect(var _) => {_arrangedRect = _};
@@ -63,32 +64,8 @@ class Partition {
   get getArrangedRect => _arrangedRect;
   get getAbsGridArea => _absGridArea;
   get getAbsRoomArea => _absRoomArea;
+  get getLeafNumber => _leafNumber;
 
-
-  // [for partitionCreatorVisitor]
-  String getLeafPosition(){
-    String type = "";
-    if (_splitAxis=="vertical") {
-      if(_leafNumber == 0) {type="L";}
-      if(_leafNumber == 1) {type="R";}
-    } else if(_splitAxis=="horizontal") {
-      if(_leafNumber == 0) {type="U";}
-      if(_leafNumber == 1) {type="D";}
-    }
-    return type;
-  }
-
-
-  // 長方形を分割する方向を決める。
-  // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
-  void adjustSplitAxis() {
-    _splitAxis =  (rect.length/rect.first.length) + (Random().nextDouble() * _splitAxisBias) > 1 ? "horizontal" : "vertical";
-  }
-
-  // 長方形を分割する比率を決める。
-  void adjustSplitRatio() {
-    _splitRatio =  Random().nextDouble() / 2 + _splitRatioBias;
-  }
 
 
   void acceptPartitionCreatorVisitor(PartitionCreatorVisitor visitor){
@@ -107,7 +84,6 @@ class Partition {
     var _ = visitor.execute(this);
   }
 
-  Partition({required this.depth, required this.isRoot, required this.rect, required this.absArea, required this.name}) {
-  }
+  Partition({required this.depth, required this.isRoot, required this.rect, required this.absArea, required this.name});
 
 }
