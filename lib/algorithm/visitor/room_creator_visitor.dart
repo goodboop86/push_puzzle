@@ -99,8 +99,8 @@ class RoomCreatorVisitor extends Visitor {
 
       // grid, roomのabsAreaがMSTのために必要
       // そのために、このpartitionの絶対座標(from)を加算する
-      p.absGridArea = p.getGridArea.add(Point(y: p.getAbsArea.from.y, x: p.getAbsArea.from.x));
-      p.absRoomArea = p.getRoomArea.add(Point(y: p.getAbsArea.from.y, x: p.getAbsArea.from.x));
+      p.absGridArea = p.getGridArea.add(Point(y: p.absArea.from.y, x: p.absArea.from.x));
+      p.absRoomArea = p.getRoomArea.add(Point(y: p.absArea.from.y, x: p.absArea.from.x));
 
       isDebug? trace(p): null;
       return leaf;
@@ -111,7 +111,7 @@ class RoomCreatorVisitor extends Visitor {
     logging.info(
         "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
             "Debug: ${p.getIsDebug} "
-            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias}) "
             "absGridArea: ${p.getAbsGridArea.toString()}, "

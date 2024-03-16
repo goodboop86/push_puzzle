@@ -19,11 +19,11 @@ class DungeonProcessor {
     root = Partition(
         depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, absArea: initialArea, name: d.rootName);
 
-    visitor.visit(root, isDebug: true);
+    visitor.visit(root, isDebug: false);
 
     //arranger.visit(root, isDebug: false);
 
-    roomCreator.visit(root, isDebug: true);
+    roomCreator.visit(root, isDebug: false);
 
     arranger.visit(root, isDebug: true);
 

@@ -27,7 +27,7 @@ class PartitionCreatorVisitor extends Visitor {
         p.leafNumber = i;
         p.children.add(Partition(
             rect: leaf, depth: p.depth + 1, isRoot: false, absArea: absArea[i],
-            name: p.getName + p.getLeafPosition()));
+            name: p.name + p.getLeafPosition()));
       });
     } else {
       p.depth = p.depth;
@@ -103,10 +103,10 @@ class PartitionCreatorVisitor extends Visitor {
     logging.info(
         "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
             "Debug: ${p.getIsDebug} "
-            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias}) "
-            "absArea: ${p.getAbsArea.toString()}"
+            "absArea: ${p.absArea.toString()}"
     );
     List<List<int>> rect = p.rect;
     rect.debugPrint();

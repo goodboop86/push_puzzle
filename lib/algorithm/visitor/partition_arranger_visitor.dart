@@ -53,7 +53,7 @@ class PartitionArrangerVisitor extends Visitor {
     logging.info(
         "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
             "Debug: ${p.getIsDebug} "
-            "name: ${p.getName}, Split axis: ${p.getSplitAxis} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias})"
     );
