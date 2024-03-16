@@ -9,7 +9,7 @@ import '../area.dart';
 
 class Partition {
   final log = Logger('Partition');
-  late DungeonConfig config = DungeonConfig();
+  late DungeonConfig config;
   List<Partition> children = [];
   late int depth;
 
@@ -94,5 +94,6 @@ class Partition {
       required this.isRoot,
       required this.rect,
       required this.absArea,
-      required this.name});
+      required this.name,
+      required this.config});
 }

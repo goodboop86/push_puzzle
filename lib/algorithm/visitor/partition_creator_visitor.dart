@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:push_puzzle/algorithm/area.dart';
+import 'package:push_puzzle/algorithm/dungeon_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class PartitionCreatorVisitor extends Visitor {
+
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
@@ -30,7 +32,8 @@ class PartitionCreatorVisitor extends Visitor {
             depth: p.depth + 1,
             isRoot: false,
             absArea: absArea[i],
-            name: p.name + getLeafPosition(p)));
+            name: p.name + getLeafPosition(p),
+            config: config));
       });
     } else {
       p.depth = p.depth;
@@ -146,5 +149,5 @@ class PartitionCreatorVisitor extends Visitor {
     rect.debugPrint();
   }
 
-  PartitionCreatorVisitor();
+  PartitionCreatorVisitor({required config}) :super(config);
 }

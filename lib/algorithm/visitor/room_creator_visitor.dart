@@ -124,5 +124,5 @@ class RoomCreatorVisitor extends Visitor {
     rect.debugPrint();
   }
 
-  RoomCreatorVisitor();
+  RoomCreatorVisitor({required config}) :super(config);
 }

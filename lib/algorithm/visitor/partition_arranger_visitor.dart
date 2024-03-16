@@ -57,4 +57,5 @@ class PartitionArrangerVisitor extends Visitor {
     List<List<int>> rect = p.getArrangedRect;
     rect.debugPrint();
   }
+  PartitionArrangerVisitor({required config}) :super(config);
 }
