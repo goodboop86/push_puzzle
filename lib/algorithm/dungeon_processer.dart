@@ -1,6 +1,6 @@
 import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor_config.dart';
+import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';

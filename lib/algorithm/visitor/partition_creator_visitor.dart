@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:push_puzzle/algorithm/area.dart';
-import 'package:push_puzzle/algorithm/visitor_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';

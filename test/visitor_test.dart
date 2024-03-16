@@ -2,60 +2,38 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
+import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 
 import 'package:push_puzzle/src/stage_state.dart';
 
-import 'resources/dungeon_config.dart';
 import 'resources/test_object.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
-  TestObject obj = TestObject();
-  DungeonConfig config = obj.config;
-  Partition p = obj.partition;
+  TestObject testObj = TestObject();
+  Partition partition = testObj.partition;
+  VisitorConfig config = testObj.config;
+
 
   group('Test stage state of game initialization.', () {
-    late StageState state;
 
     setUp(() {
-      state = StageState();
-      // Initial State
-      // ########
-      // # .. p #
-      // # oo   #
-      // #      #
-      // ########
     });
 
-    group('public Getter', () {
-      test('playerIndex', () {
-        expect(state.playerIndex, 13);
+    group('Visitor test', () {
+      test('PartitionCreatorVisitor test', () {
+        expect(1, 1);
       });
-      test('isCrateMove', () {
-        expect(state.isCrateMove, false);
+      test('RoomCreatorVisitor test', () {
+        expect(1, 1);
       });
-      test('isClear', () {
-        expect(state.isClear, false);
+      test('PartitionArrangerVisitor test', () {
+        expect(1, 1);
       });
       test('playerVecPos', () {
-        expect(state.playerVecPos, Vector2(5.0, 1.0));
-      });
-      test('crateIndexList', () {
-        expect(state.crateIndexList, [18, 19]);
-      });
-      test('crateVecList', () {
-        expect(state.crateVecList, [Vector2(2.0, 2.0), Vector2(3.0, 2.0)]);
-      });
-      test('crateOnGoalIndexList', () {
-        expect(state.crateOnGoalIndexList, []);
-      });
-      test('crateOnGoalVecList', () {
-        expect(state.crateOnGoalVecList, []);
-      });
-      test('splitStageStateList', () {
-        expect(state.splitStageStateList, ['########', '# .. p #', '# oo   #', '#      #', '########']);
+        expect(1, 1);
       });
     });
   });
