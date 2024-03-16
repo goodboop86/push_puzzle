@@ -9,7 +9,7 @@ class PartitionCache {
 
   // 初期設定値
   final double _splitRatioBias = 0.25;
-  final int _splitDepth = 2;
+  final int _splitDepth = 3;
   final bool _isDebug = false;
   late bool _isRoot;
 
@@ -31,7 +31,7 @@ class PartitionCache {
   late Area _roomArea;
 
   // 結合に関する設定
-  late List<List<int>> _consolidRect;
+  late List<List<int>> _arrangedRect;
 
 
   set leafNumber(int _) {_leafNumber = _;}
@@ -40,7 +40,7 @@ class PartitionCache {
   set isRoot(bool _) => {_isRoot = _};
   set roomArea(Area _) => {_roomArea = _};
   set gridArea(Area _) => {_gridArea = _};
-  set consolidRect(var _) => {_consolidRect = _};
+  set arrangedRect(var _) => {_arrangedRect = _};
   set absArea(Area _) => {_absArea = _};
 
   get getSplitAxisBias => _splitAxisBias;
@@ -57,7 +57,7 @@ class PartitionCache {
   get getIsRoot => _isRoot;
   get getRoomArea => _roomArea;
   get getGridArea => _gridArea;
-  get getConsolidRect => _consolidRect;
+  get getArrangedRect => _arrangedRect;
   get getAbsArea => _absArea;
 
 

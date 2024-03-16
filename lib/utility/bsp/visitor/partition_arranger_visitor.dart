@@ -17,8 +17,8 @@ class PartitionArrangerVisitor extends Visitor {
     // 最後に返却された結合配列がrootに対する戻り値であるのに対しif文を通り抜けてしまう。
 
     if (p.children.isEmpty) {
-      p.cache.consolidRect = p.cache.getRect;
-      return p.cache.getConsolidRect;
+      p.cache.arrangedRect = p.cache.getRect;
+      return p.cache.getArrangedRect;
 
     } else {
       //要素2
@@ -38,9 +38,9 @@ class PartitionArrangerVisitor extends Visitor {
         return [];
       }
 
+      p.cache.arrangedRect = merged;
       isDebug? _trace(p): null;
-      p.cache.consolidRect = merged;
-      return p.cache.getConsolidRect;
+      return p.cache.getArrangedRect;
     }
   }
 
@@ -52,7 +52,7 @@ class PartitionArrangerVisitor extends Visitor {
             "(bias: ±${p.cache.getSplitAxisBias}), Sprit ratio: ${p.cache.getSplitRatio} "
             "(bias: ±${p.cache.getSplitRatioBias})"
     );
-    List<List<int>> rect = p.cache.getRect;
+    List<List<int>> rect = p.cache.getArrangedRect;
     rect.debugPrint();
   }
 

@@ -97,7 +97,7 @@ class RoomCreatorVisitor extends Visitor {
 
       return leaf;
     } else {
-      Exception();
+      logging.info("部屋を作成できるスペースがありません。");
       return leaf;
     }
   }
