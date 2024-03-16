@@ -7,7 +7,7 @@ class DungeonConfig {
   // Partitionの設定値
   final int initialDepth = -0; //don't change
   final bool initialIsRoot = true; //don't change
-  final String rootName = "r";
+  final String rootName = "r"; // don't change
 
   // RoomCreatorの設定値
   final int minRoomSize = 4;

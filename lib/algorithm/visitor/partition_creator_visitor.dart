@@ -5,7 +5,6 @@ import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class PartitionCreatorVisitor extends Visitor {
-  late DungeonConfig config = DungeonConfig();
 
   @override
   void visit(Partition partition, {bool isDebug = false}) {
@@ -18,7 +17,7 @@ class PartitionCreatorVisitor extends Visitor {
 
     p.children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
-    if (_isCreateChildren(p)) {
+    if (shouldExecute(p)) {
       var data = _split(p);
       List<List<List<int>>> pair = data.pair;
       List<Area> absArea = data.absArea;
@@ -81,14 +80,13 @@ class PartitionCreatorVisitor extends Visitor {
     if (pair.isEmpty) {
       throw Exception();
     } else {
-
       ({List<List<List<int>>> pair, List<Area> absArea}) data = (pair: pair, absArea: absAreas);
-
       return data;
     }
   }
 
-  bool _isCreateChildren(Partition p) {
+  @override
+  bool shouldExecute(Partition p) {
     bool isShouldCreate = p.depth < p.config.dungeonDepth ? true : false;
 
     // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる

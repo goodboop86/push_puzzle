@@ -43,6 +43,7 @@ class PartitionArrangerVisitor extends Visitor {
     }
   }
 
+  @override
   bool shouldExecute(Partition p) {
     return p.children.isNotEmpty;
   }

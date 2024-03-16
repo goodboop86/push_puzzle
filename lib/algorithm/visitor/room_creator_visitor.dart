@@ -2,13 +2,11 @@
 import 'dart:math';
 
 import 'package:push_puzzle/algorithm/area.dart';
-import 'package:push_puzzle/algorithm/dungeon_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
-  final DungeonConfig config = DungeonConfig();
 
   @override
   void visit(Partition partition, {bool isDebug = false}){
@@ -37,6 +35,7 @@ class RoomCreatorVisitor extends Visitor {
     }
   }
 
+  @override
   bool shouldExecute(Partition p) {
     // グリッドサイズ: 部屋を作成できる空間
     //({int height, int width}) gridShape;
