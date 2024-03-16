@@ -1,4 +1,4 @@
-class DungeonConfig {
+class VisitorConfig {
   // ダンジョンの設定値
   final int dungeonHeight = 20;
   final int dungeonWidth = 20;

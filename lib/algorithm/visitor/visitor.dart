@@ -1,10 +1,10 @@
 import 'package:logging/logging.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 
-import '../dungeon_config.dart';
+import '../visitor_config.dart';
 
 abstract class Visitor {
-  late DungeonConfig config = DungeonConfig();
+  late VisitorConfig config = VisitorConfig();
   final Logger logging = Logger('Visitor');
   late bool isDebug;
   void visit(Partition partition);

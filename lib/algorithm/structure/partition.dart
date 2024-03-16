@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/algorithm/dungeon_config.dart';
+import 'package:push_puzzle/algorithm/visitor_config.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
 import 'package:logging/logging.dart';
@@ -9,7 +9,7 @@ import '../area.dart';
 
 class Partition {
   final log = Logger('Partition');
-  late DungeonConfig config;
+  late VisitorConfig config;
   List<Partition> children = [];
   late int depth;
 
