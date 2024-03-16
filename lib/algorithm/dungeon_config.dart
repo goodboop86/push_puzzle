@@ -13,6 +13,4 @@ class DungeonConfig {
   final int minRoomSize = 4;
   final int minMarginBetweenLeaf = 2;
   final double gridRatio = 0.6;
-
-
 }

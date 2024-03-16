@@ -2,9 +2,7 @@ import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
-
 class PartitionArrangerVisitor extends Visitor {
-
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
@@ -19,11 +17,13 @@ class PartitionArrangerVisitor extends Visitor {
     if (shouldExecute(p)) {
       //要素2
       List<List<List<int>>> pair = [];
-      for (var child in p.children) {pair.add(execute(child));}
+      for (var child in p.children) {
+        pair.add(execute(child));
+      }
 
       List<List<int>> merged = [];
       if (p.getSplitAxis == "horizontal") {
-        merged =  pair[0] + pair[1];
+        merged = pair[0] + pair[1];
       } else if (p.getSplitAxis == "vertical") {
         for (int i = 0; i < pair[0].length; i++) {
           merged.addAll([pair[0][i] + pair[1][i]]);
@@ -34,7 +34,7 @@ class PartitionArrangerVisitor extends Visitor {
       }
 
       p.arrangedRect = merged;
-      isDebug? trace(p): null;
+      isDebug ? trace(p) : null;
       return p.getArrangedRect;
     } else {
       p.arrangedRect = p.rect;
@@ -49,15 +49,12 @@ class PartitionArrangerVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info(
-        "Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
-            "Debug: ${p.getIsDebug} "
-            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
-            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
-            "(bias: ±${p.getSplitRatioBias})"
-    );
+    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+        "Debug: ${p.getIsDebug} "
+        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+        "(bias: ±${p.getSplitRatioBias})");
     List<List<int>> rect = p.getArrangedRect;
     rect.debugPrint();
   }
-
 }

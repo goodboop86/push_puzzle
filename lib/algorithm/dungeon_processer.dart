@@ -15,9 +15,12 @@ class DungeonProcessor {
   late Area initialArea;
 
   void process() {
-
     root = Partition(
-        depth: d.initialDepth, isRoot: d.initialIsRoot, rect: initialRect, absArea: initialArea, name: d.rootName);
+        depth: d.initialDepth,
+        isRoot: d.initialIsRoot,
+        rect: initialRect,
+        absArea: initialArea,
+        name: d.rootName);
 
     visitor.visit(root, isDebug: true);
 
@@ -27,17 +30,14 @@ class DungeonProcessor {
 
     arranger.visit(root, isDebug: false);
 
-
     // arranger.visit(root);
-
-
   }
 
   DungeonProcessor() {
-    initialRect = List.generate(d.dungeonHeight,
-            (i) => List.generate(d.dungeonWidth, (j) => 8));
-    initialArea = Area(from: Point(y: 0, x: 0), to: Point(y: d.dungeonHeight - 1, x: d.dungeonWidth - 1));
-
-}
-
+    initialRect = List.generate(
+        d.dungeonHeight, (i) => List.generate(d.dungeonWidth, (j) => 8));
+    initialArea = Area(
+        from: Point(y: 0, x: 0),
+        to: Point(y: d.dungeonHeight - 1, x: d.dungeonWidth - 1));
+  }
 }
