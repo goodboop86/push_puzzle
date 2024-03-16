@@ -30,8 +30,7 @@ class PartitionArrangerVisitor extends Visitor {
         }
       } else {
         // 無い想定
-        Exception();
-        return [];
+        throw Exception("$PartitionArrangerVisitor");
       }
 
       p.arrangedRect = merged;

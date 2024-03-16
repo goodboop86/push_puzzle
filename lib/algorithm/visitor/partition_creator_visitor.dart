@@ -77,7 +77,7 @@ class PartitionCreatorVisitor extends Visitor {
 
     // splitが作成されていなければexception(無い想定)
     if (pair.isEmpty) {
-      throw Exception();
+      throw Exception("$PartitionCreatorVisitor");
     } else {
       ({List<List<List<int>>> pair, List<Area> absArea}) data = (pair: pair, absArea: absAreas);
       return data;
