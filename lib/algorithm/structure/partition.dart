@@ -9,10 +9,10 @@ import 'partition_cache.dart';
 
 class Partition {
   final log = Logger('Partition');
+  final DungeonConfig config = DungeonConfig();
   List<Partition> children = [];
   late int depth;
   late PartitionCache cache = PartitionCache();
-  late DungeonConfig config = DungeonConfig();
   late int id;
 
 
@@ -30,7 +30,7 @@ class Partition {
   }
 
 
-  void acceptPartitionVisitor(PartitionCreatorVisitor visitor){
+  void acceptPartitionCreatorVisitor(PartitionCreatorVisitor visitor){
       log.info("##### Create a partition with depth: ${cache.getSplitDepth} #####");
       visitor.execute(this);
   }

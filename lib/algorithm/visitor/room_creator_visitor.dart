@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/dungeon_config.dart';
-import 'package:push_puzzle/algorithm/partition/partition.dart';
+import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
@@ -41,7 +41,7 @@ class RoomCreatorVisitor extends Visitor {
     }
   }
 
-  bool isCreatable(List<List<int>> leaf) {
+  bool _isCreatable(List<List<int>> leaf) {
     int leafHeight = leaf.length;
     int leafWidth = leaf.first.length;
 
@@ -59,7 +59,7 @@ class RoomCreatorVisitor extends Visitor {
 
   List<List<int>> drawAreas(){
     List<List<int>> leaf = tp.cache.getRect;
-    if(isCreatable(leaf)) {
+    if(_isCreatable(leaf)) {
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
       int rh = Random().nextInt(gridHeight - config.minRoomSize) +
           config.minRoomSize; // roomHeight
@@ -93,6 +93,11 @@ class RoomCreatorVisitor extends Visitor {
         }
       }
 
+      // grid, roomのabsAreaがMSTのために必要
+      // そのために、このpartitionの絶対座標(from)を加算する
+      tp.cache.absGridArea = tp.cache.getGridArea.add(Point(y: tp.cache.getAbsArea.from.y, x: tp.cache.getAbsArea.from.x));
+      tp.cache.absRoomArea = tp.cache.getRoomArea.add(Point(y: tp.cache.getAbsArea.from.y, x: tp.cache.getAbsArea.from.x));
+
       isDebug? _trace(): null;
 
       return leaf;
@@ -108,7 +113,9 @@ class RoomCreatorVisitor extends Visitor {
             "Debug: ${tp.cache.getIsDebug} "
             "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
             "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
-            "(bias: ±${tp.cache.getSplitRatioBias})"
+            "(bias: ±${tp.cache.getSplitRatioBias}) "
+            "absGridArea: ${tp.cache.getAbsGridArea.toString()}, "
+            "absRoomArea: ${tp.cache.getAbsRoomArea.toString()}"
     );
     List<List<int>> rect = tp.cache.getRect;
     rect.debugPrint();

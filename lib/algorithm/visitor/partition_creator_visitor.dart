@@ -1,6 +1,6 @@
 import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/dungeon_config.dart';
-import 'package:push_puzzle/algorithm/partition/partition.dart';
+import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
@@ -11,7 +11,7 @@ class PartitionCreatorVisitor extends Visitor {
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
-    partition.acceptPartitionVisitor(this);
+    partition.acceptPartitionCreatorVisitor(this);
   }
 
   @override
@@ -92,7 +92,7 @@ class PartitionCreatorVisitor extends Visitor {
   }
 
   bool _isCreateChildren() {
-    bool isShouldCreate = tp.depth < tp.cache.getSplitDepth ? true : false;
+    bool isShouldCreate = tp.depth < tp.config.dungeonDepth ? true : false;
 
     // - 分割可能かはsplit()で利用するsublistへ渡すindexによって代わる
     // - sublistはsublist(0,0)などでも空配列を返せるのでexceptionはしない

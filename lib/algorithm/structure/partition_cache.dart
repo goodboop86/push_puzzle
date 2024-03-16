@@ -29,6 +29,8 @@ class PartitionCache {
   // roomCreatorに関する設定
   late Area _gridArea;
   late Area _roomArea;
+  late Area _absGridArea;
+  late Area _absRoomArea;
 
   // 結合に関する設定
   late List<List<int>> _arrangedRect;
@@ -42,6 +44,8 @@ class PartitionCache {
   set gridArea(Area _) => {_gridArea = _};
   set arrangedRect(var _) => {_arrangedRect = _};
   set absArea(Area _) => {_absArea = _};
+  set absGridArea(Area _) => {_absGridArea = _};
+  set absRoomArea(Area _) => {_absRoomArea = _};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
@@ -51,7 +55,7 @@ class PartitionCache {
   get getSplitRatio => _splitRatio;
 
   // roomCreatorに関する設定
- // get getDepth => _depth;
+  // get getDepth => _depth;
   get getRect => _rect;
   get getName => _name;
   get getIsRoot => _isRoot;
@@ -59,8 +63,11 @@ class PartitionCache {
   get getGridArea => _gridArea;
   get getArrangedRect => _arrangedRect;
   get getAbsArea => _absArea;
+  get getAbsGridArea => _absGridArea;
+  get getAbsRoomArea => _absRoomArea;
 
 
+  // [for partitionCreatorVisitor]
   String getLeafPosition(){
     String type = "";
     if (_splitAxis=="vertical") {
@@ -72,6 +79,7 @@ class PartitionCache {
     }
      return type;
   }
+
 
   // 長方形を分割する方向を決める。
   // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。

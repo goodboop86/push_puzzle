@@ -29,6 +29,10 @@ class Area {
         x: Random().nextInt(from.x - to.x) + from.x);
   }
 
+  Area add(Point p) {
+    return Area(from: Point(y: from.y + p.y, x: from.x + p.x), to: Point(y: to.y + p.y, x: to.x + p.x));
+  }
+
   @override
   String toString() {
     return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
