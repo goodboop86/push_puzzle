@@ -36,7 +36,8 @@ class RoomCreatorVisitor extends Visitor {
     }
   }
 
-  bool _isCreatable(List<List<int>> leaf) {
+  bool _isCreatable(Partition p) {
+    List<List<int>> leaf = p.cache.getRect;
     int leafHeight = leaf.length;
     int leafWidth = leaf.first.length;
 
@@ -54,7 +55,7 @@ class RoomCreatorVisitor extends Visitor {
 
   List<List<int>> drawAreas(Partition p){
     List<List<int>> leaf = p.cache.getRect;
-    if(_isCreatable(leaf)) {
+    if(_isCreatable(p)) {
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
       int rh = Random().nextInt(gridHeight - config.minRoomSize) +
           config.minRoomSize; // roomHeight
