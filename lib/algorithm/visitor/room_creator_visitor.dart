@@ -8,10 +8,7 @@ import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
-  late DungeonConfig config = DungeonConfig();
-
-  late int gridHeight;
-  late int gridWidth;
+  final DungeonConfig config = DungeonConfig();
 
   @override
   void visit(Partition partition, {bool isDebug = false}){
@@ -41,33 +38,42 @@ class RoomCreatorVisitor extends Visitor {
   }
 
   bool shouldExecute(Partition p) {
-    List<List<int>> leaf = p.cache.getRect;
-    int leafHeight = leaf.length;
-    int leafWidth = leaf.first.length;
-
     // グリッドサイズ: 部屋を作成できる空間
-    gridHeight = leafHeight - config.minMarginBetweenLeaf * 2;
-    gridWidth = leafWidth - config.minMarginBetweenLeaf * 2;
+    //({int height, int width}) gridShape;
+
+    ({int height, int width}) gridShape = (
+    height: (p.cache.getRect.length - config.minMarginBetweenLeaf * 2).toInt(),
+    width: (p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    );
+
+    // gridHeight =  p.cache.getRect.length - config.minMarginBetweenLeaf * 2;
+    // gridWidth = p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2;
 
     // 作成する部屋のサイズが小さすぎないか
     bool isEnoughRoomSize =
-    (gridWidth > config.minRoomSize) && (gridHeight > config.minRoomSize) ? true : false;
+    (gridShape.width > config.minRoomSize) && (gridShape.height > config.minRoomSize) ? true : false;
 
     return  isEnoughRoomSize;
   }
 
 
   List<List<int>> drawAreas(Partition p){
+
+    ({int height, int width}) gridShape = (
+    height: (p.cache.getRect.length - config.minMarginBetweenLeaf * 2).toInt(),
+    width: (p.cache.getRect.first.length - config.minMarginBetweenLeaf * 2).toInt()
+    );
+
     List<List<int>> leaf = p.cache.getRect;
       // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
-      int rh = Random().nextInt(gridHeight - config.minRoomSize) +
+      int rh = Random().nextInt(gridShape.height - config.minRoomSize) +
           config.minRoomSize; // roomHeight
-      int rw = Random().nextInt(gridWidth - config.minRoomSize) +
+      int rw = Random().nextInt(gridShape.width - config.minRoomSize) +
           config.minRoomSize; // roomWidth
 
       // 部屋とグリッドとの距離をランダムに決める
-      int hb = Random().nextInt(gridHeight - rh); // heightBias
-      int wb = Random().nextInt(gridWidth - rw); // widthBias
+      int hb = Random().nextInt(gridShape.height - rh); // heightBias
+      int wb = Random().nextInt(gridShape.width - rw); // widthBias
 
 
       // グリッドを描画する範囲
