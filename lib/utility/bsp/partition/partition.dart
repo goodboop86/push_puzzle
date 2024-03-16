@@ -46,9 +46,10 @@ class Partition {
     var _ = visitor.execute(this);
   }
 
-  Partition({required this.depth, required isRoot, required List<List<int>> rect, required String name}) {
-    cache.rect = rect;
+  Partition({required this.depth, required isRoot, required List<List<int>> rect, required Area absArea, required String name}) {
     cache.isRoot = isRoot;
+    cache.rect = rect;
+    cache.absArea = absArea;
     cache.name = name;
   }
 

@@ -28,4 +28,9 @@ class Area {
         y: Random().nextInt(from.y - to.y) + from.y,
         x: Random().nextInt(from.x - to.x) + from.x);
   }
+
+  @override
+  String toString() {
+    return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
+  }
 }

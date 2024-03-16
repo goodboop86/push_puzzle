@@ -1,3 +1,4 @@
+import 'package:push_puzzle/utility/bsp/area.dart';
 import 'package:push_puzzle/utility/bsp/dungeon_config.dart';
 import 'package:push_puzzle/utility/bsp/partition/partition.dart';
 import 'package:push_puzzle/utility/bsp/visitor/visitor.dart';
@@ -21,13 +22,16 @@ class PartitionCreatorVisitor extends Visitor {
     tp.children = [];
     // 分割回数が十分でないならchildrenの作成を繰り返す
     if (_isCreateChildren()) {
-      List<List<List<int>>> pair = _split();
+      var data = _split();
+      List<List<List<int>>> pair = data.pair;
+      List<Area> absArea = data.absArea;
+
       tp.cache.depth = tp.depth;
 
       pair.asMap().forEach((int i, var leaf) {
         tp.cache.leafNumber = i;
         tp.children.add(Partition(
-            rect: leaf, depth: tp.depth + 1, isRoot: false,
+            rect: leaf, depth: tp.depth + 1, isRoot: false, absArea: absArea[i],
             name: tp.cache.getName + tp.cache.getLeafPosition()));
       });
     } else {
@@ -40,7 +44,7 @@ class PartitionCreatorVisitor extends Visitor {
 
 
   // 2次元配列をパラメータに従って分割する。
-  List<List<List<int>>> _split() {
+  ({List<List<List<int>>> pair, List<Area> absArea}) _split() {
 
     List<List<int>> rect = tp.cache.getRect;
     int height = rect.length;
@@ -50,7 +54,8 @@ class PartitionCreatorVisitor extends Visitor {
     tp.cache.adjustSplitRatio();
     double ratio = tp.cache.getSplitRatio;
 
-    List<List<List<int>>>? pair = [];
+    List<Area> absAreas = [];
+    List<List<List<int>>> pair = [];
     if (axis == "horizontal") {
       int idx = (height * ratio).toInt();
       // memo: sublistの第２引数の配列番号は含まれない
@@ -58,11 +63,20 @@ class PartitionCreatorVisitor extends Visitor {
         rect.sublist(0, idx),
         rect.sublist(idx, height)
       ];
+      absAreas = [
+        Area(from: Point(y: 0, x: 0), to: Point(y: idx - 1, x: width - 1)),
+        Area(from: Point(y: idx, x: 0), to: Point(y: height - 1, x: width -1)),
+      ];
+
     } else if (axis == "vertical") {
       int idx = (width * ratio).toInt();
       pair = [
         rect.map((row) => row.sublist(0, idx)).toList(),
         rect.map((row) => row.sublist(idx, width)).toList()
+      ];
+      absAreas = [
+        Area(from: Point(y: 0, x: 0), to: Point(y: height - 1 , x: idx - 1)),
+        Area(from: Point(y: 0, x: idx), to: Point(y: height -1 , x: width - 1)),
       ];
     }
 
@@ -70,7 +84,10 @@ class PartitionCreatorVisitor extends Visitor {
     if (pair.isEmpty) {
       throw Exception();
     } else {
-      return pair;
+
+      ({List<List<List<int>>> pair, List<Area> absArea}) data = (pair: pair, absArea: absAreas);
+
+      return data;
     }
   }
 
@@ -93,7 +110,8 @@ class PartitionCreatorVisitor extends Visitor {
             "Debug: ${tp.cache.getIsDebug} "
             "name: ${tp.cache.getName}, Split axis: ${tp.cache.getSplitAxis} "
             "(bias: ±${tp.cache.getSplitAxisBias}), Sprit ratio: ${tp.cache.getSplitRatio} "
-            "(bias: ±${tp.cache.getSplitRatioBias})"
+            "(bias: ±${tp.cache.getSplitRatioBias}) "
+            "absArea: ${tp.cache.getAbsArea.toString()}"
     );
     List<List<int>> rect = tp.cache.getRect;
     rect.debugPrint();
