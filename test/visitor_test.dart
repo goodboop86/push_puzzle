@@ -124,6 +124,7 @@ void main() {
           expect(leafChild.children.isEmpty, true);
         });
 
+        // split: horizontalの場合
         when(adjustor.adjustSplitAxis(any)).thenReturn("horizontal");
         partitionCreator.visit(partition, isDebug: true);
         List<Partition> hTarget = leafAccessor.visit(partition);
@@ -144,12 +145,12 @@ void main() {
                   x: config.dungeonWidth -1
               )
           );
-
           expect(leafChild.absArea.toString(), expectedArea.toString());
           expect(leafChild.depth, config.dungeonDepth);
           expect(leafChild.isRoot, false);
           expect(leafChild.children.isEmpty, true);
-        });
+        }
+        );
 
         // TODO: absAreaのテスト
 

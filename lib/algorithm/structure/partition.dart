@@ -29,6 +29,8 @@ class Partition {
   final double _splitAxisBias = 0.1;
 
   // roomCreatorに関する設定
+  late ({int height, int width}) _gridShape;
+  late ({int height, int width}) roomShape;
   late Area _gridArea;
   late Area _roomArea;
   late Area _absGridArea;
@@ -49,6 +51,7 @@ class Partition {
     _splitRatio = _;
   }
 
+  set gridShape(({int height, int width}) _) => {_gridShape = _};
   set roomArea(Area _) => {_roomArea = _};
   set gridArea(Area _) => {_gridArea = _};
   set arrangedRect(var _) => {_arrangedRect = _};
@@ -63,6 +66,7 @@ class Partition {
 
   // roomCreatorに関する設定
   // get getDepth => _depth;
+  get getGridShape => _gridShape;
   get getRoomArea => _roomArea;
   get getGridArea => _gridArea;
   get getArrangedRect => _arrangedRect;

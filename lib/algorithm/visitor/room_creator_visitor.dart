@@ -6,6 +6,7 @@ import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
+  late RoomCreatorAdjustor adjustor = RoomCreatorAdjustor();
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
@@ -55,21 +56,17 @@ class RoomCreatorVisitor extends Visitor {
   }
 
   List<List<int>> drawAreas(Partition p) {
-    ({int height, int width}) gridShape = (
+    p.gridShape = (
       height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
       width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
     );
 
     List<List<int>> leaf = p.rect;
     // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
-    int rh = Random().nextInt(gridShape.height - config.minRoomSize) +
-        config.minRoomSize; // roomHeight
-    int rw = Random().nextInt(gridShape.width - config.minRoomSize) +
-        config.minRoomSize; // roomWidth
+    p.roomShape = adjustor.getRoomShape(p); // roomWidth
 
     // 部屋とグリッドとの距離をランダムに決める
-    int hb = Random().nextInt(gridShape.height - rh); // heightBias
-    int wb = Random().nextInt(gridShape.width - rw); // widthBias
+    ({int height, int width}) rbs = adjustor.getRoomBiasShape(p);
 
     // グリッドを描画する範囲
     p.gridArea = Area(
@@ -83,11 +80,11 @@ class RoomCreatorVisitor extends Visitor {
     // 部屋を描画する範囲
     p.roomArea = Area(
         from: Point(
-            y: config.minMarginBetweenLeaf + hb,
-            x: config.minMarginBetweenLeaf + wb),
+            y: config.minMarginBetweenLeaf + rbs.height,
+            x: config.minMarginBetweenLeaf + rbs.width),
         to: Point(
-            y: config.minMarginBetweenLeaf + hb + rh - 1,
-            x: config.minMarginBetweenLeaf + wb + rw - 1));
+            y: config.minMarginBetweenLeaf + rbs.height + p.roomShape.height - 1,
+            x: config.minMarginBetweenLeaf + rbs.width + p.roomShape.width - 1));
 
     for (int y = 0; y < leaf.length; y++) {
       for (int x = 0; x < leaf.first.length; x++) {
@@ -125,4 +122,29 @@ class RoomCreatorVisitor extends Visitor {
   }
 
   RoomCreatorVisitor({required config}) : super(config);
+}
+
+
+class RoomCreatorAdjustor {
+
+  ({int height, int width}) getRoomShape(Partition p){
+    ({int height, int width}) gridShape = (
+    height: (p.rect.length - p.config.minMarginBetweenLeaf * 2).toInt(),
+    width: (p.rect.first.length - p.config.minMarginBetweenLeaf * 2).toInt()
+    );
+
+    int rh = Random().nextInt(gridShape.height - p.config.minRoomSize) +
+        p.config.minRoomSize;
+    int rw =Random().nextInt(gridShape.width - p.config.minRoomSize) +
+        p.config.minRoomSize;
+
+    return (height: rh, width: rw);
+  }
+
+  ({int height, int width}) getRoomBiasShape(Partition p) {
+    int hb = Random().nextInt(p.getGridShape.height - p.roomShape.height);
+    int wb = Random().nextInt(p.getGridShape.width - p.roomShape.width);
+
+    return (height: hb, width: wb);
+  }
 }
