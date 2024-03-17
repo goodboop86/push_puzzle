@@ -67,7 +67,6 @@ class PartitionCreatorVisitor extends Visitor {
     return type;
   }
 
-
   // 2次元配列をパラメータに従って分割する。
   ({List<List<List<int>>> pair, List<Area> absArea}) _split(Partition p) {
     List<List<int>> rect = p.rect;
@@ -105,7 +104,7 @@ class PartitionCreatorVisitor extends Visitor {
       throw Exception("$PartitionCreatorVisitor");
     } else {
       ({List<List<List<int>>> pair, List<Area> absArea}) data =
-      (pair: pair, absArea: absAreas);
+          (pair: pair, absArea: absAreas);
       return data;
     }
   }
@@ -126,12 +125,13 @@ class PartitionCreatorVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
-        "Debug: ${p.getIsDebug} "
-        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
-        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
-        "(bias: ±${p.getSplitRatioBias}) "
-        "absArea: ${p.absArea.toString()}");
+    logging
+        .info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias}) "
+            "absArea: ${p.absArea.toString()}");
     List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
@@ -142,21 +142,20 @@ class PartitionCreatorVisitor extends Visitor {
 
 // テストのため切り出す
 class PartitionCreatorAdjustor {
-
   // 長方形を分割する方向を決める。
   // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
   String adjustSplitAxis(Partition? p) {
-    return p == null ? "null" : (p.rect.length / p.rect.first.length) +
-        (Random().nextDouble() * p.getSplitAxisBias) >
-        1
-        ? "horizontal"
-        : "vertical";
+    return p == null
+        ? "null"
+        : (p.rect.length / p.rect.first.length) +
+                    (Random().nextDouble() * p.getSplitAxisBias) >
+                1
+            ? "horizontal"
+            : "vertical";
   }
 
   // 長方形を分割する比率を決める。
-  double adjustSplitRatio(Partition? p ) {
+  double adjustSplitRatio(Partition? p) {
     return p == null ? -1 : Random().nextDouble() / 2 + p.getSplitRatioBias;
   }
 }
-
-

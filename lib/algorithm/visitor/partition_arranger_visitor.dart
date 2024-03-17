@@ -49,11 +49,12 @@ class PartitionArrangerVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
-        "Debug: ${p.getIsDebug} "
-        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
-        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
-        "(bias: ±${p.getSplitRatioBias})");
+    logging
+        .info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias})");
     List<List<int>> rect = p.getArrangedRect;
     rect.debugPrint();
   }

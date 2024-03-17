@@ -8,6 +8,7 @@ import 'package:mockito/src/dummies.dart' as _i4;
 import 'package:push_puzzle/algorithm/structure/partition.dart' as _i3;
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart'
     as _i2;
+import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -58,4 +59,32 @@ class MockPartitionCreatorAdjustor extends _i1.Mock
         returnValue: 0.0,
         returnValueForMissingStub: 0.0,
       ) as double);
+}
+
+/// A class which mocks [RoomCreatorAdjustor].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockRoomCreatorAdjustor extends _i1.Mock
+    implements _i5.RoomCreatorAdjustor {
+  @override
+  ({int height, int width}) getRoomShape(_i3.Partition? p) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getRoomShape,
+          [p],
+        ),
+        returnValue: (height: 0, width: 0),
+        returnValueForMissingStub: (height: 0, width: 0),
+      ) as ({int height, int width}));
+
+  @override
+  ({int height, int width}) getRoomBiasShape(_i3.Partition? p) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getRoomBiasShape,
+          [p],
+        ),
+        returnValue: (height: 0, width: 0),
+        returnValueForMissingStub: (height: 0, width: 0),
+      ) as ({int height, int width}));
 }

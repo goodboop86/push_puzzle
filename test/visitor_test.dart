@@ -22,6 +22,7 @@ import 'visitor_test.mocks.dart';
 // Mock化したいクラス<Foo>を指定して`dart run build_runner build`
 // すると、`visitor_test.mocks.dart`が生成される。
 @GenerateNiceMocks([MockSpec<PartitionCreatorAdjustor>()])
+@GenerateNiceMocks([MockSpec<RoomCreatorAdjustor>()])
 void main() {
   final config = TestVisitorConfig();
   late Partition partition;
@@ -32,11 +33,12 @@ void main() {
   late PartitionLeafAccessorVisitor leafAccessor;
   late RoomCreatorVisitor roomCreator;
   late PartitionArrangerVisitor partitionArranger;
-  final MockPartitionCreatorAdjustor adjustor = MockPartitionCreatorAdjustor();
+  final MockPartitionCreatorAdjustor mockPartitionAdjustor = MockPartitionCreatorAdjustor();
+  final MockRoomCreatorAdjustor mockRoomAdjustor = MockRoomCreatorAdjustor();
 
 
 
-
+// FIXME: ダンジョンサイズが割り切れないときにテストが失敗する
   group('Test stage state of game initialization.', () {
 
     setUp(() {
@@ -62,40 +64,42 @@ void main() {
           PartitionLeafAccessorVisitor(config: config);
 
       partitionCreator =
-          PartitionCreatorVisitor(config: config, adjustor: adjustor);
+          PartitionCreatorVisitor(config: config, adjustor: mockPartitionAdjustor);
 
-      partitionCreator =
-          PartitionCreatorVisitor(config: config, adjustor: adjustor);
+      roomCreator =
+          RoomCreatorVisitor(config: config, adjustor: mockRoomAdjustor);
 
     });
 
-    group('Visitor test', () {
+    group('Visitor test', ()
+    {
+      test('Visitor test', () {
 
-      test('PartitionLeafAccessorVisitor', () {
+        /// PartitionLeafAccessorVisitor test
         /* partitionの子供の要素をリストで取得できているかどうか*/
         Partition child = Partition(
             depth: 1,
             isRoot: false,
             rect: List.generate(5,
                     (i) => List.generate(4, (j) => 8)),
-            absArea: testArea, // don't care.
+            absArea: testArea,
+            // don't care.
             name: "dummy",
             config: config);
 
-        partition.children.addAll([child,child]);
+        partition.children.addAll([child, child]);
 
         List<Partition> target = leafAccessor.visit(partition, isDebug: true);
-        for(Partition leaf in target){
+        for (Partition leaf in target) {
           expect(leaf.rect.length, 5);
           expect(leaf.rect.first.length, 4);
         }
-      });
 
-      test('PartitionCreatorVisitor test', () {
 
+        /// PartitionCreatorVisitor test
         // testでは比率と方向を固定する
-        when(adjustor.adjustSplitAxis(any)).thenReturn("vertical");
-        when(adjustor.adjustSplitRatio(any)).thenReturn(0.5);
+        when(mockPartitionAdjustor.adjustSplitAxis(any)).thenReturn("vertical");
+        when(mockPartitionAdjustor.adjustSplitRatio(any)).thenReturn(0.5);
 
         partitionCreator.visit(partition, isDebug: true);
         List<Partition> vTarget = leafAccessor.visit(partition);
@@ -103,7 +107,8 @@ void main() {
         /* 適切な幅で分割できているか */
         for (var leaf in vTarget) {
           expect(leaf.rect.length, config.dungeonHeight.toInt());
-          expect(leaf.rect.first.length, config.dungeonWidth~/4);
+          expect(leaf.rect.first.length,
+              config.dungeonWidth ~/ pow(2, config.dungeonDepth));
         }
 
         /* その他の設定値が正しいか (split: vertical) */
@@ -111,10 +116,11 @@ void main() {
           Area expectedArea = Area(
               from: Point(
                   y: 0,
-                  x: (i * config.dungeonWidth)~/pow(2, config.dungeonDepth)),
+                  x: (i * config.dungeonWidth) ~/ pow(2, config.dungeonDepth)),
               to: Point(
                   y: config.dungeonHeight - 1,
-                  x: ((i + 1) * config.dungeonWidth)~/pow(2, config.dungeonDepth) - 1
+                  x: ((i + 1) * config.dungeonWidth) ~/
+                      pow(2, config.dungeonDepth) - 1
               )
           );
 
@@ -124,47 +130,79 @@ void main() {
           expect(leafChild.children.isEmpty, true);
         });
 
+
         // split: horizontalの場合
-        when(adjustor.adjustSplitAxis(any)).thenReturn("horizontal");
-        partitionCreator.visit(partition, isDebug: true);
-        List<Partition> hTarget = leafAccessor.visit(partition);
+        when(mockPartitionAdjustor.adjustSplitAxis(any)).thenReturn(
+              "horizontal");
+          partitionCreator.visit(partition, isDebug: true);
+          List<Partition> hTarget = leafAccessor.visit(partition);
 
-        for (var leaf in hTarget) {
-          expect(leaf.rect.length, config.dungeonHeight~/4);
-          expect(leaf.rect.first.length, config.dungeonWidth);
-        }
+          for (var leaf in hTarget) {
+            expect(leaf.rect.length,
+                config.dungeonHeight ~/ pow(2, config.dungeonDepth));
+            expect(leaf.rect.first.length, config.dungeonWidth);
+          }
 
-        /* その他の設定値が正しいか (split: horizontal) */
-        hTarget.asMap().forEach((int i, var leafChild) {
-          Area expectedArea = Area(
-              from: Point(
-                  y: (i * config.dungeonHeight)~/pow(2, config.dungeonDepth),
-                  x: 0),
-              to: Point(
-                  y: ((i + 1) * config.dungeonHeight)~/pow(2, config.dungeonDepth) - 1,
-                  x: config.dungeonWidth -1
-              )
-          );
-          expect(leafChild.absArea.toString(), expectedArea.toString());
-          expect(leafChild.depth, config.dungeonDepth);
-          expect(leafChild.isRoot, false);
-          expect(leafChild.children.isEmpty, true);
-        }
-        );
+          /* その他の設定値が正しいか (split: horizontal) */
+          hTarget.asMap().forEach((int i, var leafChild) {
+            Area expectedArea = Area(
+                from: Point(
+                    y: (i * config.dungeonHeight) ~/
+                        pow(2, config.dungeonDepth),
+                    x: 0),
+                to: Point(
+                    y: ((i + 1) * config.dungeonHeight) ~/
+                        pow(2, config.dungeonDepth) - 1,
+                    x: config.dungeonWidth - 1
+                )
+            );
+            expect(leafChild.absArea.toString(), expectedArea.toString());
+            expect(leafChild.depth, config.dungeonDepth);
+            expect(leafChild.isRoot, false);
+            expect(leafChild.children.isEmpty, true);
+          });
 
-        // TODO: absAreaのテスト
 
-      });
-      test('RoomCreatorVisitor test', () {
-        expect(1, 1);
-      });
-      test('PartitionArrangerVisitor test', () {
-        expect(1, 1);
-      });
-      test('playerVecPos', () {
-        expect(1, 1);
-      });
-    });
-  });
+
+          /// RoomCreatorVisitor test
+            // testでは比率と方向を固定する
+            /* for partitionCreatorVisitor */
+            when(mockPartitionAdjustor.adjustSplitAxis(any)).thenReturn(
+                "vertical");
+            when(mockPartitionAdjustor.adjustSplitRatio(any)).thenReturn(0.5);
+
+            partitionCreator.visit(partition, isDebug: true);
+
+            /* for roomCreatorVisitor */
+            // 部屋サイズは最小サイズで固定、biasは1だけ追加する。
+            when(mockRoomAdjustor.getRoomShape(any)).thenReturn(
+                (height: config.minRoomSize, width: config.minRoomSize));
+            when(mockRoomAdjustor.getRoomBiasShape(any)).thenReturn(
+                (height: 1, width: 1));
+
+            roomCreator.visit(partition, isDebug: true);
+
+            vTarget = leafAccessor.visit(partition);
+
+            int isGridFromIdx = config.minMarginBetweenLeaf - 1;
+            int isMarginFromIdx = isGridFromIdx + 1; // 1: bias
+            int isRoomFromIdx = isMarginFromIdx + 1; // 1: bias
+            int isRoomToIdx = isMarginFromIdx + config.minRoomSize;
+            int isMarginToIdx = isRoomToIdx + 1; // 1: bias
+
+            // see https://www.figma.com/file/TYMZ68KXrb9LPZCY2KwUSV/Untitled?type=design&node-id=0%3A1&mode=design&t=gJVwV39YwKqVA3yq-1
+            vTarget.asMap().forEach((int i, var leafChild) {
+              expect(leafChild.rect[isGridFromIdx][isGridFromIdx], 8);
+              expect(leafChild.rect[isMarginFromIdx][isMarginFromIdx], 1);
+              expect(leafChild.rect[isRoomFromIdx][isRoomFromIdx], 4);
+              expect(leafChild.rect[isRoomToIdx][isRoomToIdx], 4);
+              expect(leafChild.rect[isMarginToIdx][isMarginToIdx], 1);
+            }
+            );
+          });
+
+          test('foo test', () {
+            expect(1, 1);
+          });
+        });});
 }
-

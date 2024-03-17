@@ -38,7 +38,7 @@ class RoomCreatorVisitor extends Visitor {
     // グリッドサイズ: 部屋を作成できる空間
     //({int height, int width}) gridShape;
 
-    ({int height, int width}) gridShape = (
+    p.gridShape = (
       height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
       width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
     );
@@ -47,8 +47,8 @@ class RoomCreatorVisitor extends Visitor {
     // gridWidth = p.rect.first.length - config.minMarginBetweenLeaf * 2;
 
     // 作成する部屋のサイズが小さすぎないか
-    bool isEnoughRoomSize = (gridShape.width > config.minRoomSize) &&
-            (gridShape.height > config.minRoomSize)
+    bool isEnoughRoomSize = (p.getGridShape.width > config.minRoomSize) &&
+            (p.getGridShape.height > config.minRoomSize)
         ? true
         : false;
 
@@ -56,11 +56,6 @@ class RoomCreatorVisitor extends Visitor {
   }
 
   List<List<int>> drawAreas(Partition p) {
-    p.gridShape = (
-      height: (p.rect.length - config.minMarginBetweenLeaf * 2).toInt(),
-      width: (p.rect.first.length - config.minMarginBetweenLeaf * 2).toInt()
-    );
-
     List<List<int>> leaf = p.rect;
     // 最小部屋サイズが4、グリッドサイズ20なら 4~10になる
     p.roomShape = adjustor.getRoomShape(p); // roomWidth
@@ -83,8 +78,14 @@ class RoomCreatorVisitor extends Visitor {
             y: config.minMarginBetweenLeaf + rbs.height,
             x: config.minMarginBetweenLeaf + rbs.width),
         to: Point(
-            y: config.minMarginBetweenLeaf + rbs.height + p.roomShape.height - 1,
-            x: config.minMarginBetweenLeaf + rbs.width + p.roomShape.width - 1));
+            y: config.minMarginBetweenLeaf +
+                rbs.height +
+                p.roomShape.height -
+                1,
+            x: config.minMarginBetweenLeaf +
+                rbs.width +
+                p.roomShape.width -
+                1));
 
     for (int y = 0; y < leaf.length; y++) {
       for (int x = 0; x < leaf.first.length; x++) {
@@ -110,13 +111,14 @@ class RoomCreatorVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
-        "Debug: ${p.getIsDebug} "
-        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
-        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
-        "(bias: ±${p.getSplitRatioBias}) "
-        "absGridArea: ${p.getAbsGridArea.toString()}, "
-        "absRoomArea: ${p.getAbsRoomArea.toString()}");
+    logging
+        .info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias}) "
+            "absGridArea: ${p.getAbsGridArea.toString()}, "
+            "absRoomArea: ${p.getAbsRoomArea.toString()}");
     List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
@@ -124,18 +126,11 @@ class RoomCreatorVisitor extends Visitor {
   RoomCreatorVisitor({required config, required this.adjustor}) : super(config);
 }
 
-
 class RoomCreatorAdjustor {
-
-  ({int height, int width}) getRoomShape(Partition p){
-    ({int height, int width}) gridShape = (
-    height: (p.rect.length - p.config.minMarginBetweenLeaf * 2).toInt(),
-    width: (p.rect.first.length - p.config.minMarginBetweenLeaf * 2).toInt()
-    );
-
-    int rh = Random().nextInt(gridShape.height - p.config.minRoomSize) +
+  ({int height, int width}) getRoomShape(Partition p) {
+    int rh = Random().nextInt(p.getGridShape.height - p.config.minRoomSize) +
         p.config.minRoomSize;
-    int rw =Random().nextInt(gridShape.width - p.config.minRoomSize) +
+    int rw = Random().nextInt(p.getGridShape.width - p.config.minRoomSize) +
         p.config.minRoomSize;
 
     return (height: rh, width: rw);

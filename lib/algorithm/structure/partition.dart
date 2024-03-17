@@ -90,7 +90,8 @@ class Partition {
     var _ = visitor.execute(this);
   }
 
-  List<Partition> acceptLeafAccessorVisitor(PartitionLeafAccessorVisitor visitor) {
+  List<Partition> acceptLeafAccessorVisitor(
+      PartitionLeafAccessorVisitor visitor) {
     log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
     return visitor.execute(this);
