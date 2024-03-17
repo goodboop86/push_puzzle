@@ -35,7 +35,7 @@ class DungeonProcessor {
 
     //arranger.visit(root, isDebug: false);
 
-    roomCreator = RoomCreatorVisitor(config: config);
+    roomCreator = RoomCreatorVisitor(config: config, adjustor: RoomCreatorAdjustor());
     roomCreator.visit(root, isDebug: false);
 
     arranger = PartitionArrangerVisitor(config: config);

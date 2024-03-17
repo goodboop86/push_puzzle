@@ -6,7 +6,7 @@ import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
 
 class RoomCreatorVisitor extends Visitor {
-  late RoomCreatorAdjustor adjustor = RoomCreatorAdjustor();
+  late RoomCreatorAdjustor adjustor;
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
@@ -121,7 +121,7 @@ class RoomCreatorVisitor extends Visitor {
     rect.debugPrint();
   }
 
-  RoomCreatorVisitor({required config}) : super(config);
+  RoomCreatorVisitor({required config, required this.adjustor}) : super(config);
 }
 
 
