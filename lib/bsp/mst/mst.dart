@@ -33,18 +33,13 @@ class MST {
     //parentを初期化
     List<int> parent = List.generate(numberOfVertices, (j) => -1);
 
-    int edgeCount = 0;
-    int index = 0;
-    while (edgeCount < numberOfVertices - 1) {
-      Edge nextEdge = edges[index];
-      int x = findParent(parent, nextEdge.source);
-      int y = findParent(parent, nextEdge.destination);
+    for (Edge edge in edges) {
+      int x = findParent(parent, edge.source);
+      int y = findParent(parent, edge.destination);
       if (x != y) {
-        minimumSpanningTree.add(nextEdge);
+        minimumSpanningTree.add(edge);
         union(parent, x, y);
-        edgeCount += 1;
       }
-      index += 1;
     }
     return minimumSpanningTree;
   }
