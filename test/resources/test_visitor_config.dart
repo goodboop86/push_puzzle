@@ -1,4 +1,4 @@
-import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
+import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
 
 class TestVisitorConfig extends VisitorConfig {
   // ダンジョンの設定値

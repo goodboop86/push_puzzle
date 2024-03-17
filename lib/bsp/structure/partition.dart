@@ -1,8 +1,8 @@
-import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/partition_leaf_accesor_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
-import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
+import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 import 'package:logging/logging.dart';
 import '../area.dart';
 

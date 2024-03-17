@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:push_puzzle/algorithm/area.dart';
-import 'package:push_puzzle/algorithm/structure/partition.dart';
-import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/partition_leaf_accesor_visitor.dart';
-import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
+import 'package:push_puzzle/bsp/area.dart';
+import 'package:push_puzzle/bsp/structure/partition.dart';
+import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 
 
 import 'resources/test_visitor_config.dart';
