@@ -30,23 +30,16 @@ class DungeonProcessor {
         name: initialRootName,
         config: config);
 
-    visitor = PartitionCreatorVisitor(
-        config: config, adjustor: PartitionCreatorAdjustor());
     visitor.visit(root, isDebug: false);
 
     //arranger.visit(root, isDebug: false);
 
-    roomCreator =
-        RoomCreatorVisitor(config: config, adjustor: RoomCreatorAdjustor());
     roomCreator.visit(root, isDebug: false);
+
+    List<Partition> leafs = accessor.visit(root, isDebug: false);
 
     arranger = PartitionArrangerVisitor(config: config);
     arranger.visit(root, isDebug: true);
-
-    accessor = PartitionLeafAccessorVisitor(config: config);
-    List<Partition> leafs = accessor.visit(root, isDebug: false);
-
-    // arranger.visit(root);
   }
 
   DungeonProcessor() {
@@ -55,5 +48,12 @@ class DungeonProcessor {
     initialArea = Area(
         from: Point(y: 0, x: 0),
         to: Point(y: config.dungeonHeight - 1, x: config.dungeonWidth - 1));
+
+    visitor = PartitionCreatorVisitor(
+        config: config, adjustor: PartitionCreatorAdjustor());
+    roomCreator =
+        RoomCreatorVisitor(config: config, adjustor: RoomCreatorAdjustor());
+    accessor = PartitionLeafAccessorVisitor(config: config);
+    arranger = PartitionArrangerVisitor(config: config);
   }
 }
