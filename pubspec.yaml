@@ -12,6 +12,7 @@ dependencies:
   dart_console: ^1.1.0
   logging: ^1.2.0
   http: ^1.2.1
+  collection: ^1.18.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -23,5 +24,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-test:
-  resouces
