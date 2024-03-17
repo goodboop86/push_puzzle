@@ -2,7 +2,7 @@ class VisitorConfig {
   // ダンジョンの設定値
   final int dungeonHeight = 20;
   final int dungeonWidth = 20;
-  final int dungeonDepth = 2;
+  final int dungeonDepth = 3;
 
   // RoomCreatorの設定値
   final int minRoomSize = 4;

@@ -16,11 +16,11 @@ import 'visitor_test.mocks.dart';
 // NOTE: Mock化したいクラス<Foo>を指定して下記のアノテーションを追加する
 // Mock化したいクラス<Foo>を指定して`dart run build_runner build`
 // すると、`visitor_test.mocks.dart`が生成される。
-// 作成後はNullSafetyのため<MockFoo>などに変更する必要がある。
-@GenerateNiceMocks([MockSpec<MockPartitionCreatorAdjustor>()])
+@GenerateNiceMocks([MockSpec<PartitionCreatorAdjustor>()])
 void main() {
   final config = VisitorConfig();
   late Partition partition;
+  MockPartitionCreatorAdjustor adjustor = MockPartitionCreatorAdjustor();
 
   // 初期partitionの作成
   var initialRect = List.generate(config.dungeonHeight,
@@ -44,20 +44,27 @@ void main() {
   group('Test stage state of game initialization.', () {
 
     setUp(() {
+
     });
 
     group('Visitor test', () {
       test('PartitionCreatorVisitor test', () {
-        MockPartitionCreatorAdjustor adjustor = MockPartitionCreatorAdjustor();
-        when(adjustor.adjustSplitAxis(partition)).thenReturn("vertical");
-        when(adjustor.adjustSplitRatio(partition)).thenReturn(0.5);
 
+        when(adjustor.adjustSplitAxis(any)).thenReturn("vertical");
+        when(adjustor.adjustSplitRatio(any)).thenReturn(0.5);
 
         PartitionCreatorVisitor visitor =
         PartitionCreatorVisitor(config: config, adjustor: adjustor);
 
+        visitor.visit(partition, isDebug: true);
 
-        expect(1, 1);
+      // for (var p in partition.children) {
+      //   for (var e in p.children) {
+      //     expect(e.rect.length, 10);
+      //     expect(e.rect.first.length, 5);
+      //   }
+      // }
+
       });
       test('RoomCreatorVisitor test', () {
         expect(1, 1);

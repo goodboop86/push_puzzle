@@ -1,5 +1,6 @@
 import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_leaf_accesor_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
@@ -10,6 +11,7 @@ class DungeonProcessor {
   late PartitionCreatorVisitor visitor;
   late PartitionArrangerVisitor arranger;
   late RoomCreatorVisitor roomCreator;
+  late PartitionLeafAccessorVisitor accessor;
   late Partition root;
 
   // Root Partitionの設定値
@@ -29,15 +31,18 @@ class DungeonProcessor {
         config: config);
 
     visitor = PartitionCreatorVisitor(config: config, adjustor: PartitionCreatorAdjustor());
-    visitor.visit(root, isDebug: true);
+    visitor.visit(root, isDebug: false);
 
     //arranger.visit(root, isDebug: false);
 
     roomCreator = RoomCreatorVisitor(config: config);
-    roomCreator.visit(root, isDebug: true);
+    roomCreator.visit(root, isDebug: false);
 
     arranger = PartitionArrangerVisitor(config: config);
-    arranger.visit(root, isDebug: true);
+    arranger.visit(root, isDebug: false);
+
+    accessor = PartitionLeafAccessorVisitor(config: config);
+    List<Partition> leafs = accessor.visit(root, isDebug: true);
 
     // arranger.visit(root);
   }

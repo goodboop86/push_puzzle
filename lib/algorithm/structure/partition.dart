@@ -1,4 +1,5 @@
 import 'package:push_puzzle/algorithm/visitor/partition_arranger_visitor.dart';
+import 'package:push_puzzle/algorithm/visitor/partition_leaf_accesor_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
@@ -13,7 +14,6 @@ class Partition {
 
   // 初期設定値
   final double _splitRatioBias = 0.25;
-  final int _splitDepth = 3;
   final bool _isDebug = false;
   late bool isRoot;
 
@@ -57,7 +57,6 @@ class Partition {
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
-  get getSplitDepth => _splitDepth;
   get getIsDebug => _isDebug;
   get getSplitAxis => _splitAxis;
   get getSplitRatio => _splitRatio;
@@ -72,19 +71,25 @@ class Partition {
   get getLeafNumber => _leafNumber;
 
   void acceptPartitionCreatorVisitor(PartitionCreatorVisitor visitor) {
-    log.info("##### Create a partition with depth: ${getSplitDepth} #####");
+    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     visitor.execute(this);
   }
 
   void acceptRoomCreatorVisitor(RoomCreatorVisitor visitor) {
-    log.info("##### create room in rect. depth: ${getSplitDepth} #####");
+    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     visitor.execute(this);
   }
 
   void acceptConsolidatorVisitor(PartitionArrangerVisitor visitor) {
-    log.info("##### consolid a rect. depth: ${getSplitDepth} #####");
+    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
     var _ = visitor.execute(this);
+  }
+
+  List<Partition> acceptLeafAccessorVisitor(PartitionLeafAccessorVisitor visitor) {
+    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
+    // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
+    return visitor.execute(this);
   }
 
   Partition(

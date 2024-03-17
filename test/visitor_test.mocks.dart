@@ -4,6 +4,8 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:push_puzzle/algorithm/structure/partition.dart' as _i3;
 import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart'
     as _i2;
 
@@ -24,4 +26,36 @@ import 'package:push_puzzle/algorithm/visitor/partition_creator_visitor.dart'
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPartitionCreatorAdjustor extends _i1.Mock
-    implements _i2.PartitionCreatorAdjustor {}
+    implements _i2.PartitionCreatorAdjustor {
+  @override
+  String adjustSplitAxis(_i3.Partition? p) => (super.noSuchMethod(
+        Invocation.method(
+          #adjustSplitAxis,
+          [p],
+        ),
+        returnValue: _i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #adjustSplitAxis,
+            [p],
+          ),
+        ),
+        returnValueForMissingStub: _i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #adjustSplitAxis,
+            [p],
+          ),
+        ),
+      ) as String);
+
+  @override
+  double adjustSplitRatio(_i3.Partition? p) => (super.noSuchMethod(
+        Invocation.method(
+          #adjustSplitRatio,
+          [p],
+        ),
+        returnValue: 0.0,
+        returnValueForMissingStub: 0.0,
+      ) as double);
+}

@@ -126,7 +126,7 @@ class PartitionCreatorVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
         "Debug: ${p.getIsDebug} "
         "name: ${p.name}, Split axis: ${p.getSplitAxis} "
         "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
@@ -145,8 +145,8 @@ class PartitionCreatorAdjustor {
 
   // 長方形を分割する方向を決める。
   // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
-  String adjustSplitAxis(Partition p) {
-    return (p.rect.length / p.rect.first.length) +
+  String adjustSplitAxis(Partition? p) {
+    return p == null ? "null" : (p.rect.length / p.rect.first.length) +
         (Random().nextDouble() * p.getSplitAxisBias) >
         1
         ? "horizontal"
@@ -154,8 +154,8 @@ class PartitionCreatorAdjustor {
   }
 
   // 長方形を分割する比率を決める。
-  double adjustSplitRatio(Partition p) {
-    return Random().nextDouble() / 2 + p.getSplitRatioBias;
+  double adjustSplitRatio(Partition? p ) {
+    return p == null ? -1 : Random().nextDouble() / 2 + p.getSplitRatioBias;
   }
 }
 

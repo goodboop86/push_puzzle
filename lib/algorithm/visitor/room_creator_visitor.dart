@@ -113,7 +113,7 @@ class RoomCreatorVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
+    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
         "Debug: ${p.getIsDebug} "
         "name: ${p.name}, Split axis: ${p.getSplitAxis} "
         "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
