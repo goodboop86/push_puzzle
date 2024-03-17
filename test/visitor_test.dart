@@ -13,7 +13,6 @@ import 'package:push_puzzle/algorithm/visitor/partition_leaf_accesor_visitor.dar
 import 'package:push_puzzle/algorithm/visitor/room_creator_visitor.dart';
 
 
-import 'resources/test_object.dart';
 import 'resources/test_visitor_config.dart';
 import 'visitor_test.mocks.dart';
 
