@@ -4,8 +4,11 @@ import 'package:push_puzzle/algorithm/area.dart';
 import 'package:push_puzzle/algorithm/structure/partition.dart';
 import 'package:push_puzzle/algorithm/visitor/visitor.dart';
 import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
+import 'package:push_puzzle/algorithm/visitor/visitor_config.dart';
 
 class PartitionCreatorVisitor extends Visitor {
+  late PartitionCreatorAdjustor adjustor;
+
   @override
   void visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
@@ -29,8 +32,9 @@ class PartitionCreatorVisitor extends Visitor {
             rect: leaf,
             depth: p.depth + 1,
             isRoot: false,
-            absArea: absArea[i],
-            name: p.name + getLeafPosition(p)));
+            absArea: absArea[i].add(p.absArea.from),
+            name: p.name + getLeafPosition(p),
+            config: config));
       });
     } else {
       p.depth = p.depth;
@@ -63,29 +67,14 @@ class PartitionCreatorVisitor extends Visitor {
     return type;
   }
 
-  // 長方形を分割する方向を決める。
-  // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
-  void adjustSplitAxis(Partition p) {
-    p.splitAxis = (p.rect.length / p.rect.first.length) +
-                (Random().nextDouble() * p.getSplitAxisBias) >
-            1
-        ? "horizontal"
-        : "vertical";
-  }
-
-  // 長方形を分割する比率を決める。
-  void adjustSplitRatio(Partition p) {
-    p.splitRatio = Random().nextDouble() / 2 + p.getSplitRatioBias;
-  }
-
   // 2次元配列をパラメータに従って分割する。
   ({List<List<List<int>>> pair, List<Area> absArea}) _split(Partition p) {
     List<List<int>> rect = p.rect;
     int height = rect.length;
     int width = rect.first.length;
-    adjustSplitAxis(p);
+    p.splitAxis = adjustor.adjustSplitAxis(p);
     String axis = p.getSplitAxis;
-    adjustSplitRatio(p);
+    p.splitRatio = adjustor.adjustSplitRatio(p);
     double ratio = p.getSplitRatio;
 
     List<Area> absAreas = [];
@@ -136,15 +125,37 @@ class PartitionCreatorVisitor extends Visitor {
 
   @override
   void trace(Partition p) {
-    logging.info("Root: ${p.isRoot}, depth: ${p.depth}/${p.getSplitDepth}, "
-        "Debug: ${p.getIsDebug} "
-        "name: ${p.name}, Split axis: ${p.getSplitAxis} "
-        "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
-        "(bias: ±${p.getSplitRatioBias}) "
-        "absArea: ${p.absArea.toString()}");
+    logging
+        .info("Root: ${p.isRoot}, depth: ${p.depth}/${p.config.dungeonDepth}, "
+            "Debug: ${p.getIsDebug} "
+            "name: ${p.name}, Split axis: ${p.getSplitAxis} "
+            "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
+            "(bias: ±${p.getSplitRatioBias}) "
+            "absArea: ${p.absArea.toString()}");
     List<List<int>> rect = p.rect;
     rect.debugPrint();
   }
 
-  PartitionCreatorVisitor();
+  PartitionCreatorVisitor({required config, required this.adjustor})
+      : super(config);
+}
+
+// テストのため切り出す
+class PartitionCreatorAdjustor {
+  // 長方形を分割する方向を決める。
+  // ectのy/x比率 (± bias) > 1以上なら縦長なのでhorizontalに分割する。
+  String adjustSplitAxis(Partition? p) {
+    return p == null
+        ? "null"
+        : (p.rect.length / p.rect.first.length) +
+                    (Random().nextDouble() * p.getSplitAxisBias) >
+                1
+            ? "horizontal"
+            : "vertical";
+  }
+
+  // 長方形を分割する比率を決める。
+  double adjustSplitRatio(Partition? p) {
+    return p == null ? -1 : Random().nextDouble() / 2 + p.getSplitRatioBias;
+  }
 }
