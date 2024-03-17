@@ -3,8 +3,8 @@ import 'package:push_puzzle/algorithm/structure/partition.dart';
 
 import 'visitor_config.dart';
 
-abstract class Visitor {
-  late VisitorConfig config = VisitorConfig();
+abstract class Visitor<T extends VisitorConfig> {
+  late T config;
   final Logger logging = Logger('Visitor');
   late bool isDebug;
   void visit(Partition partition);

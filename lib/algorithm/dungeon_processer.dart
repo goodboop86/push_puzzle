@@ -39,10 +39,10 @@ class DungeonProcessor {
     roomCreator.visit(root, isDebug: false);
 
     arranger = PartitionArrangerVisitor(config: config);
-    arranger.visit(root, isDebug: false);
+    arranger.visit(root, isDebug: true);
 
     accessor = PartitionLeafAccessorVisitor(config: config);
-    List<Partition> leafs = accessor.visit(root, isDebug: true);
+    List<Partition> leafs = accessor.visit(root, isDebug: false);
 
     // arranger.visit(root);
   }

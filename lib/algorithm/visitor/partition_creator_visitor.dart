@@ -32,7 +32,7 @@ class PartitionCreatorVisitor extends Visitor {
             rect: leaf,
             depth: p.depth + 1,
             isRoot: false,
-            absArea: absArea[i],
+            absArea: absArea[i].add(p.absArea.from),
             name: p.name + getLeafPosition(p),
             config: config));
       });
