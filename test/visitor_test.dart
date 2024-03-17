@@ -76,7 +76,7 @@ void main() {
       test('Visitor test', () {
 
         /// PartitionLeafAccessorVisitor test
-        /* partitionの子供の要素をリストで取得できているかどうか*/
+        /// partitionの子供の要素をリストで取得できているかどうか
         Partition child = Partition(
             depth: 1,
             isRoot: false,
@@ -104,14 +104,14 @@ void main() {
         partitionCreator.visit(partition, isDebug: true);
         List<Partition> vTarget = leafAccessor.visit(partition);
 
-        /* 適切な幅で分割できているか */
+        /* 適切な幅で分割できているか (vertical) */
         for (var leaf in vTarget) {
           expect(leaf.rect.length, config.dungeonHeight.toInt());
           expect(leaf.rect.first.length,
               config.dungeonWidth ~/ pow(2, config.dungeonDepth));
         }
 
-        /* その他の設定値が正しいか (split: vertical) */
+        /* その他の設定値が正しいか */
         vTarget.asMap().forEach((int i, var leafChild) {
           Area expectedArea = Area(
               from: Point(
@@ -131,7 +131,7 @@ void main() {
         });
 
 
-        // split: horizontalの場合
+        /* 適切な幅で分割できているか (horizontal) */
         when(mockPartitionAdjustor.adjustSplitAxis(any)).thenReturn(
               "horizontal");
           partitionCreator.visit(partition, isDebug: true);
@@ -143,7 +143,7 @@ void main() {
             expect(leaf.rect.first.length, config.dungeonWidth);
           }
 
-          /* その他の設定値が正しいか (split: horizontal) */
+          /* その他の設定値が正しいか */
           hTarget.asMap().forEach((int i, var leafChild) {
             Area expectedArea = Area(
                 from: Point(
@@ -165,14 +165,6 @@ void main() {
 
 
           /// RoomCreatorVisitor test
-            // testでは比率と方向を固定する
-            /* for partitionCreatorVisitor */
-            when(mockPartitionAdjustor.adjustSplitAxis(any)).thenReturn(
-                "vertical");
-            when(mockPartitionAdjustor.adjustSplitRatio(any)).thenReturn(0.5);
-
-            partitionCreator.visit(partition, isDebug: true);
-
             /* for roomCreatorVisitor */
             // 部屋サイズは最小サイズで固定、biasは1だけ追加する。
             when(mockRoomAdjustor.getRoomShape(any)).thenReturn(
