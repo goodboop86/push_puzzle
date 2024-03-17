@@ -1,6 +1,6 @@
-import 'package:push_puzzle/algorithm/structure/partition.dart';
-import 'package:push_puzzle/algorithm/visitor/visitor.dart';
-import 'package:push_puzzle/algorithm/extention/list2d_extention.dart';
+import 'package:push_puzzle/bsp/structure/partition.dart';
+import 'package:push_puzzle/bsp/visitor/visitor.dart';
+import 'package:push_puzzle/bsp/extention/list2d_extention.dart';
 
 class PartitionLeafAccessorVisitor extends Visitor {
   @override
