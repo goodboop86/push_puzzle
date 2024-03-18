@@ -1,6 +1,5 @@
-import 'package:push_puzzle/bsp/visitor/corridor_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_leaf_accessor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
 import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
@@ -84,10 +83,10 @@ class Partition {
     visitor.execute(this);
   }
 
-  void acceptConsolidatorVisitor(PartitionArrangerVisitor visitor) {
+  List<List<int>> acceptPartitionArrangerVisitor(PartitionArrangerVisitor visitor) {
     log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
-    var _ = visitor.execute(this);
+    return visitor.execute(this);
   }
 
   List<Partition> acceptLeafAccessorVisitor(
@@ -95,13 +94,6 @@ class Partition {
     log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
     return visitor.execute(this);
-  }
-
-  void acceptCorridorCreatorVisitor(
-      CorridorCreatorVisitor visitor) {
-    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
-    // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
-    visitor.execute(this);
   }
 
   Partition(

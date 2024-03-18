@@ -9,7 +9,7 @@ import 'package:push_puzzle/bsp/area.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
-import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_leaf_accessor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 
 
