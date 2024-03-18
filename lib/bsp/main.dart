@@ -3,6 +3,7 @@
 import 'dart:core';
 
 import 'package:logging/logging.dart';
+import 'package:push_puzzle/bsp/processor/context_processor.dart';
 import 'package:push_puzzle/bsp/processor/tree_processor.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 
@@ -13,5 +14,6 @@ void main() {
   });
 
   ({List<Partition> leafs, List<List<int>> field}) context = TreeProcessor().process();
+  ContextProcessor(context: context).process();
 
 }

@@ -1,7 +1,6 @@
 import 'package:push_puzzle/bsp/area.dart';
 import 'package:push_puzzle/bsp/mst/mst.dart';
 import 'package:push_puzzle/bsp/strategy/strategy.dart';
-import 'package:push_puzzle/bsp/visitor/visitor.dart';
 
 import '../structure/partition.dart';
 
@@ -10,13 +9,13 @@ class CorridorCreateStrategy extends Strategy {
 
 
   @override
-  void execute() {
-      ({List<Partition> partition, List<Edge> edge}) target = createEdges(leafs);
-      List <Edge> mstResult = calculate(target.edge, target.partition.length);
+  List<Edge> execute() {
+      ({List<Partition> partition, List<Edge> edge}) target = createEdges();
+      return calculate(target.edge, target.partition.length);
     }
 
 
-  ({List<Partition> partition, List<Edge> edge}) createEdges(List<Partition> leafs) {
+  ({List<Partition> partition, List<Edge> edge}) createEdges() {
     List<Partition> targetLeafs = [];
     for (Partition p in leafs) {
       if (p.hasRoomArea) {
@@ -44,5 +43,5 @@ class CorridorCreateStrategy extends Strategy {
   List<Edge> calculate(List<Edge> target, int numbOfVertices) {
     return mst.kruskalMST(target, numbOfVertices);
   }
-  CorridorCreateStrategy({required leafs, required field}) : super(leafs: leafs, field: field);
+  CorridorCreateStrategy({required super.leafs, required super.field});
 }
