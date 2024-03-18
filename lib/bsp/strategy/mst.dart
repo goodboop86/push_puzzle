@@ -1,5 +1,8 @@
 // see: https://medium.com/@sadigrzazada20/a-minimum-spanning-tree-mst-85c6f881d28a
 import 'package:logging/logging.dart';
+import 'package:push_puzzle/bsp/area.dart';
+import 'package:push_puzzle/bsp/strategy/strategy.dart';
+import 'package:push_puzzle/bsp/structure/partition.dart';
 
 
 class Edge {
@@ -11,11 +14,17 @@ class Edge {
   String toString() {
     return "Source: $source, Destination: $destination, Weight: $weight";
   }
-
   Edge({required this.source, required this.destination,required this.weight});
 }
 
-class MST {
+class MSTStrategy extends Strategy {
+
+  @override
+  List<Edge> execute() {
+    ({List<Partition> partition ,List<Edge> edge}) target = createEdges();
+    return kruskalMST(target.edge, target.partition.length);
+  }
+
   int findParent(List<int> parent, int vertex) {
     if (parent[vertex] == -1) {
       return vertex;
@@ -27,6 +36,31 @@ class MST {
     int xSet = findParent(parent, x);
     int ySet = findParent(parent, y);
     parent[xSet] = ySet;
+  }
+
+  ({List<Partition> partition, List<Edge> edge}) createEdges() {
+    List<Partition> targetLeafs = [];
+    for (Partition p in leafs) {
+      if (p.hasRoomArea) {
+        targetLeafs.add(p);
+      }
+    }
+
+    List<Edge> edges = [];
+    for (int i = 0; i < targetLeafs.length; i++) {
+      for (int j = i + 1; j < targetLeafs.length; j++) {
+        Point source = targetLeafs[i].absRoomArea.center();
+        Point destination = targetLeafs[j].absRoomArea.center();
+        edges.add(
+            Edge(
+                source: i,
+                destination: j,
+                weight: source.distanceOf(destination).toInt()
+            ));
+      }
+    }
+    ({List<Partition> partition ,List<Edge> edge}) target = (partition: targetLeafs, edge: edges);
+    return target;
   }
 
   List<Edge> kruskalMST(List<Edge> edges, int numberOfVertices) {
@@ -48,32 +82,5 @@ class MST {
     }
     return minimumSpanningTree;
   }
-  MST();
-}
-
-
-
-void main() {
-  Logger logging = Logger('MST');
-  Logger.root.level = Level.ALL; // defaults to Level.INFO
-  Logger.root.onRecord.listen((record) {
-    print('${record.level.name}: ${record.time}: ${record.message}');
-  });
-  MST mst = MST();
-
-  List<Edge> edges = [
-    Edge(source: 0, destination: 1, weight: 2),
-    Edge(source: 0, destination: 2, weight: 4),
-    Edge(source: 1, destination: 2, weight: 1),
-    Edge(source: 1, destination: 3, weight: 7),
-    Edge(source: 2, destination: 3, weight: 3),
-  ];
-
-  int numberOfVertices = 4;
-  List<Edge> minimumSpanningTree = mst.kruskalMST(edges, numberOfVertices);
-
-  logging.info("Edges in the Minimum Spanning Tree:");
-  for (var edge in minimumSpanningTree) {
-    logging.info("${edge.source} - ${edge.destination} (Weight: ${edge.weight})");
-  }
+  MSTStrategy({required super.leafs, required super.field});
 }

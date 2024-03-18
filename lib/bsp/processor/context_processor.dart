@@ -1,4 +1,4 @@
-import 'package:push_puzzle/bsp/mst/mst.dart';
+import 'package:push_puzzle/bsp/strategy/mst.dart';
 import 'package:push_puzzle/bsp/processor/processor.dart';
 import 'package:push_puzzle/bsp/strategy/corridor_create_storategy.dart';
 import 'package:push_puzzle/bsp/strategy/strategy_executor.dart';
@@ -11,7 +11,9 @@ class ContextProcessor extends Processor {
   void process() {
     ContextExecutor executor = ContextExecutor();
 
-    List<Edge> edges = executor.execute(CorridorCreateStrategy(leafs: context.leafs, field: context.field));
+    List<Edge> edges = executor.execute(MSTStrategy(leafs: context.leafs, field: context.field));
+
+    print(edges);
 
   }
   ContextProcessor({required this.context});
