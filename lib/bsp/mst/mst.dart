@@ -7,6 +7,11 @@ class Edge {
   late int destination;
   late int weight;
 
+  @override
+  String toString() {
+    return "Source: $source, Destination: $destination, Weight: $weight";
+  }
+
   Edge({required this.source, required this.destination,required this.weight});
 }
 

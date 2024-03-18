@@ -1,4 +1,5 @@
 import 'package:push_puzzle/bsp/area.dart';
+import 'package:push_puzzle/bsp/visitor/corridor_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
@@ -8,10 +9,11 @@ import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 
 class DungeonProcessor {
   VisitorConfig config = VisitorConfig();
-  late PartitionCreatorVisitor visitor;
-  late PartitionArrangerVisitor arranger;
+  late PartitionCreatorVisitor partitionCreator;
+  late PartitionArrangerVisitor partitionArranger;
   late RoomCreatorVisitor roomCreator;
-  late PartitionLeafAccessorVisitor accessor;
+  late PartitionLeafAccessorVisitor leafAccessor;
+  late CorridorCreatorVisitor corridorCreator;
   late Partition root;
 
   // Root Partitionの設定値
@@ -30,16 +32,19 @@ class DungeonProcessor {
         name: initialRootName,
         config: config);
 
-    visitor.visit(root, isDebug: false);
+    partitionCreator.visit(root, isDebug: false);
 
     //arranger.visit(root, isDebug: false);
 
     roomCreator.visit(root, isDebug: false);
 
-    List<Partition> leafs = accessor.visit(root, isDebug: false);
 
-    arranger = PartitionArrangerVisitor(config: config);
-    arranger.visit(root, isDebug: true);
+    List<Partition> edges = leafAccessor.visit(root, isDebug: false);
+
+    corridorCreator = CorridorCreatorVisitor(config: config, leafChildren: edges);
+    corridorCreator.visit(root, isDebug: false);
+
+    partitionArranger.visit(root, isDebug: true);
   }
 
   DungeonProcessor() {
@@ -49,11 +54,11 @@ class DungeonProcessor {
         from: Point(y: 0, x: 0),
         to: Point(y: config.dungeonHeight - 1, x: config.dungeonWidth - 1));
 
-    visitor = PartitionCreatorVisitor(
+    partitionCreator = PartitionCreatorVisitor(
         config: config, adjustor: PartitionCreatorAdjustor());
     roomCreator =
         RoomCreatorVisitor(config: config, adjustor: RoomCreatorAdjustor());
-    accessor = PartitionLeafAccessorVisitor(config: config);
-    arranger = PartitionArrangerVisitor(config: config);
+    leafAccessor = PartitionLeafAccessorVisitor(config: config);
+    partitionArranger = PartitionArrangerVisitor(config: config);
   }
 }
