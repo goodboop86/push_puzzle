@@ -1,3 +1,4 @@
+import 'package:push_puzzle/bsp/visitor/corridor_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
@@ -34,7 +35,9 @@ class Partition {
   late Area _gridArea;
   late Area _roomArea;
   late Area _absGridArea;
-  late Area _absRoomArea;
+  late Area absRoomArea;
+  bool hasGridArea = false;
+  bool hasRoomArea = false;
 
   // 結合に関する設定
   late List<List<int>> _arrangedRect;
@@ -56,7 +59,6 @@ class Partition {
   set gridArea(Area _) => {_gridArea = _};
   set arrangedRect(var _) => {_arrangedRect = _};
   set absGridArea(Area _) => {_absGridArea = _};
-  set absRoomArea(Area _) => {_absRoomArea = _};
 
   get getSplitAxisBias => _splitAxisBias;
   get getSplitRatioBias => _splitRatioBias;
@@ -65,13 +67,11 @@ class Partition {
   get getSplitRatio => _splitRatio;
 
   // roomCreatorに関する設定
-  // get getDepth => _depth;
   get getGridShape => _gridShape;
   get getRoomArea => _roomArea;
   get getGridArea => _gridArea;
   get getArrangedRect => _arrangedRect;
   get getAbsGridArea => _absGridArea;
-  get getAbsRoomArea => _absRoomArea;
   get getLeafNumber => _leafNumber;
 
   void acceptPartitionCreatorVisitor(PartitionCreatorVisitor visitor) {
@@ -95,6 +95,13 @@ class Partition {
     log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
     return visitor.execute(this);
+  }
+
+  void acceptCorridorCreatorVisitor(
+      CorridorCreatorVisitor visitor) {
+    log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
+    // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
+    visitor.execute(this);
   }
 
   Partition(

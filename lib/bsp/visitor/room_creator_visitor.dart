@@ -105,6 +105,9 @@ class RoomCreatorVisitor extends Visitor {
     p.absRoomArea =
         p.getRoomArea.add(Point(y: p.absArea.from.y, x: p.absArea.from.x));
 
+    p.hasGridArea = true;
+    p.hasRoomArea = true;
+
     isDebug ? trace(p) : null;
     return leaf;
   }
@@ -118,7 +121,7 @@ class RoomCreatorVisitor extends Visitor {
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias}) "
             "absGridArea: ${p.getAbsGridArea.toString()}, "
-            "absRoomArea: ${p.getAbsRoomArea.toString()}");
+            "absRoomArea: ${p.absRoomArea.toString()}");
     List<List<int>> rect = p.rect;
     rect.debugPrint();
   }

@@ -4,6 +4,10 @@ class Point {
   late int y;
   late int x;
   Point({required this.y, required this.x});
+
+  double distanceOf(Point p) {
+    return sqrt(pow(p.y - y, 2) + pow(p.x - x, 2));
+  }
 }
 
 class Area {
