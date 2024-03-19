@@ -1,5 +1,4 @@
 // see: https://medium.com/@sadigrzazada20/a-minimum-spanning-tree-mst-85c6f881d28a
-import 'package:logging/logging.dart';
 import 'package:push_puzzle/bsp/area.dart';
 import 'package:push_puzzle/bsp/strategy/strategy.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
@@ -20,9 +19,13 @@ class Edge {
 class MSTStrategy extends Strategy {
 
   @override
-  List<Edge> execute() {
+  ({List<Partition> partition ,List<Edge> edge}) execute() {
     ({List<Partition> partition ,List<Edge> edge}) target = createEdges();
-    return kruskalMST(target.edge, target.partition.length);
+    List<Edge> mstEdge = kruskalMST(target.edge, target.partition.length);
+
+    ({List<Partition> partition ,List<Edge> edge}) result = (partition: target.partition, edge: mstEdge);
+
+    return result;
   }
 
   int findParent(List<int> parent, int vertex) {
