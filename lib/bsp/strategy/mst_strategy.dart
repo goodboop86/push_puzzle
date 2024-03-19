@@ -26,11 +26,11 @@ class MSTStrategy extends Strategy {
     List<Edge> mstEdge = kruskalMST(target.edge, target.leafs.length);
 
 
-    return StrategyMaterial(leafs: target.leafs, edge: mstEdge, field: []);
+    return StrategyMaterial(leafs: target.leafs, edges: mstEdge, field: []);
   }
 
+  @override
   void trace() {
-    logging.info("==== \nMSTStrategy");
   }
 
   int findParent(List<int> parent, int vertex) {

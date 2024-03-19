@@ -1,10 +1,8 @@
-import 'package:push_puzzle/bsp/strategy/corridor_create_storategy.dart';
 import 'package:push_puzzle/bsp/strategy/mst_strategy.dart';
 import 'package:push_puzzle/bsp/processor/processor.dart';
 import 'package:push_puzzle/bsp/strategy/strategy.dart';
 import 'package:push_puzzle/bsp/strategy/strategy_executor.dart';
 import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
-import 'package:push_puzzle/bsp/structure/partition.dart';
 
 class MaterialProcessor extends Processor {
   late StrategyMaterial material;
@@ -13,7 +11,6 @@ class MaterialProcessor extends Processor {
 
   @override
   void process() {
-    //StrategyExecutor executor = StrategyExecutor();
 
     List<StrategyType> order = [
       StrategyType.MST,

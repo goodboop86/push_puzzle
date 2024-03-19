@@ -4,16 +4,15 @@ import 'mst_strategy.dart';
 
 
 class CorridorCreateStrategy extends Strategy {
-  late List<Edge> edge;
 
 
   @override
-  void execute() {
+  void execute() {;
     }
 
   @override
   void trace() {
-    logging.info("edge: $edge");
+    logging.info("==== \nCorridorCreateStrategy");
   }
   CorridorCreateStrategy({required super.material});
 }

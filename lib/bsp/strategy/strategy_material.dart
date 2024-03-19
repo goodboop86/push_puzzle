@@ -6,10 +6,10 @@ class StrategyMaterial {
   Logger logging = Logger("StrategyMaterial");
   late List<Partition> leafs;
   late List<List<int>> field;
-  late List<Edge> edge;
-  StrategyMaterial({required this.leafs, required this.field, required this.edge});
+  late List<Edge> edges;
+  StrategyMaterial({required this.leafs, required this.field, required this.edges});
 
   trace() {
-    logging.info("leafs: $leafs \nfield: $field \nedge: $edge");
+    logging.info("leafs: $leafs \nfield: $field \nedge: $edges");
   }
 }

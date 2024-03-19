@@ -39,9 +39,9 @@ class TreeProcessor extends Processor{
     List<Partition> leafs = leafAccessor.visit(root, isDebug: false);
     List<List<int>> field = partitionArranger.visit(root, isDebug: true);
 
-    StrategyMaterial result = StrategyMaterial(leafs: leafs, field: field, edge: []);
+    StrategyMaterial result = StrategyMaterial(leafs: leafs, field: field, edges: []);
 
-    return StrategyMaterial(leafs: leafs, field: field, edge: []);
+    return StrategyMaterial(leafs: leafs, field: field, edges: []);
   }
 
   TreeProcessor() {
