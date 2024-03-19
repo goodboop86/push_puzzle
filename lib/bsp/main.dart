@@ -3,8 +3,9 @@
 import 'dart:core';
 
 import 'package:logging/logging.dart';
-import 'package:push_puzzle/bsp/processor/context_processor.dart';
+import 'package:push_puzzle/bsp/processor/material_processor.dart';
 import 'package:push_puzzle/bsp/processor/tree_processor.dart';
+import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 
 void main() {
@@ -13,7 +14,7 @@ void main() {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
 
-  ({List<Partition> leafs, List<List<int>> field}) context = TreeProcessor().process();
-  ContextProcessor(context: context).process();
+  StrategyMaterial material = TreeProcessor().process();
+  MaterialProcessor(material: material).process();
 
 }

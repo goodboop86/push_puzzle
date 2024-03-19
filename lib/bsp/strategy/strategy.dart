@@ -1,10 +1,12 @@
-import 'package:push_puzzle/bsp/structure/partition.dart';
+import 'package:logging/logging.dart';
+import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 
 abstract class Strategy {
-  List<Partition> leafs;
-  List<List<int>> field;
+  Logger logging = Logger("Strategy");
+  StrategyMaterial material;
 
   execute();
+  trace();
 
-  Strategy({required this.leafs, required this.field});
+  Strategy({required this.material});
 }

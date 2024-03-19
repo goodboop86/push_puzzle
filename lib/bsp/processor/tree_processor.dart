@@ -1,5 +1,6 @@
 import 'package:push_puzzle/bsp/area.dart';
 import 'package:push_puzzle/bsp/processor/processor.dart';
+import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/partition_leaf_accessor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
@@ -23,7 +24,7 @@ class TreeProcessor extends Processor{
   late Area initialArea;
 
   @override
-  ({List<Partition> leafs, List<List<int>> field})  process() {
+  StrategyMaterial process() {
     root = Partition(
         depth: initialDepth,
         isRoot: initialIsRoot,
@@ -38,11 +39,9 @@ class TreeProcessor extends Processor{
     List<Partition> leafs = leafAccessor.visit(root, isDebug: false);
     List<List<int>> field = partitionArranger.visit(root, isDebug: true);
 
-    ({List<Partition> leafs, List<List<int>> field}) result = (
-      leafs: leafs,
-      field: field);
+    StrategyMaterial result = StrategyMaterial(leafs: leafs, field: field, edge: []);
 
-    return result;
+    return StrategyMaterial(leafs: leafs, field: field, edge: []);
   }
 
   TreeProcessor() {

@@ -1,6 +1,8 @@
 // see: https://medium.com/@sadigrzazada20/a-minimum-spanning-tree-mst-85c6f881d28a
+import 'package:logging/logging.dart';
 import 'package:push_puzzle/bsp/area.dart';
 import 'package:push_puzzle/bsp/strategy/strategy.dart';
+import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 
 
@@ -19,13 +21,16 @@ class Edge {
 class MSTStrategy extends Strategy {
 
   @override
-  ({List<Partition> partition ,List<Edge> edge}) execute() {
-    ({List<Partition> partition ,List<Edge> edge}) target = createEdges();
-    List<Edge> mstEdge = kruskalMST(target.edge, target.partition.length);
+  StrategyMaterial execute() {
+    ({List<Partition> leafs ,List<Edge> edge}) target = createEdges();
+    List<Edge> mstEdge = kruskalMST(target.edge, target.leafs.length);
 
-    ({List<Partition> partition ,List<Edge> edge}) result = (partition: target.partition, edge: mstEdge);
 
-    return result;
+    return StrategyMaterial(leafs: target.leafs, edge: mstEdge, field: []);
+  }
+
+  void trace() {
+    logging.info("==== \nMSTStrategy");
   }
 
   int findParent(List<int> parent, int vertex) {
@@ -41,9 +46,9 @@ class MSTStrategy extends Strategy {
     parent[xSet] = ySet;
   }
 
-  ({List<Partition> partition, List<Edge> edge}) createEdges() {
+  ({List<Partition> leafs, List<Edge> edge}) createEdges() {
     List<Partition> targetLeafs = [];
-    for (Partition p in leafs) {
+    for (Partition p in material.leafs) {
       if (p.hasRoomArea) {
         targetLeafs.add(p);
       }
@@ -62,7 +67,7 @@ class MSTStrategy extends Strategy {
             ));
       }
     }
-    ({List<Partition> partition ,List<Edge> edge}) target = (partition: targetLeafs, edge: edges);
+    ({List<Partition> leafs ,List<Edge> edge}) target = (leafs: targetLeafs, edge: edges);
     return target;
   }
 
@@ -85,5 +90,5 @@ class MSTStrategy extends Strategy {
     }
     return minimumSpanningTree;
   }
-  MSTStrategy({required super.leafs, required super.field});
+  MSTStrategy({required super.material});
 }
