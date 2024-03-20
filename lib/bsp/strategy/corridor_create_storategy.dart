@@ -100,7 +100,7 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
 
 
     for(Area corridor in corridors) {
-      logging.info("## draw -> ${corridor.toString()}");
+      logging.info("## draw createPlainCorridor -> ${corridor.toString()}");
       draw(corridor);
     }
     field.debugPrint();
@@ -130,14 +130,14 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
 
     Point bendPoint = cornerPoint[Random().nextInt(2)];
 
-    logging.info("## draw -> ${sourcePoint.toString()} -> ${bendPoint.toString()} -> ${destinationPoint.toString()}");
+    logging.info("## draw createBendCorridor -> ${sourcePoint.toString()} -> ${bendPoint.toString()} -> ${destinationPoint.toString()}");
 
     Area former = Area(from: sourcePoint, to: bendPoint);
-    Area latter = Area(from: bendPoint, to: destinationPoint);
-    if(sourcePoint.isCompletelyLargerThan(destinationPoint)){
-      former = Area(from: destinationPoint, to: bendPoint);
-      latter = Area(from: bendPoint, to: sourcePoint);
-    }
+    Area latter = Area(from: bendPoint.deepCopy(), to: destinationPoint);
+
+
+    former.modify();
+    latter.modify();
     draw(former);
     draw(latter);
   }

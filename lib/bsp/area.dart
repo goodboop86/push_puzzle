@@ -17,6 +17,10 @@ class Point {
     return y > p.y && x > p.x;
   }
 
+  Point deepCopy() {
+    return Point(y: y, x: x);
+  }
+
   @override
   String toString() {
     return "y: $y, x: $x";
@@ -81,22 +85,29 @@ class Area {
         to: Point(y: to.y + p.y, x: to.x + p.x));
   }
 
+
+  void modify() {
+    if(from.x > to.x) {
+      print("before: ${toString()}");
+      int tmp = from.x;
+      from.x = to.x;
+      to.x = tmp;
+      print("after: ${toString()}");
+    }
+    if(from.y > to.y) {
+      print("before: ${toString()}");
+      int tmp = from.y;
+      from.y = to.y;
+      to.y = tmp;
+      print("after: ${toString()}");
+
+    }
+  }
+
   @override
   String toString() {
     return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
   }
 
-  void modify() {
-    if (from.x > to.x) {
-      int temp = from.x;
-      from.x = to.x;
-      to.x = temp;
-    }
-    if (from.y > to.y) {
-      int temp = from.y;
-      from.y = to.y;
-      to.y = temp;
-    }
-  }
 }
 enum Duplicate { X, Y, none}
