@@ -16,6 +16,11 @@ class Point {
   bool isCompletelyLargerThan(Point p) {
     return y > p.y && x > p.x;
   }
+
+  @override
+  String toString() {
+    return "y: $y, x: $x";
+  }
 }
 
 class Area {
@@ -36,18 +41,24 @@ class Area {
 
   Duplicate overWrapDirectionTo(Area another) {
     List<int> xRange = List.generate(
-        from.x, (index) => index + to.x - from.x);
+        to.x - from.x, (index) => index + from.x);
     List<int> anotherXRange = List.generate(
-        another.from.x, (index) => index + another.to.x - another.from.x);
+        another.to.x - another.from.x, (index) => index + another.from.x);
+
+    print(xRange);
+    print(anotherXRange);
 
     List<int> duplication = xRange.where((element) => anotherXRange.contains(element)).toList();
 
     if(duplication.isNotEmpty) {return Duplicate.X;}
 
     List<int> yRange = List.generate(
-        from.y, (index) => index + to.y - from.y);
+        to.y - from.y, (index) => index + from.y);
     List<int> anotherYRange = List.generate(
-        another.from.y, (index) => index + another.to.y - another.from.y);
+        another.to.y - another.from.y, (index) => index + another.from.y);
+
+    print(yRange);
+    print(anotherYRange);
 
     duplication = yRange.where((element) => anotherYRange.contains(element)).toList();
 
@@ -58,9 +69,11 @@ class Area {
   }
 
   Point getRandomPoint() {
+
+    print(toString());
     return Point(
-        y: Random().nextInt(from.y - to.y) + from.y,
-        x: Random().nextInt(from.x - to.x) + from.x);
+        y: Random().nextInt(to.y - from.y) + from.y,
+        x: Random().nextInt(to.x - from.x) + from.x);
   }
 
   Area add(Point p) {

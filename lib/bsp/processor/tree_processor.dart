@@ -37,7 +37,7 @@ class TreeProcessor extends Processor{
     roomCreator.visit(root, isDebug: false);
 
     List<Partition> leafs = leafAccessor.visit(root, isDebug: false);
-    List<List<int>> field = partitionArranger.visit(root, isDebug: true);
+    List<List<int>> field = partitionArranger.visit(root, isDebug: false);
 
     StrategyMaterial result = StrategyMaterial(leafs: leafs, field: field, edges: []);
 

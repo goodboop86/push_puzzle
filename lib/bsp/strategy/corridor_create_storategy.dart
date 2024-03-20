@@ -52,6 +52,8 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
     Point dStart;
     Point dEnd;
 
+    logging.info(duplicate);
+    logging.info(distance.toString());
     // source/destinationの通路作成に関する方針を決める
     int boundary;
     if(duplicate == Duplicate.X) {

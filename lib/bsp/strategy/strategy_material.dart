@@ -1,4 +1,5 @@
 import 'package:logging/logging.dart';
+import 'package:push_puzzle/bsp/extention/list2d_extention.dart';
 import 'package:push_puzzle/bsp/strategy/mst_strategy.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 
@@ -10,6 +11,7 @@ class StrategyMaterial {
   StrategyMaterial({required this.leafs, required this.field, required this.edges});
 
   trace() {
-    logging.info("leafs: $leafs \nfield: $field \nedge: $edges");
+    logging.info("leafs: $leafs edge: $edges");
+    field.debugPrint();
   }
 }
