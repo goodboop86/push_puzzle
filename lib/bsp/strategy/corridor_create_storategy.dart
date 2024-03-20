@@ -48,15 +48,17 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
     // Direction destinationDirection;
     List<Area> corridors = [];
     int bias = 1;
-    Point fStart;
-    Point fEnd;
-    Point lStart;
-    Point lEnd;
 
     // source/destinationの通路作成に関する方針を決める
     int boundaryIdx;
     Partition former = source;
     Partition latter = destination;
+    Point fStart;
+    Point fEnd;
+    Point lStart;
+    Point lEnd;
+    Point bStart; // between start
+    Point bEnd; // between start
     if(duplicate == Duplicate.X) {
       if(centerDistance.y < 0) {
         former = destination;
@@ -70,6 +72,9 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
       lStart = Point(y: boundaryIdx, x: latter.absRoomArea.from.x + bias);
       lEnd = Point(y:latter.absRoomArea.from.y + bias, x: latter.absRoomArea.from.x + bias);
 
+      bStart = fEnd.x < lStart.x ? fEnd : lStart;
+      bEnd = fEnd.x > lStart.x ? fEnd : lStart;
+
     } else if (duplicate == Duplicate.Y) {
       if(centerDistance.x < 0) {
         former = destination;
@@ -82,17 +87,20 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
       fEnd = Point(y:former.absRoomArea.to.y - bias, x: boundaryIdx);
       lStart = Point(y: latter.absRoomArea.from.y + bias, x: boundaryIdx);
       lEnd = Point(y: latter.absRoomArea.from.y + bias, x: latter.absRoomArea.from.x);
+
+      bStart = fEnd.y < lStart.y ? fEnd : lStart;
+      bEnd = fEnd.y > lStart.y ? fEnd : lStart;
     } else {
       throw Exception("Invalid duplicate");
     }
-    corridors.addAll([Area(from: fStart, to: fEnd), Area(from: lStart, to: lEnd), Area(from: fEnd, to: lStart)]);
+    corridors.addAll([Area(from: fStart, to: fEnd), Area(from: lStart, to: lEnd), Area(from: bStart, to: bEnd)]);
 
 
     for(Area corridor in corridors) {
-      logging.info("## draw to ${corridor.toString()}");
+      logging.info("## draw -> ${corridor.toString()}");
       draw(corridor);
-      field.debugPrint();
     }
+    field.debugPrint();
   }
 
   void draw(Area area) {
@@ -100,7 +108,6 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
       for(int j = 0; j <= field.first.length; j++) {
         if(area.isIn(i, j)) {
           field[i][j] = 2;
-          //print("draw: $i, $j");
         }
       }
     }
