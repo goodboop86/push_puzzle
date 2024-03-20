@@ -5,7 +5,6 @@ import 'package:push_puzzle/bsp/strategy/strategy.dart';
 import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 
-
 class Edge {
   late int source;
   late int destination;
@@ -15,23 +14,22 @@ class Edge {
   String toString() {
     return "Source: $source, Destination: $destination, Weight: $weight";
   }
-  Edge({required this.source, required this.destination,required this.weight});
+
+  Edge({required this.source, required this.destination, required this.weight});
 }
 
 class MSTStrategy extends Strategy {
-
   @override
   StrategyMaterial execute() {
-    ({List<Partition> leafs ,List<Edge> edge}) target = createEdges();
+    ({List<Partition> leafs, List<Edge> edge}) target = createEdges();
     List<Edge> mstEdge = kruskalMST(target.edge, target.leafs.length);
 
-
-    return StrategyMaterial(leafs: target.leafs, edges: mstEdge, field: material.field);
+    return StrategyMaterial(
+        leafs: target.leafs, edges: mstEdge, field: material.field);
   }
 
   @override
-  void trace() {
-  }
+  void trace() {}
 
   int findParent(List<int> parent, int vertex) {
     if (parent[vertex] == -1) {
@@ -59,15 +57,14 @@ class MSTStrategy extends Strategy {
       for (int j = i + 1; j < targetLeafs.length; j++) {
         Point source = targetLeafs[i].absRoomArea.center();
         Point destination = targetLeafs[j].absRoomArea.center();
-        edges.add(
-            Edge(
-                source: i,
-                destination: j,
-                weight: source.squaredDistanceOf(destination).toInt()
-            ));
+        edges.add(Edge(
+            source: i,
+            destination: j,
+            weight: source.squaredDistanceOf(destination).toInt()));
       }
     }
-    ({List<Partition> leafs ,List<Edge> edge}) target = (leafs: targetLeafs, edge: edges);
+    ({List<Partition> leafs, List<Edge> edge}) target =
+        (leafs: targetLeafs, edge: edges);
     return target;
   }
 
@@ -90,5 +87,6 @@ class MSTStrategy extends Strategy {
     }
     return minimumSpanningTree;
   }
+
   MSTStrategy({required super.material});
 }

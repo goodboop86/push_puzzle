@@ -8,5 +8,6 @@ class StrategyExecutor {
     logging.info("##### ${strategy.toString()}");
     return strategy.execute();
   }
+
   StrategyExecutor();
 }

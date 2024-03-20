@@ -8,7 +8,7 @@ import 'package:push_puzzle/bsp/structure/partition.dart';
 import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 
-class TreeProcessor extends Processor{
+class TreeProcessor extends Processor {
   VisitorConfig config = VisitorConfig();
   late PartitionCreatorVisitor partitionCreator;
   late PartitionArrangerVisitor partitionArranger;
@@ -39,7 +39,8 @@ class TreeProcessor extends Processor{
     List<Partition> leafs = leafAccessor.visit(root, isDebug: false);
     List<List<int>> field = partitionArranger.visit(root, isDebug: false);
 
-    StrategyMaterial result = StrategyMaterial(leafs: leafs, field: field, edges: []);
+    StrategyMaterial result =
+        StrategyMaterial(leafs: leafs, field: field, edges: []);
 
     return StrategyMaterial(leafs: leafs, field: field, edges: []);
   }

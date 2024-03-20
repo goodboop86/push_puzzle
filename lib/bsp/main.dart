@@ -16,5 +16,4 @@ void main() {
 
   StrategyMaterial material = TreeProcessor().process();
   MaterialProcessor(material: material).process();
-
 }

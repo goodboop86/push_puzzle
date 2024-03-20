@@ -83,7 +83,8 @@ class Partition {
     visitor.execute(this);
   }
 
-  List<List<int>> acceptPartitionArrangerVisitor(PartitionArrangerVisitor visitor) {
+  List<List<int>> acceptPartitionArrangerVisitor(
+      PartitionArrangerVisitor visitor) {
     log.info("##### ${visitor.toString()}. depth: ${config.dungeonDepth}");
     // 各Treeの結合配列はそれぞれのcacheに格納されるので戻す必要はない。
     return visitor.execute(this);

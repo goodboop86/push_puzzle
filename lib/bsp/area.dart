@@ -12,7 +12,7 @@ class Point {
   }
 
   Point distanceOf(Point destination) {
-    return Point(y: destination.y - y,  x: destination.x - x);
+    return Point(y: destination.y - y, x: destination.x - x);
   }
 
   bool isCompletelyLargerThan(Point p) {
@@ -47,13 +47,13 @@ class Area {
   }
 
   Duplicate overWrapDirectionTo(Area another) {
-    List<int> xRange = List.generate(
-        to.x - from.x + 1, (index) => index + from.x);
+    List<int> xRange =
+        List.generate(to.x - from.x + 1, (index) => index + from.x);
     List<int> anotherXRange = List.generate(
         another.to.x - another.from.x + 1, (index) => index + another.from.x);
 
-    List<int> duplication = xRange.where((element) =>
-        anotherXRange.contains(element)).toList();
+    List<int> duplication =
+        xRange.where((element) => anotherXRange.contains(element)).toList();
 
     List<List<int>> tmpX = [xRange, anotherXRange];
     tmpX.debugPrint();
@@ -62,9 +62,8 @@ class Area {
       return Duplicate.X;
     }
 
-
-    List<int> yRange = List.generate(
-        to.y - from.y + 1, (index) => index + from.y);
+    List<int> yRange =
+        List.generate(to.y - from.y + 1, (index) => index + from.y);
     List<int> anotherYRange = List.generate(
         another.to.y - another.from.y + 1, (index) => index + another.from.y);
 
@@ -93,22 +92,20 @@ class Area {
         to: Point(y: to.y + p.y, x: to.x + p.x));
   }
 
-
   void modify() {
-    if(from.x > to.x) {
+    if (from.x > to.x) {
       print("before: ${toString()}");
       int tmp = from.x;
       from.x = to.x;
       to.x = tmp;
       print("after: ${toString()}");
     }
-    if(from.y > to.y) {
+    if (from.y > to.y) {
       print("before: ${toString()}");
       int tmp = from.y;
       from.y = to.y;
       to.y = tmp;
       print("after: ${toString()}");
-
     }
   }
 
@@ -116,6 +113,6 @@ class Area {
   String toString() {
     return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
   }
-
 }
-enum Duplicate { X, Y, none}
+
+enum Duplicate { X, Y, none }

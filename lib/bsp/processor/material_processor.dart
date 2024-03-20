@@ -12,11 +12,7 @@ class MaterialProcessor extends Processor {
 
   @override
   void process() {
-
-    List<StrategyType> order = [
-      StrategyType.MST,
-      StrategyType.CORRIDOR_CREATE
-    ];
+    List<StrategyType> order = [StrategyType.MST, StrategyType.CORRIDOR_CREATE];
 
     for (var strategyType in order) {
       switch (strategyType) {
@@ -33,16 +29,11 @@ class MaterialProcessor extends Processor {
 
     print(material);
 
-
-
     //print(target);
-
   }
+
   MaterialProcessor({required this.material});
   // NOTE: contextをすぐ作り替えたいので、メンバ変数として持つのは微妙...
 }
 
-enum StrategyType{
-  MST,
-  CORRIDOR_CREATE
-}
+enum StrategyType { MST, CORRIDOR_CREATE }

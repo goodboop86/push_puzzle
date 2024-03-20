@@ -8,7 +8,8 @@ class StrategyMaterial {
   late List<Partition> leafs;
   late List<List<int>> field;
   late List<Edge> edges;
-  StrategyMaterial({required this.leafs, required this.field, required this.edges});
+  StrategyMaterial(
+      {required this.leafs, required this.field, required this.edges});
 
   trace() {
     logging.info("leafs: $leafs edge: $edges");

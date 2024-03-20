@@ -6,12 +6,11 @@ extension List2DExtension on List<List<int>> {
     Logger l = Logger('List2DExtension');
     forEach((row) {
       List<String> tmp = [];
-      for(int i in row) {
+      for (int i in row) {
         tmp.add(block[i]);
-        }
-      l.info(tmp);
       }
-    );
+      l.info(tmp);
+    });
     l.info("---");
   }
 
@@ -19,8 +18,7 @@ extension List2DExtension on List<List<int>> {
     Logger l = Logger('List2DExtension');
     forEach((row) {
       l.info(row);
-    }
-    );
+    });
     l.info("---");
   }
 }
