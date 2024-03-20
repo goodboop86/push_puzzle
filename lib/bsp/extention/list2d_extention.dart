@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 
 extension List2DExtension on List<List<int>> {
   debugPrint() {
-    List<String> block = ["#", "~", " "];
+    List<String> block = ["#", "%", " "];
     int wall = 8;
     Logger l = Logger('List2DExtension');
     forEach((row) {
