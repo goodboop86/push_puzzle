@@ -126,17 +126,16 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
 
     Point bendPoint = cornerPoint[Random().nextInt(2)];
 
-    if(sourcePoint.isCompletelyLargerThan(sourcePoint)){
-      draw(Area(from: sourcePoint, to: bendPoint));
-      field.debugPrint();
-      draw(Area(from: bendPoint, to: destinationPoint));
-      field.debugPrint();
-    } else {
-      draw(Area(from: destinationPoint, to: bendPoint));
-      field.debugPrint();
-      draw(Area(from: bendPoint, to: sourcePoint));
-      field.debugPrint();
+    logging.info("## draw -> ${sourcePoint.toString()} -> ${bendPoint.toString()} -> ${destinationPoint.toString()}");
+
+    Area former = Area(from: sourcePoint, to: bendPoint);
+    Area latter = Area(from: bendPoint, to: destinationPoint);
+    if(sourcePoint.isCompletelyLargerThan(destinationPoint)){
+      former = Area(from: destinationPoint, to: bendPoint);
+      latter = Area(from: bendPoint, to: sourcePoint);
     }
+    draw(former);
+    draw(latter);
   }
 
 

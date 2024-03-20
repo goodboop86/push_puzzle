@@ -26,6 +26,7 @@ class Point {
 class Area {
   late Point from;
   late Point to;
+
   Area({required this.from, required this.to});
 
   bool isIn(int y, int x) =>
@@ -46,26 +47,29 @@ class Area {
         another.to.x - another.from.x, (index) => index + another.from.x);
 
 
-    List<int> duplication = xRange.where((element) => anotherXRange.contains(element)).toList();
+    List<int> duplication = xRange.where((element) =>
+        anotherXRange.contains(element)).toList();
 
-    if(duplication.isNotEmpty) {return Duplicate.X;}
+    if (duplication.isNotEmpty) {
+      return Duplicate.X;
+    }
 
     List<int> yRange = List.generate(
         to.y - from.y, (index) => index + from.y);
     List<int> anotherYRange = List.generate(
         another.to.y - another.from.y, (index) => index + another.from.y);
 
-    duplication = yRange.where((element) => anotherYRange.contains(element)).toList();
+    duplication =
+        yRange.where((element) => anotherYRange.contains(element)).toList();
 
-    if(duplication.isNotEmpty) {return Duplicate.Y;}
+    if (duplication.isNotEmpty) {
+      return Duplicate.Y;
+    }
 
-   return Duplicate.none;
-
+    return Duplicate.none;
   }
 
   Point getRandomPoint() {
-
-    print(toString());
     return Point(
         y: Random().nextInt(to.y - from.y) + from.y,
         x: Random().nextInt(to.x - from.x) + from.x);
@@ -81,6 +85,18 @@ class Area {
   String toString() {
     return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
   }
-}
 
+  void modify() {
+    if (from.x > to.x) {
+      int temp = from.x;
+      from.x = to.x;
+      to.x = temp;
+    }
+    if (from.y > to.y) {
+      int temp = from.y;
+      from.y = to.y;
+      to.y = temp;
+    }
+  }
+}
 enum Duplicate { X, Y, none}
