@@ -5,6 +5,6 @@ class VisitorConfig {
   final int dungeonDepth = 3;
 
   // RoomCreatorの設定値
-  final int minRoomSize = 4;
-  final int minMarginBetweenLeaf = 1;
+  final int minRoomSize = 3;
+  final int minMarginBetweenLeaf = 2;
 }

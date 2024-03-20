@@ -1,3 +1,4 @@
+import 'package:push_puzzle/bsp/strategy/corridor_create_storategy.dart';
 import 'package:push_puzzle/bsp/strategy/mst_strategy.dart';
 import 'package:push_puzzle/bsp/processor/processor.dart';
 import 'package:push_puzzle/bsp/strategy/strategy.dart';
@@ -23,12 +24,14 @@ class MaterialProcessor extends Processor {
           strategy = MSTStrategy(material: material);
           break;
         case StrategyType.CORRIDOR_CREATE:
-          //strategy = CorridorCreateStrategy(material: material);
+          strategy = CorridorCreateStrategy(material: material);
           break;
       }
       material = executor.execute(strategy);
       material.trace();
     }
+
+    print(material);
 
 
 

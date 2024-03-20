@@ -5,8 +5,16 @@ class Point {
   late int x;
   Point({required this.y, required this.x});
 
-  double distanceOf(Point p) {
+  double squaredDistanceOf(Point p) {
     return sqrt(pow(p.y - y, 2) + pow(p.x - x, 2));
+  }
+
+  Point distanceOf(Point destination) {
+    return Point(y: destination.y - y,  x: destination.x - x);
+  }
+
+  bool isCompletelyLargerThan(Point p) {
+    return y > p.y && x > p.x;
   }
 }
 
@@ -26,6 +34,29 @@ class Area {
     return [to.y - from.y, to.x - from.x];
   }
 
+  Duplicate overWrapDirectionTo(Area another) {
+    List<int> xRange = List.generate(
+        from.x, (index) => index + to.x - from.x);
+    List<int> anotherXRange = List.generate(
+        another.from.x, (index) => index + another.to.x - another.from.x);
+
+    List<int> duplication = xRange.where((element) => anotherXRange.contains(element)).toList();
+
+    if(duplication.isNotEmpty) {return Duplicate.X;}
+
+    List<int> yRange = List.generate(
+        from.y, (index) => index + to.y - from.y);
+    List<int> anotherYRange = List.generate(
+        another.from.y, (index) => index + another.to.y - another.from.y);
+
+    duplication = yRange.where((element) => anotherYRange.contains(element)).toList();
+
+    if(duplication.isNotEmpty) {return Duplicate.Y;}
+
+   return Duplicate.none;
+
+  }
+
   Point getRandomPoint() {
     return Point(
         y: Random().nextInt(from.y - to.y) + from.y,
@@ -43,3 +74,5 @@ class Area {
     return "from (y: ${from.y}, x: ${from.x}) to (y: ${to.y}, x: ${to.x})";
   }
 }
+
+enum Duplicate { X, Y, none}

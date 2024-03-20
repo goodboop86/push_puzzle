@@ -90,9 +90,9 @@ class RoomCreatorVisitor extends Visitor {
     for (int y = 0; y < leaf.length; y++) {
       for (int x = 0; x < leaf.first.length; x++) {
         if (p.getGridArea.isIn(y, x)) {
-          leaf[y][x] = 1;
+          leaf[y][x] = 8;
           if (p.getRoomArea.isIn(y, x)) {
-            leaf[y][x] = 4;
+            leaf[y][x] = 1;
           }
         }
       }

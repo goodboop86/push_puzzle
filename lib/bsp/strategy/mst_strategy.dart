@@ -26,7 +26,7 @@ class MSTStrategy extends Strategy {
     List<Edge> mstEdge = kruskalMST(target.edge, target.leafs.length);
 
 
-    return StrategyMaterial(leafs: target.leafs, edges: mstEdge, field: []);
+    return StrategyMaterial(leafs: target.leafs, edges: mstEdge, field: material.field);
   }
 
   @override
@@ -63,7 +63,7 @@ class MSTStrategy extends Strategy {
             Edge(
                 source: i,
                 destination: j,
-                weight: source.distanceOf(destination).toInt()
+                weight: source.squaredDistanceOf(destination).toInt()
             ));
       }
     }
