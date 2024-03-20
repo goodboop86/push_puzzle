@@ -133,7 +133,7 @@ class PartitionCreatorVisitor extends Visitor {
             "(bias: ±${p.getSplitRatioBias}) "
             "absArea: ${p.absArea.toString()}");
     List<List<int>> rect = p.rect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   PartitionCreatorVisitor({required config, required this.adjustor})

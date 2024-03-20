@@ -56,7 +56,7 @@ class PartitionArrangerVisitor extends Visitor {
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias})");
     List<List<int>> rect = p.getArrangedRect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   PartitionArrangerVisitor({required config}) : super(config);

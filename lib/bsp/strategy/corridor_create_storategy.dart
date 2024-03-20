@@ -103,7 +103,7 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
       logging.info("## draw createPlainCorridor -> ${corridor.toString()}");
       draw(corridor);
     }
-    field.debugPrint();
+    field.debugField();
   }
 
   void draw(Area area) {

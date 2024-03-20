@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:push_puzzle/bsp/extention/list2d_extention.dart';
+
 class Point {
   late int y;
   late int x;
@@ -46,22 +48,28 @@ class Area {
 
   Duplicate overWrapDirectionTo(Area another) {
     List<int> xRange = List.generate(
-        to.x - from.x, (index) => index + from.x);
+        to.x - from.x + 1, (index) => index + from.x);
     List<int> anotherXRange = List.generate(
-        another.to.x - another.from.x, (index) => index + another.from.x);
-
+        another.to.x - another.from.x + 1, (index) => index + another.from.x);
 
     List<int> duplication = xRange.where((element) =>
         anotherXRange.contains(element)).toList();
+
+    List<List<int>> tmpX = [xRange, anotherXRange];
+    tmpX.debugPrint();
 
     if (duplication.isNotEmpty) {
       return Duplicate.X;
     }
 
+
     List<int> yRange = List.generate(
-        to.y - from.y, (index) => index + from.y);
+        to.y - from.y + 1, (index) => index + from.y);
     List<int> anotherYRange = List.generate(
-        another.to.y - another.from.y, (index) => index + another.from.y);
+        another.to.y - another.from.y + 1, (index) => index + another.from.y);
+
+    List<List<int>> tmpY = [yRange, anotherYRange];
+    tmpY.debugPrint();
 
     duplication =
         yRange.where((element) => anotherYRange.contains(element)).toList();

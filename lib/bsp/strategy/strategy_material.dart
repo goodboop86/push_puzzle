@@ -12,6 +12,6 @@ class StrategyMaterial {
 
   trace() {
     logging.info("leafs: $leafs edge: $edges");
-    field.debugPrint();
+    field.debugField();
   }
 }

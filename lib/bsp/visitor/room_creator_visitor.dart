@@ -123,7 +123,7 @@ class RoomCreatorVisitor extends Visitor {
             "absGridArea: ${p.getAbsGridArea.toString()}, "
             "absRoomArea: ${p.absRoomArea.toString()}");
     List<List<int>> rect = p.rect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   RoomCreatorVisitor({required config, required this.adjustor}) : super(config);

@@ -1,9 +1,8 @@
 import 'package:logging/logging.dart';
 
 extension List2DExtension on List<List<int>> {
-  debugPrint() {
+  debugField() {
     List<String> block = ["#", "%", " "];
-    int wall = 8;
     Logger l = Logger('List2DExtension');
     forEach((row) {
       List<String> tmp = [];
@@ -12,6 +11,15 @@ extension List2DExtension on List<List<int>> {
         }
       l.info(tmp);
       }
+    );
+    l.info("---");
+  }
+
+  debugPrint() {
+    Logger l = Logger('List2DExtension');
+    forEach((row) {
+      l.info(row);
+    }
     );
     l.info("---");
   }
@@ -27,5 +35,5 @@ void main() {
     [0, 1, 2],
   ];
 
-  list.debugPrint();
+  list.debugField();
 }
