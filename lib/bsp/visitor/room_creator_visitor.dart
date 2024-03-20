@@ -92,7 +92,7 @@ class RoomCreatorVisitor extends Visitor {
         if (p.getGridArea.isIn(y, x)) {
           leaf[y][x] = 1;
           if (p.getRoomArea.isIn(y, x)) {
-            leaf[y][x] = 4;
+            leaf[y][x] = 2;
           }
         }
       }
@@ -123,7 +123,7 @@ class RoomCreatorVisitor extends Visitor {
             "absGridArea: ${p.getAbsGridArea.toString()}, "
             "absRoomArea: ${p.absRoomArea.toString()}");
     List<List<int>> rect = p.rect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   RoomCreatorVisitor({required config, required this.adjustor}) : super(config);

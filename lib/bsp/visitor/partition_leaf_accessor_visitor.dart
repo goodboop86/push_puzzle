@@ -38,7 +38,7 @@ class PartitionLeafAccessorVisitor extends Visitor {
             "(bias: ±${p.getSplitRatioBias}) "
             "absArea: ${p.absArea.toString()}");
     List<List<int>> rect = p.rect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   PartitionLeafAccessorVisitor({required config}) : super(config);

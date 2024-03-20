@@ -1,19 +1,19 @@
 import 'package:push_puzzle/bsp/area.dart';
-import 'package:push_puzzle/bsp/visitor/corridor_creator_visitor.dart';
+import 'package:push_puzzle/bsp/processor/processor.dart';
+import 'package:push_puzzle/bsp/strategy/strategy_material.dart';
 import 'package:push_puzzle/bsp/visitor/partition_arranger_visitor.dart';
-import 'package:push_puzzle/bsp/visitor/partition_leaf_accesor_visitor.dart';
+import 'package:push_puzzle/bsp/visitor/partition_leaf_accessor_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/visitor_config.dart';
 import 'package:push_puzzle/bsp/structure/partition.dart';
 import 'package:push_puzzle/bsp/visitor/partition_creator_visitor.dart';
 import 'package:push_puzzle/bsp/visitor/room_creator_visitor.dart';
 
-class DungeonProcessor {
+class TreeProcessor extends Processor {
   VisitorConfig config = VisitorConfig();
   late PartitionCreatorVisitor partitionCreator;
   late PartitionArrangerVisitor partitionArranger;
   late RoomCreatorVisitor roomCreator;
   late PartitionLeafAccessorVisitor leafAccessor;
-  late CorridorCreatorVisitor corridorCreator;
   late Partition root;
 
   // Root Partitionの設定値
@@ -23,7 +23,8 @@ class DungeonProcessor {
   late List<List<int>> initialRect;
   late Area initialArea;
 
-  void process() {
+  @override
+  StrategyMaterial process() {
     root = Partition(
         depth: initialDepth,
         isRoot: initialIsRoot,
@@ -33,23 +34,20 @@ class DungeonProcessor {
         config: config);
 
     partitionCreator.visit(root, isDebug: false);
-
-    //arranger.visit(root, isDebug: false);
-
     roomCreator.visit(root, isDebug: false);
 
+    List<Partition> leafs = leafAccessor.visit(root, isDebug: false);
+    List<List<int>> field = partitionArranger.visit(root, isDebug: false);
 
-    List<Partition> edges = leafAccessor.visit(root, isDebug: false);
+    StrategyMaterial result =
+        StrategyMaterial(leafs: leafs, field: field, edges: []);
 
-    corridorCreator = CorridorCreatorVisitor(config: config, leafChildren: edges);
-    corridorCreator.visit(root, isDebug: false);
-
-    partitionArranger.visit(root, isDebug: true);
+    return StrategyMaterial(leafs: leafs, field: field, edges: []);
   }
 
-  DungeonProcessor() {
+  TreeProcessor() {
     initialRect = List.generate(config.dungeonHeight,
-        (i) => List.generate(config.dungeonWidth, (j) => 8));
+        (i) => List.generate(config.dungeonWidth, (j) => 0));
     initialArea = Area(
         from: Point(y: 0, x: 0),
         to: Point(y: config.dungeonHeight - 1, x: config.dungeonWidth - 1));

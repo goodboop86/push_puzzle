@@ -4,9 +4,9 @@ import 'package:push_puzzle/bsp/extention/list2d_extention.dart';
 
 class PartitionArrangerVisitor extends Visitor {
   @override
-  void visit(Partition partition, {bool isDebug = false}) {
+  List<List<int>> visit(Partition partition, {bool isDebug = false}) {
     this.isDebug = isDebug;
-    partition.acceptConsolidatorVisitor(this);
+    return partition.acceptPartitionArrangerVisitor(this);
   }
 
   @override
@@ -56,7 +56,7 @@ class PartitionArrangerVisitor extends Visitor {
             "(bias: ±${p.getSplitAxisBias}), Sprit ratio: ${p.getSplitRatio} "
             "(bias: ±${p.getSplitRatioBias})");
     List<List<int>> rect = p.getArrangedRect;
-    rect.debugPrint();
+    rect.debugField();
   }
 
   PartitionArrangerVisitor({required config}) : super(config);
