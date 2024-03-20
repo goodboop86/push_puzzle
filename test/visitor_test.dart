@@ -43,7 +43,7 @@ void main() {
     setUp(() {
       // 初期partitionの作成
       testRect = List.generate(config.dungeonHeight,
-              (i) => List.generate(config.dungeonWidth, (j) => 8));
+              (i) => List.generate(config.dungeonWidth, (j) => 0));
 
       // 初期のエリアを作成
       testArea = Area(
@@ -80,7 +80,7 @@ void main() {
             depth: 1,
             isRoot: false,
             rect: List.generate(5,
-                    (i) => List.generate(4, (j) => 8)),
+                    (i) => List.generate(4, (j) => 0)),
             absArea: testArea,
             // don't care.
             name: "dummy",

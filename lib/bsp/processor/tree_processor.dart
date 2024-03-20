@@ -46,7 +46,7 @@ class TreeProcessor extends Processor{
 
   TreeProcessor() {
     initialRect = List.generate(config.dungeonHeight,
-        (i) => List.generate(config.dungeonWidth, (j) => 8));
+        (i) => List.generate(config.dungeonWidth, (j) => 0));
     initialArea = Area(
         from: Point(y: 0, x: 0),
         to: Point(y: config.dungeonHeight - 1, x: config.dungeonWidth - 1));

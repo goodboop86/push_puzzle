@@ -30,6 +30,8 @@ class CorridorCreateStrategy extends Strategy {
   void createCorridor(Partition source, Partition destination) {
     Duplicate duplicate = source.absRoomArea.overWrapDirectionTo(destination.absRoomArea);
 
+    logging.info(duplicate);
+
     if (duplicate == Duplicate.none) {
       createBendCorridor(source, destination);
     } else {
@@ -38,86 +40,56 @@ class CorridorCreateStrategy extends Strategy {
   }
 
 void createPlainCorridor(Partition source, Partition destination, Duplicate duplicate) {
-    Point distance = source.absRoomArea.center().distanceOf(destination.absRoomArea.center());
+
+    // distance of destination - source
+    Point centerDistance = source.absRoomArea.center().distanceOf(destination.absRoomArea.center());
 
     // Direction sourceDirection;
     // Direction destinationDirection;
-    Area sourceCorridor;
-    Area destinationCorridor;
-    Area betweenCorridor;
     List<Area> corridors = [];
     int bias = 1;
-    Point sStart;
-    Point sEnd;
-    Point dStart;
-    Point dEnd;
+    Point fStart;
+    Point fEnd;
+    Point lStart;
+    Point lEnd;
 
-    logging.info(duplicate);
-    logging.info(distance.toString());
     // source/destinationの通路作成に関する方針を決める
-    int boundary;
+    int boundaryIdx;
+    Partition former = source;
+    Partition latter = destination;
     if(duplicate == Duplicate.X) {
-      if(distance.x > 0) {
-        //sourceDirection = Direction.right;
-        //destinationDirection = Direction.left;
-
-        int corridorDistance = (source.absRoomArea.to.x - destination.absRoomArea.from.x);
-        boundary = destination.absRoomArea.from.x + corridorDistance ~/ 2;
-
-        sStart = Point(y:source.absRoomArea.to.y - bias, x: source.absRoomArea.to.x);
-        sEnd = Point(y:source.absRoomArea.to.y - bias, x: boundary);
-        dStart = Point(y:destination.absRoomArea.from.y + bias, x: boundary);
-        dEnd = Point(y:destination.absRoomArea.from.y + bias, x: destination.absRoomArea.from.x);
-      } else {
-        //sourceDirection = Direction.left;
-        //destinationDirection = Direction.right;
-
-        int corridorDistance = (source.absRoomArea.from.x - destination.absRoomArea.to.x);
-        boundary = destination.absRoomArea.to.x + corridorDistance ~/ 2;
-
-        dStart = Point(y:destination.absRoomArea.to.y - bias, x: destination.absRoomArea.to.x);
-        dEnd = Point(y:destination.absRoomArea.to.y - bias, x: boundary);
-        sStart = Point(y:source.absRoomArea.from.y + bias, x: boundary);
-        sEnd = Point(y:source.absRoomArea.from.y + bias, x: source.absRoomArea.from.x);
+      if(centerDistance.y < 0) {
+        former = destination;
+        latter = source;
       }
+      int corridorDistance = (latter.absRoomArea.from.y - former.absRoomArea.to.y);
+      boundaryIdx = former.absRoomArea.to.y + (corridorDistance ~/ 2);
 
+      fStart = Point(y:former.absRoomArea.to.y, x: former.absRoomArea.to.x - bias);
+      fEnd = Point(y:boundaryIdx, x: former.absRoomArea.to.x - bias);
+      lStart = Point(y: boundaryIdx, x: latter.absRoomArea.from.x + bias);
+      lEnd = Point(y:latter.absRoomArea.from.y + bias, x: latter.absRoomArea.from.x + bias);
 
     } else if (duplicate == Duplicate.Y) {
-      if(distance.y > 0) {
-        //sourceDirection = Direction.down;
-        //destinationDirection = Direction.up;
-
-        int corridorDistance = (source.absRoomArea.to.y - destination.absRoomArea.from.y);
-        boundary = destination.absRoomArea.from.y + corridorDistance ~/ 2;
-
-        sStart = Point(y:source.absRoomArea.to.y, x: source.absRoomArea.to.x - bias);
-        sEnd = Point(y:boundary, x: source.absRoomArea.to.x - bias);
-        dStart = Point(y:boundary, x: destination.absRoomArea.from.x + bias);
-        dEnd = Point(y:destination.absRoomArea.from.y, x: destination.absRoomArea.from.x + bias);
-
-      } else {
-        //sourceDirection = Direction.up;
-        //destinationDirection = Direction.down;
-
-        int corridorDistance = (source.absRoomArea.from.y - destination.absRoomArea.to.y);
-        boundary = destination.absRoomArea.to.y + corridorDistance ~/ 2;
-
-        dStart = Point(y:destination.absRoomArea.to.y, x: destination.absRoomArea.to.x - bias);
-        dEnd = Point(y:boundary, x: destination.absRoomArea.to.x - bias);
-        sStart = Point(y:boundary, x: source.absRoomArea.from.x + bias);
-        sEnd = Point(y:source.absRoomArea.from.y, x: source.absRoomArea.from.x + bias);
-
+      if(centerDistance.x < 0) {
+        former = destination;
+        latter = source;
       }
+      int corridorDistance = (latter.absRoomArea.from.x - former.absRoomArea.to.x);
+      boundaryIdx = former.absRoomArea.to.x + (corridorDistance ~/ 2);
+
+      fStart = Point(y:former.absRoomArea.to.y - bias, x: former.absRoomArea.to.x);
+      fEnd = Point(y:former.absRoomArea.to.y - bias, x: boundaryIdx);
+      lStart = Point(y: latter.absRoomArea.from.y + bias, x: boundaryIdx);
+      lEnd = Point(y: latter.absRoomArea.from.y + bias, x: latter.absRoomArea.from.x);
     } else {
       throw Exception("Invalid duplicate");
     }
-    corridors.addAll([Area(from: sStart, to: sEnd), Area(from: dStart, to: dEnd), Area(from: sEnd, to: dStart)]);
+    corridors.addAll([Area(from: fStart, to: fEnd), Area(from: lStart, to: lEnd), Area(from: fEnd, to: lStart)]);
+
 
     for(Area corridor in corridors) {
-      logging.info(corridor.toString());
-    }
-
-    for(Area corridor in corridors) {
+      logging.info("## draw to ${corridor.toString()}");
       draw(corridor);
       field.debugPrint();
     }
@@ -127,8 +99,8 @@ void createPlainCorridor(Partition source, Partition destination, Duplicate dupl
     for(int i = 0; i <= field.length; i++) {
       for(int j = 0; j <= field.first.length; j++) {
         if(area.isIn(i, j)) {
-          field[i][j] = 1;
-          print("draw: $i, $j");
+          field[i][j] = 2;
+          //print("draw: $i, $j");
         }
       }
     }
